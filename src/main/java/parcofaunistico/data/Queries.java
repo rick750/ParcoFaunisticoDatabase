@@ -13,6 +13,20 @@ public final class Queries {
     FROM AREA
     """;
 
+    public static final String SHOW_ZONA_RICREATIVA = 
+    """
+    SELECT zr.nome, a.orario_apertura, a.orario_chiusura
+    FROM ZONA_RICREATIVA zr, AREA a
+    WHERE a.nome = zr.nome         
+    """;
+
+    public static final String SHOW_ZONA_AMMINISTRATIVA = 
+     """
+    SELECT za.nome, a.orario_apertura, a.orario_chiusura
+    FROM ZONA_AMMINISTRATIVA za, AREA a
+    WHERE a.nome = za.nome         
+    """;
+
     public static final String SHOW_HABITAT =
     """
     SELECT h.nome, a.orario_apertura, a.orario_chiusura
@@ -36,5 +50,23 @@ public final class Queries {
     """
     SELECT * 
     FROM DIETA        
+    """;
+
+    public static final String SHOW_PRODOTTO = 
+    """
+    SELECT *
+    FROM PRODOTTO        
+    """;
+
+    public static final String SHOW_ORDINE = 
+    """
+    SELECT *
+    FROM ORDINE        
+    """;
+
+    public static final String SHOW_RENDIMENTO_GIORNALIERO = 
+    """
+    SELECT * 
+    FROM RENDIMENTO_GIORNALIERO        
     """;
 }
