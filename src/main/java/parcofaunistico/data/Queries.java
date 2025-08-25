@@ -70,4 +70,10 @@ public final class Queries {
     SELECT * 
     FROM RENDIMENTO_GIORNALIERO        
     """;
+
+    public static final String SHOW_SCONTO =
+    """
+    SELECT *
+    FROM SCONTO        
+    """;
 }
