@@ -4,7 +4,8 @@ public final class Queries {
     public static final String SHOW_PERSONE = 
     """
     SELECT *
-    FROM PERSONA
+    FROM PERSONA p, VISITATORE v
+    WHERE p.codice_fiscale = v.codice_fiscale;
     """;
 
     public static final String SHOW_AREE = 
