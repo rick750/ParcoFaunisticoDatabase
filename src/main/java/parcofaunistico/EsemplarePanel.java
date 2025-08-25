@@ -9,15 +9,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import parcofaunistico.data.Visitatore;
+import parcofaunistico.data.Esemplare;
 
-public class PersonePanel extends JPanel {
+public class EsemplarePanel extends JPanel {
 
     private final JPanel contentPanel;
     private final JButton backButton;
     private final Runnable backAction;
 
-    public PersonePanel(Runnable onBack) {
+    public EsemplarePanel(Runnable onBack) {
         super();
         this.backAction = onBack;
 
@@ -37,19 +37,19 @@ public class PersonePanel extends JPanel {
         this.add(bottom, BorderLayout.SOUTH);
     }
 
-    public void setPersone(List<Visitatore> persone) {
+    public void setEsemplari(List<Esemplare> esemplari) {
         contentPanel.removeAll();
-        contentPanel.add(new JLabel("Persone:"));
+        contentPanel.add(new JLabel("Esemplari:"));
         contentPanel.add(new JLabel(" "));
-        addPersone(contentPanel, persone);
+        addEsemplare(contentPanel, esemplari);
         contentPanel.add(new JLabel(" "));
         contentPanel.revalidate();
         contentPanel.repaint();
     }
 
-    private void addPersone(Container cp, List<Visitatore> persone) {
-        for (Visitatore persona : persone) {
-            cp.add(new JLabel(persona.toString()));
+    private void addEsemplare(Container cp, List<Esemplare> esemplari) {
+        for (Esemplare esemplare : esemplari) {
+            cp.add(new JLabel(esemplare.toString()));
         }
     }
 }

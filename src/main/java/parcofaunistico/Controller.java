@@ -15,18 +15,33 @@ public final class Controller {
         this.model = model;
     }
 
-    void loadInitialPage() {
+    public void loadInitialPage() {
+        this.view.showMainMenu();
+    }
+
+    public void userRequestedInitialPage() {
+        this.loadInitialPage();
+    }
+
+    public void userRequestedPersone() {
         try {
-            this.view.loadingPersone();
             var persone = this.model.loadPersone();
             this.view.showPersone(persone);
         } catch (DAOException e) {
             e.printStackTrace();
         }
     }
-    
-    public void userRequestedInitialPage() {
-        this.loadInitialPage();
+
+    public void userRequestedEsemplari() {
+        try {
+            var esemplari = this.model.loadEsemplari();
+            this.view.showEsemplari(esemplari);
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
     }
 
+    public void userRequestedMainMenu() {
+        this.view.showMainMenu();
+    }
 }
