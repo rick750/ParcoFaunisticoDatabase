@@ -109,6 +109,20 @@ public final class MainView extends JFrame{
             }
         });
 
+        var btnClassProdotti = new JButton("Pagina classifica Prodotti");
+        btnClassProdotti.addActionListener(e -> {
+            if (controller.isPresent()) {
+                controller.get().userRequestedClassificaProdotti();
+            }
+        });
+
+        var btnAcqProdotti = new JButton("Pagina acquisti prodotti");
+        btnAcqProdotti.addActionListener(e -> {
+            if (controller.isPresent()) {
+                controller.get().userRequestedAcquistiProdotti();
+            }
+        });
+
         panel.add(btnPersone);
         panel.add(new JLabel(" "));
         panel.add(btnEsemplari);
@@ -118,6 +132,10 @@ public final class MainView extends JFrame{
         panel.add(btnAppSconto);
         panel.add(new JLabel(" "));
         panel.add(btnIncBiglietti);
+        panel.add(new JLabel(" "));
+        panel.add(btnClassProdotti);
+        panel.add(new JLabel(" "));
+        panel.add(btnAcqProdotti);
 
         return panel;
     }
@@ -129,12 +147,10 @@ public final class MainView extends JFrame{
 
     public <T> void showPanel(List<T> voci, final String subtitle) {
         this.remove(this.mainMenuPanel);
-        System.out.println("Aggiungo pannello con subtitle: " + subtitle);
         final var vociPanel = new VociPanel<T>(() -> showMainMenu());
         vociPanel.setVoci(voci, subtitle);
         vociPanel.setPreferredSize(new Dimension(this.mainMenuPanel.getPreferredSize().width - 100, 
         this.mainMenuPanel.getPreferredSize().height - 100));
-        System.out.println("VociPanel " + vociPanel.getPreferredSize());
         this.emptyPanel.add(vociPanel);
         this.layout.show(this.cardPanel, EMPTY);
         

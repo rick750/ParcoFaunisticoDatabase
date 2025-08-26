@@ -60,4 +60,22 @@ public final class Controller {
         }
     }
 
+    public void userRequestedClassificaProdotti() {
+        try {
+            final var incassi = this.model.loadClassificaProdotti();
+            this.view.showPanel(incassi, "Classifica Prodotti più venduti");
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void userRequestedAcquistiProdotti() {
+        try {
+            final var acquisti = this.model.loadAcquistiProdotti();
+            this.view.showPanel(acquisti, "NUmero di vendite dei prodotti");
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

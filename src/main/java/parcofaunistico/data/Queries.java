@@ -101,4 +101,55 @@ public final class Queries {
 	OR (b.codice_transazione = pv.codice_transazione AND b.codice_gruppo = pv.codice_gruppo) 
     GROUP BY pv.data_effettuazione;         
     """;
+
+    public static final String SHOW_CLASSIFICA_PRODOTTI = 
+    """
+    WITH stat_prodotto AS (
+    SELECT
+    o.nome AS zona,
+    o.codice_prodotto,
+    p.nome AS prodotto_nome,
+    SUM(o.quantita_acquistata) AS quantita_tot,
+    SUM(o.quantita_acquistata * p.prezzo_unitario) AS ricavo
+    FROM ORDINE o
+    JOIN PRODOTTO p ON p.codice_prodotto = o.codice_prodotto
+    GROUP BY o.nome, o.codice_prodotto, p.nome
+    ),
+    ricavo_zona AS (
+    SELECT zona, SUM(ricavo) AS ricavo_totale_zona
+    FROM stat_prodotto
+    GROUP BY zona
+    ),
+    classifica AS (
+    SELECT
+    sp.*,
+    rz.ricavo_totale_zona,
+    ROUND(100 * sp.ricavo / NULLIF(rz.ricavo_totale_zona,0), 2) AS contributo_prodotto_percentuale,
+    ROW_NUMBER() OVER (
+      PARTITION BY sp.zona
+      ORDER BY sp.quantita_tot DESC, sp.ricavo DESC
+    ) AS rn
+    FROM stat_prodotto sp
+    JOIN ricavo_zona rz USING (zona)
+    )
+    SELECT
+    zona,
+    codice_prodotto,
+    prodotto_nome,
+    quantita_tot,
+    ricavo,
+    ricavo_totale_zona,
+    contributo_prodotto_percentuale
+    FROM classifica
+    WHERE rn <= 3
+    ORDER BY zona, quantita_tot DESC, rn;        
+    """;
+
+    public static final String SHOW_ACQUISTI_PRODOTTO = 
+    """
+    SELECT p.codice_prodotto, p.nome, SUM(o.quantita_acquistata) AS totale_venduto
+    FROM PRODOTTO p, ORDINE o
+    WHERE p.codice_prodotto = o.codice_prodotto
+    GROUP BY o.codice_prodotto;        
+    """;
 }

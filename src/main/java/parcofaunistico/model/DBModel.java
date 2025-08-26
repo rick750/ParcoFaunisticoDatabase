@@ -3,10 +3,11 @@ package parcofaunistico.model;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
+import parcofaunistico.data.AcquistiProdotto;
 import parcofaunistico.data.Affluenza;
 import parcofaunistico.data.ApplicazioneSconto;
+import parcofaunistico.data.ClassificaProdotto;
 import parcofaunistico.data.Esemplare;
 import parcofaunistico.data.IncassoBiglietto;
 import parcofaunistico.data.Visitatore;
@@ -48,5 +49,17 @@ public final class DBModel implements Model {
     public List<IncassoBiglietto> loadIncassiBiglietti() {
         final var incassi = IncassoBiglietto.DAO.list(this.connection);
         return incassi;
+    }
+
+    @Override
+    public List<ClassificaProdotto> loadClassificaProdotti() {
+        final var classifica = ClassificaProdotto.DAO.list(this.connection);
+        return classifica;
+    }
+
+    @Override
+    public List<AcquistiProdotto> loadAcquistiProdotti() {
+        final var acquisti = AcquistiProdotto.DAO.list(this.connection);
+        return acquisti;
     }
 }
