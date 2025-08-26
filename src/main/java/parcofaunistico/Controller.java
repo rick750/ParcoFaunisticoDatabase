@@ -15,18 +15,10 @@ public final class Controller {
         this.model = model;
     }
 
-    public void loadInitialPage() {
-        this.view.showMainMenu();
-    }
-
-    public void userRequestedInitialPage() {
-        this.loadInitialPage();
-    }
-
     public void userRequestedPersone() {
         try {
             var persone = this.model.loadPersone();
-            this.view.showPersone(persone);
+            this.view.showPanel(persone, "Visitatori");
         } catch (DAOException e) {
             e.printStackTrace();
         }
@@ -35,13 +27,37 @@ public final class Controller {
     public void userRequestedEsemplari() {
         try {
             var esemplari = this.model.loadEsemplari();
-            this.view.showEsemplari(esemplari);
+            this.view.showPanel(esemplari, "Esemplari");
         } catch (DAOException e) {
             e.printStackTrace();
         }
     }
 
-    public void userRequestedMainMenu() {
-        this.view.showMainMenu();
+    public void userRequestedAffluenze() {
+        try {
+            final var affluenze = this.model.loadAffluenze();
+            this.view.showPanel(affluenze, "Affluenze");
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
     }
+
+    public void userRequestedApplicazioniSconto() {
+        try {
+            final var applicazioni = this.model.loadApplicazioniSconto();
+            this.view.showPanel(applicazioni, "Applicazioni Sconto");
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void userRequestedIncassiBiglietti() {
+          try {
+            final var incassi = this.model.loadIncassiBiglietti();
+            this.view.showPanel(incassi, "Incassi Biglietti");
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

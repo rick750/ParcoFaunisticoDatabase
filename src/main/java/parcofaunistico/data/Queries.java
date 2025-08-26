@@ -76,4 +76,29 @@ public final class Queries {
     SELECT *
     FROM SCONTO        
     """;
+
+    public static final String SHOW_AFFLUENZA =
+    """
+    SELECT v.nome, COUNT(*) as numVisite
+    FROM visita v
+    GROUP BY v.nome
+    """;
+
+    public static final String SHOW_APPLICAZIONI_SCONTI =
+    """
+    SELECT pv.codice_sconto, COUNT(*) AS numApplicazioni, s.tipologia
+    FROM PAGAMENTO_VISITA pv, SCONTO s
+    WHERE pv.codice_sconto = s.codice_sconto
+    AND pv.codice_sconto IS NOT NULL 
+    GROUP BY pv.codice_sconto;        
+    """;
+
+    public static final String SHOW_INCASSI_BIGLIETTI =
+    """
+    SELECT pv.data_effettuazione, SUM(b.prezzo_effettivo) AS totale_incassi_giornalieri
+    FROM BIGLIETTO b, PAGAMENTO_VISITA pv
+    WHERE (b.codice_transazione = pv.codice_transazione AND b.codice_fiscale = pv.codice_fiscale) 
+	OR (b.codice_transazione = pv.codice_transazione AND b.codice_gruppo = pv.codice_gruppo) 
+    GROUP BY pv.data_effettuazione;         
+    """;
 }

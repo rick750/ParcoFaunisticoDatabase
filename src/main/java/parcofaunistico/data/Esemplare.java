@@ -30,7 +30,7 @@ public class Esemplare {
                + this.eta + ", "
                + this.altezza + ", "
                + this.peso + ", "
-               + this.malato + ", ";
+               + this.malato;
     }
 
     public static final class DAO {

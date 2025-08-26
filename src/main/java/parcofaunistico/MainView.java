@@ -2,6 +2,7 @@ package parcofaunistico;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Objects;
@@ -14,52 +15,45 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 
-import parcofaunistico.data.Esemplare;
-import parcofaunistico.data.Visitatore;
-
 import java.util.List;
 
-public final class MainView {
+public final class MainView extends JFrame{
 
+    private static final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize();
+    private static final int WIDTH = (int) SCREENSIZE.getWidth();
+    private static final int HEIGHT = (int) SCREENSIZE.getHeight();
     public static final String CARD_MAIN = "main";
-    public static final String CARD_LOADING = "loading";
-    public static final String CARD_PERSONE = "persone";
-    public static final String CARD_ESEMPLARI = "esemplari";
+    public static final String EMPTY = "empty";
 
     private Optional<Controller> controller;
-    private final JFrame mainFrame;
-    private final JPanel cardsPanel;
-    private final PersonePanel personePanel;
-    private final EsemplarePanel esemplarePanel;
+    private final CardLayout layout = new CardLayout();
+    private final JPanel cardPanel = new JPanel(this.layout);
+    private final JPanel emptyPanel;
     private final JPanel mainMenuPanel;
 
     public MainView(Runnable onClose) {
         this.controller = Optional.empty();
-        this.mainFrame = setupMainFrame(onClose);
-        this.cardsPanel = new JPanel(new CardLayout());
-
-        this.personePanel = new PersonePanel(() -> showMainMenu());
-        this.esemplarePanel = new EsemplarePanel(() -> showMainMenu());
-
+        setupMainFrame(onClose);
         this.mainMenuPanel = createMainMenuPanel();
+        this.emptyPanel = new JPanel();
 
-        cardsPanel.add(mainMenuPanel, CARD_MAIN);
-        cardsPanel.add(personePanel, CARD_PERSONE);
-        cardsPanel.add(esemplarePanel, CARD_ESEMPLARI);
-
-        this.mainFrame.add(cardsPanel);
-
-        this.showMainMenu();
-        this.mainFrame.setVisible(true);
+        this.cardPanel.add(emptyPanel, EMPTY);
+        this.cardPanel.add(mainMenuPanel, CARD_MAIN);
+        this.add(cardPanel);
+        this.layout.show(this.cardPanel, CARD_MAIN);
+        this.setVisible(true);
+        this.getContentPane().revalidate();
+        this.getContentPane().repaint();
     }
 
-    private JFrame setupMainFrame(Runnable onClose) {
-        var frame = new JFrame("Parco Faunistico");
+    private void setupMainFrame(Runnable onClose) {
         var padding = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-        ((JComponent) frame.getContentPane()).setBorder(padding);
-        frame.setMinimumSize(new Dimension(1200, 400));
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.addWindowListener(
+        ((JComponent) this.getContentPane()).setBorder(padding);
+        this.setSize(new Dimension(WIDTH, HEIGHT));
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        this.addWindowListener(
             new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
                     onClose.run();
@@ -67,13 +61,13 @@ public final class MainView {
                 }
             }
         );
-        frame.setVisible(true);
-        frame.setLocationRelativeTo(null);
-        return frame;
+        this.setLocationRelativeTo(null);
     }
 
     private JPanel createMainMenuPanel() {
         var panel = new JPanel();
+        panel.setPreferredSize(this.getPreferredSize());
+        System.out.println("Main Menu " + panel.getPreferredSize());
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
         panel.add(new JLabel("\n"));
@@ -94,9 +88,36 @@ public final class MainView {
             }
         });
 
+        var btnAffluenze = new JButton("Pagina Affluenze");
+        btnAffluenze.addActionListener(e -> {
+            if (controller.isPresent()) {
+                controller.get().userRequestedAffluenze();
+            }
+        });
+
+        var btnAppSconto = new JButton("Pagina Applicazioni Sconto");
+        btnAppSconto.addActionListener(e -> {
+            if (controller.isPresent()) {
+                controller.get().userRequestedApplicazioniSconto();
+            }
+        });
+
+        var btnIncBiglietti = new JButton("Pagina Incassi Biglietti");
+         btnIncBiglietti.addActionListener(e -> {
+            if (controller.isPresent()) {
+                controller.get().userRequestedIncassiBiglietti();
+            }
+        });
+
         panel.add(btnPersone);
         panel.add(new JLabel(" "));
         panel.add(btnEsemplari);
+        panel.add(new JLabel(" "));
+        panel.add(btnAffluenze);
+        panel.add(new JLabel(" "));
+        panel.add(btnAppSconto);
+        panel.add(new JLabel(" "));
+        panel.add(btnIncBiglietti);
 
         return panel;
     }
@@ -106,17 +127,21 @@ public final class MainView {
         this.controller = Optional.of(controller);
     }
 
-    public void showPersone(List<Visitatore> persone) {
-        personePanel.setPersone(persone);
-        ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, CARD_PERSONE);
-    }
-
-    public void showEsemplari(List<Esemplare> esemplari) {
-        esemplarePanel.setEsemplari(esemplari);
-        ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, CARD_ESEMPLARI);
+    public <T> void showPanel(List<T> voci, final String subtitle) {
+        this.remove(this.mainMenuPanel);
+        System.out.println("Aggiungo pannello con subtitle: " + subtitle);
+        final var vociPanel = new VociPanel<T>(() -> showMainMenu());
+        vociPanel.setVoci(voci, subtitle);
+        vociPanel.setPreferredSize(new Dimension(this.mainMenuPanel.getPreferredSize().width - 100, 
+        this.mainMenuPanel.getPreferredSize().height - 100));
+        System.out.println("VociPanel " + vociPanel.getPreferredSize());
+        this.emptyPanel.add(vociPanel);
+        this.layout.show(this.cardPanel, EMPTY);
+        
     }
 
     public void showMainMenu() {
-        ((CardLayout) cardsPanel.getLayout()).show(cardsPanel, CARD_MAIN);
+        this.layout.show(this.cardPanel, CARD_MAIN);
+        this.emptyPanel.removeAll();
     }
 }
