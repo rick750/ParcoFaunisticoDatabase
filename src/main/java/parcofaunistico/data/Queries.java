@@ -152,6 +152,12 @@ public enum Queries {
             SELECT d.codice_fiscale
             FROM DIPENDENTE d
             WHERE d.codice_fiscale = """
+    ),
+
+    FIND_NOME("""
+        SELECT p.codice_fiscale, p.nome
+        FROM PERSONA p
+        WHERE p.codice_fiscale = """
     );
 
     private final String query;

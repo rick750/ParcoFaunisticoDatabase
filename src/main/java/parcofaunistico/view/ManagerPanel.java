@@ -2,14 +2,13 @@ package parcofaunistico.view;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import parcofaunistico.controller.ReadingController;
 
 public class ManagerPanel extends JPanel{
-    
     public ManagerPanel(final ReadingController readingController) {
-        
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         final var btnAree = new JButton("Pagina aree");
@@ -42,8 +41,40 @@ public class ManagerPanel extends JPanel{
         btnClassProdotti.addActionListener(e -> readingController.userRequestedClassificaProdotti());
         final var btnIncBiglietti = new JButton("Pagina Incassi Biglietti");
         btnIncBiglietti.addActionListener(e -> readingController.userRequestedIncassiBiglietti());
-        final var btnRendimentiGiornarlieri = new JButton("Pagina Rendimenti Giornalieri");
-        btnRendimentiGiornarlieri.addActionListener(e -> readingController.userRequestedRendimentiGiornalieri());
+        final var btnRendimentiGiornalieri = new JButton("Pagina Rendimenti Giornalieri");
+        btnRendimentiGiornalieri.addActionListener(e -> readingController.userRequestedRendimentiGiornalieri());
+
+        this.add(btnAree);
+        this.add(new JLabel(" "));
+        this.add(btnZoneAmministrative);
+        this.add(new JLabel(" "));
+        this.add(btnZonaRicreativa);
+        this.add(new JLabel(" "));
+        this.add(btnHabitat);
+        this.add(new JLabel(" "));
+        this.add(btnVisitatori);
+        this.add(new JLabel(" "));
+        this.add(btnDipendenti);
+        this.add(new JLabel(" "));
+        this.add(btnSpecie);
+        this.add(new JLabel(" "));
+        this.add(btnEsemplari);
+        this.add(new JLabel(" "));
+        this.add(btnOrdini);
+        this.add(new JLabel(" "));
+        this.add(btnProdotti);
+        this.add(new JLabel(" "));
+        this.add(btnAcqProdotti);
+        this.add(new JLabel(" "));
+        this.add(btnAffluenze);
+        this.add(new JLabel(" "));
+        this.add(btnAppSconto);
+        this.add(new JLabel(" "));
+        this.add(btnClassProdotti);
+        this.add(new JLabel(" "));
+        this.add(btnIncBiglietti);
+        this.add(new JLabel(" "));
+        this.add(btnRendimentiGiornalieri);
         
 
         

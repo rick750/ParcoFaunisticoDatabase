@@ -5,18 +5,17 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class Area {
     private final String nome;
     private final Time orarioApertura;
     private final Time orarioChiusura;
-    private final Optional<String> habitat;
-    private final Optional<String> zonaAmministrativa;
-    private final Optional<String> zonaRicreativa;
+    private final String habitat;
+    private final String zonaAmministrativa;
+    private final String zonaRicreativa;
 
     public Area(final String nome, final Time orchius, final Time oraper,
-                final Optional<String> habitat, final Optional<String> zAmm, final Optional<String> zRic) {
+                final String habitat, final String zAmm, final String zRic) {
                     this.nome = nome;
                     this.orarioApertura = oraper;
                     this.orarioChiusura = orchius;
@@ -27,12 +26,12 @@ public class Area {
 
     @Override
     public String toString() {
-        return this.nome + ", "
-             + this.orarioApertura + ", "
-             + this.orarioChiusura + ", "
-             + this.zonaAmministrativa + ", "
-             + this.zonaRicreativa + ", "
-             + this.habitat;
+        return this.nome + ",       "
+             + this.orarioApertura + ",     "
+             + this.orarioChiusura + ",      "
+             + (this.zonaAmministrativa == "" ? "" : this.zonaAmministrativa) 
+             + (this.zonaRicreativa == "" ? "" : this.zonaRicreativa)
+             + (this.habitat == "" ? "" : this.habitat);
     }
 
     public static final class DAO {
@@ -46,17 +45,30 @@ public class Area {
                     final var nome = resultSet.getString("nome");
                     final var orarioApertura = resultSet.getTime("orario_apertura");
                     final var orarioChiusura = resultSet.getTime("orario_chiusura");
-                    var zonaAmministrativa = Optional.of(resultSet.getString(3));
-                    if (zonaAmministrativa == null) {
-                        zonaAmministrativa = Optional.empty();
+                    String temp;
+
+                    String zonaAmministrativa;
+                    temp = resultSet.getString(4);
+                    if (temp == null) {
+                        zonaAmministrativa = "";
+                    } else {
+                        zonaAmministrativa = "Zona Amministrativa";
                     }
-                    var zonaRicreativa = Optional.of(resultSet.getString(4));
-                    if (zonaRicreativa == null) {
-                        zonaRicreativa = Optional.empty();
+
+                    temp = resultSet.getString(5);
+                    String zonaRicreativa;
+                    if (temp == null) {
+                        zonaRicreativa = "";
+                    } else {
+                        zonaRicreativa = " Zona Ricreativa";
                     }
-                    var habitat = Optional.of(resultSet.getString(5));
-                    if (habitat == null) {
-                        habitat = Optional.empty();
+
+                    temp = resultSet.getString(6);
+                    String habitat;
+                    if (temp == null) {
+                        habitat = "";
+                    } else {
+                        habitat = "Habitat";
                     }
 
                     final Area area = new Area(nome, orarioChiusura, orarioApertura, habitat, zonaAmministrativa, zonaRicreativa);

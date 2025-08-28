@@ -2,6 +2,7 @@ package parcofaunistico.view;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import parcofaunistico.controller.ReadingController;
@@ -25,10 +26,15 @@ public class VisitatorePanel extends JPanel{
         btnSconti.addActionListener(e -> readingController.userRequestedSconti());
 
         this.add(btnZonaRicreativa);
+        this.add(new JLabel(" "));
         this.add(btnHabitat);
+        this.add(new JLabel(" "));
         this.add(btnSpecie);
+        this.add(new JLabel(" "));
         this.add(btnEsemplari);
+        this.add(new JLabel(" "));
         this.add(btnProdotti);
+        this.add(new JLabel(" "));
         this.add(btnSconti);
     }
 }
