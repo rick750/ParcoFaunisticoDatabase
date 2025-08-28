@@ -1,10 +1,16 @@
 package parcofaunistico.data;
 
 public enum Queries {
-    SHOW_PERSONE("""
+    SHOW_VISITATORE("""
             SELECT *
             FROM PERSONA p, VISITATORE v
             WHERE p.codice_fiscale = v.codice_fiscale;
+            """),
+
+    SHOW_DIPENDENTE("""
+            SELECT *
+            FROM PERSONA p, DIPENDENTE d
+            WHERE p.codice_fiscale = d.codice_fiscale;
             """),
 
     SHOW_AREE("""
@@ -140,6 +146,12 @@ public enum Queries {
             SELECT v.codice_fiscale
             FROM VISITATORE v
             WHERE v.codice_fiscale = """
+    ),
+    
+    CHECK_DIPENDENTE("""
+            SELECT d.codice_fiscale
+            FROM DIPENDENTE d
+            WHERE d.codice_fiscale = """
     );
 
     private final String query;

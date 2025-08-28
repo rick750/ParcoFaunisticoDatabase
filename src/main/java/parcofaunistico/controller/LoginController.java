@@ -9,6 +9,7 @@ public class LoginController {
     private static final String NOME_MANAGER = "Manager";
     private static final String NOME_DIPENDENTE = "Dipendente";
     private static final String NOME_VISITATORE = "Visitatore";
+    private String codiceManager = "RVIBNC00S51G273Y";
 
     private final Model model;
 
@@ -25,10 +26,10 @@ public class LoginController {
                     trovato = this.model.checkVisitatore(codiceFiscale);
                     break;
                 case NOME_DIPENDENTE:
-                    System.out.println("Dipendente");
+                    trovato = this.model.checkDipendente(codiceFiscale);
                     break;
                 case NOME_MANAGER:
-                    System.out.println("Manager");
+                    trovato = this.codiceManager.equals(codiceFiscale);
                     break;
                 default:
                     break;

@@ -1,25 +1,30 @@
 package parcofaunistico.controller;
 
+import parcofaunistico.data.BelongingQueries;
 import parcofaunistico.data.DAOException;
+import parcofaunistico.data.Queries;
 import parcofaunistico.model.Model;
 import parcofaunistico.view.MainView;
 
+import java.util.Map;
 import java.util.Objects;
 
 public final class ReadingController {
     private final Model model;
     private final MainView view;
+    private final Map<Integer, Queries> readingQueries;
 
     public ReadingController(Model model, MainView view) {
         Objects.requireNonNull(model, "Controller created with null model");
         Objects.requireNonNull(view, "Controller created with null view");
         this.view = view;
         this.model = model;
+        this.readingQueries = BelongingQueries.getReadingQueries();
     }
 
     public void userRequestedPersone() {
         try {
-            var persone = this.model.loadPersone();
+            var persone = this.model.loadVisitatori();
             this.view.showPanel(persone, "Visitatori");
         } catch (DAOException e) {
             e.printStackTrace();
@@ -79,9 +84,4 @@ public final class ReadingController {
             e.printStackTrace();
         }
     }
-
-    public Model getModel() {
-        return this.model;
-    }
-
 }
