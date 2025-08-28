@@ -22,9 +22,9 @@ public final class DBModel implements Model {
     }
 
     @Override
-    public List<Visitatore> loadPersone() {
-        var persone = Visitatore.DAO.list(this.connection);
-        return persone;
+    public List<Visitatore> loadVisitatori() {
+        var visitatori = Visitatore.DAO.list(this.connection);
+        return visitatori;
     }
 
     @Override

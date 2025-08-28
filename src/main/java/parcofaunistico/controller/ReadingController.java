@@ -19,7 +19,7 @@ public final class ReadingController {
 
     public void userRequestedPersone() {
         try {
-            var persone = this.model.loadPersone();
+            var persone = this.model.loadVisitatori();
             this.view.showPanel(persone, "Visitatori");
         } catch (DAOException e) {
             e.printStackTrace();

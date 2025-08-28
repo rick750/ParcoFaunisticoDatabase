@@ -13,7 +13,7 @@ import parcofaunistico.data.Visitatore;
 
 public interface Model {
 
-    List<Visitatore> loadPersone();
+    List<Visitatore> loadVisitatori();
 
     List<Esemplare> loadEsemplari();
 
