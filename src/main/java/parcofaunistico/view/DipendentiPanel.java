@@ -15,13 +15,12 @@ public class DipendentiPanel extends JPanel {
     
     public DipendentiPanel(final ReadingController rContr) {
         this.readContr = Optional.of(rContr);
-        final var panel = new JPanel();
-        panel.setPreferredSize(this.getPreferredSize());
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        setPreferredSize(this.getPreferredSize());
+        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 
-        panel.add(new JLabel("\n"));
-        panel.add(new JLabel("Parco Faunistico"));
-        panel.add(new JLabel("\n"));
+        add(new JLabel("\n"));
+        add(new JLabel("Parco Faunistico"));
+        add(new JLabel("\n"));
 
         final var btnAree = new JButton("Pagina aree");
         btnAree.addActionListener(e -> {
@@ -79,21 +78,21 @@ public class DipendentiPanel extends JPanel {
             }
         });
 
-        panel.add(btnAree);
-        panel.add(new JLabel(" "));
-        panel.add(btnZoneAmministrative);
-        panel.add(new JLabel(" "));
-        panel.add(btnZoneRicreative);
-        panel.add(new JLabel(" "));
-        panel.add(btnHabitat);
-        panel.add(new JLabel(" "));
-        panel.add(btnSpecie);
-        panel.add(new JLabel(" "));
-        panel.add(btnEsemplari);
-        panel.add(new JLabel(" "));
-        panel.add(btnOrdini);
-        panel.add(new JLabel(" "));
-        panel.add(btnProdotti);
+        add(btnAree);
+        add(new JLabel(" "));
+        add(btnZoneAmministrative);
+        add(new JLabel(" "));
+        add(btnZoneRicreative);
+        add(new JLabel(" "));
+        add(btnHabitat);
+        add(new JLabel(" "));
+        add(btnSpecie);
+        add(new JLabel(" "));
+        add(btnEsemplari);
+        add(new JLabel(" "));
+        add(btnOrdini);
+        add(new JLabel(" "));
+        add(btnProdotti);
     }
 
 }
