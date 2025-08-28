@@ -27,7 +27,7 @@ public class Sconto {
         public static List<Sconto> list(Connection connection) {
             var sconti = new ArrayList<Sconto>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_SCONTO);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_SCONTO.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

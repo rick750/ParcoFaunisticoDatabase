@@ -1,4 +1,4 @@
-package parcofaunistico;
+package parcofaunistico.view;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -8,16 +8,15 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
-import parcofaunistico.data.Visitatore;
-
-public class PersonePanel extends JPanel {
+public class VociPanel<T> extends JPanel {
 
     private final JPanel contentPanel;
     private final JButton backButton;
     private final Runnable backAction;
 
-    public PersonePanel(Runnable onBack) {
+    public VociPanel(Runnable onBack) {
         super();
         this.backAction = onBack;
 
@@ -37,19 +36,21 @@ public class PersonePanel extends JPanel {
         this.add(bottom, BorderLayout.SOUTH);
     }
 
-    public void setPersone(List<Visitatore> persone) {
+    public void setVoci(List<T> voci, final String subTitle) {
         contentPanel.removeAll();
-        contentPanel.add(new JLabel("Persone:"));
-        contentPanel.add(new JLabel(" "));
-        addPersone(contentPanel, persone);
-        contentPanel.add(new JLabel(" "));
+        final var label = new JLabel(subTitle);
+        label.setBorder(new EmptyBorder(10, 10, 20, 0));
+        contentPanel.add(label);
+        addVoci(contentPanel, voci);
         contentPanel.revalidate();
         contentPanel.repaint();
     }
 
-    private void addPersone(Container cp, List<Visitatore> persone) {
-        for (Visitatore persona : persone) {
-            cp.add(new JLabel(persona.toString()));
+    private void addVoci(Container container, List<T> voci) {
+        for (final T voce : voci) {
+            final var label = new JLabel(voce.toString());
+            label.setBorder(new EmptyBorder(0, 10, 10, 0));
+            container.add(label);
         }
     }
 }

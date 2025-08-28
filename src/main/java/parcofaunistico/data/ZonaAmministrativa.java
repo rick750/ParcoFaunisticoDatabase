@@ -28,7 +28,7 @@ public class ZonaAmministrativa {
         public static List<ZonaAmministrativa> list(Connection connection) {
             var zoneAmministrative = new ArrayList<ZonaAmministrativa>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ZONA_AMMINISTRATIVA);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ZONA_AMMINISTRATIVA.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

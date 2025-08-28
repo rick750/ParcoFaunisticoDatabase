@@ -27,7 +27,7 @@ public class ApplicazioneSconto {
         public static List<ApplicazioneSconto> list(Connection connection) {
             var applicazioni = new ArrayList<ApplicazioneSconto>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_APPLICAZIONI_SCONTI);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_APPLICAZIONI_SCONTI.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

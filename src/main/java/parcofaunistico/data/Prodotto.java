@@ -30,7 +30,7 @@ public class Prodotto {
         public static List<Prodotto> list(Connection connection) {
             var prodotti = new ArrayList<Prodotto>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_PRODOTTO);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_PRODOTTO.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

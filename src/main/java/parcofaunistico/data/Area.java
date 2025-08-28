@@ -39,7 +39,7 @@ public class Area {
         public static List<Area> list(Connection connection) {
             var aree = new ArrayList<Area>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_AREE);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_AREE.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

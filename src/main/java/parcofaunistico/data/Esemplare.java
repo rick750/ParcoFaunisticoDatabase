@@ -37,7 +37,7 @@ public class Esemplare {
         public static List<Esemplare> list(Connection connection) {
             var esemplari = new ArrayList<Esemplare>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ESEMPLARE);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ESEMPLARE.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

@@ -28,7 +28,7 @@ public class RendimentoGiornaliero {
         public static List<RendimentoGiornaliero> list(Connection connection) {
             var rendimenti = new ArrayList<RendimentoGiornaliero>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_RENDIMENTO_GIORNALIERO);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_RENDIMENTO_GIORNALIERO.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

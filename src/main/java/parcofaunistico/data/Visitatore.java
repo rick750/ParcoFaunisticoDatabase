@@ -44,7 +44,7 @@ public class Visitatore {
         public static List<Visitatore> list(Connection connection) {
             var persone = new ArrayList<Visitatore>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_PERSONE);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_PERSONE.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {
@@ -62,6 +62,25 @@ public class Visitatore {
                 throw new DAOException(e);
             }
             return persone;            
+        }
+
+        public static boolean check(Connection connection, String codiceFiscale) {
+            try (
+                var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(codiceFiscale));
+                var resultSet = preparedStatement.executeQuery();
+            ) {
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }            
+            } catch (Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
+        private static String getCheckQuery(String codiceFiscale) {
+            return Queries.CHECK_VISITATORE.get() + "\'"+codiceFiscale+ "\'";
         }
     }
 

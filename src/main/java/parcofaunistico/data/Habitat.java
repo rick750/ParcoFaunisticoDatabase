@@ -29,7 +29,7 @@ public class Habitat {
         public static List<Habitat> list(Connection connection) {
             var habitat = new ArrayList<Habitat>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_HABITAT);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_HABITAT.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

@@ -24,7 +24,7 @@ public class IncassoBiglietto {
         public static List<IncassoBiglietto> list(Connection connection) {
             var incassi = new ArrayList<IncassoBiglietto>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_INCASSI_BIGLIETTI);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_INCASSI_BIGLIETTI.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

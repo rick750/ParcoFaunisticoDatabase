@@ -62,4 +62,12 @@ public final class DBModel implements Model {
         final var acquisti = AcquistiProdotto.DAO.list(this.connection);
         return acquisti;
     }
+
+    @Override
+    public Boolean checkVisitatore(String codiceFiscale) {
+        final var trovato = Visitatore.DAO.check(connection, codiceFiscale);
+        return trovato;
+    }
+
+    
 }

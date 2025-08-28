@@ -28,7 +28,7 @@ public class Ordine {
         public static List<Ordine> list(Connection connection) {
             var ordini = new ArrayList<Ordine>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ORDINE);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ORDINE.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

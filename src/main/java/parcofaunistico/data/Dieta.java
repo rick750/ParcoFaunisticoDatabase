@@ -24,7 +24,7 @@ public class Dieta {
         public static List<Dieta> list(Connection connection) {
             var diete = new ArrayList<Dieta>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_DIETA);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_DIETA.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

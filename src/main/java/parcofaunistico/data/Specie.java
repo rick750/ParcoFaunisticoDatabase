@@ -30,7 +30,7 @@ public class Specie {
         public static List<Specie> list(Connection connection) {
             var specie = new ArrayList<Specie>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_SPECIE);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_SPECIE.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

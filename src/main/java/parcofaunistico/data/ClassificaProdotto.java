@@ -40,7 +40,7 @@ public class ClassificaProdotto {
         public static List<ClassificaProdotto> list(Connection connection) {
             var classifiche = new ArrayList<ClassificaProdotto>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_CLASSIFICA_PRODOTTI);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_CLASSIFICA_PRODOTTI.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

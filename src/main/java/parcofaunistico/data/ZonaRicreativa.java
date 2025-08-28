@@ -29,7 +29,7 @@ public class ZonaRicreativa {
         public static List<ZonaRicreativa> list(Connection connection) {
             var zoneRicreative = new ArrayList<ZonaRicreativa>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ZONA_RICREATIVA);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ZONA_RICREATIVA.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

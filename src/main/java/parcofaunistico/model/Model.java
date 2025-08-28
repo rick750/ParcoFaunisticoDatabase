@@ -27,6 +27,8 @@ public interface Model {
 
     List<AcquistiProdotto> loadAcquistiProdotti();
 
+    Boolean checkVisitatore(String codiceFiscale);
+
     static Model fromConnection(Connection connection) {
         return new DBModel(connection);
     }

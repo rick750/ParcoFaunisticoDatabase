@@ -25,7 +25,7 @@ public class Affluenza {
         public static List<Affluenza> list(Connection connection) {
             var affluenze = new ArrayList<Affluenza>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_AFFLUENZA);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_AFFLUENZA.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {

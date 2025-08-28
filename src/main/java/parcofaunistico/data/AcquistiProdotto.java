@@ -27,7 +27,7 @@ public class AcquistiProdotto {
         public static List<AcquistiProdotto> list(Connection connection) {
             var acquisti = new ArrayList<AcquistiProdotto>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ACQUISTI_PRODOTTO);
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ACQUISTI_PRODOTTO.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {
