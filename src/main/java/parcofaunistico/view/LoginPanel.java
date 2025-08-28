@@ -1,15 +1,12 @@
 package parcofaunistico.view;
 
 import java.util.Collections;
-import java.util.Locale;
 
-import javax.smartcardio.Card;
 import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,7 +27,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class LoginPanel extends JPanel {
-
     private static final String NOME_MANAGER = "Manager";
     private static final String NOME_DIPENDENTE = "Dipendente";
     private static final String NOME_VISITATORE = "Visitatore";

@@ -7,16 +7,25 @@ import java.util.Objects;
 import parcofaunistico.data.AcquistiProdotto;
 import parcofaunistico.data.Affluenza;
 import parcofaunistico.data.ApplicazioneSconto;
+import parcofaunistico.data.Area;
 import parcofaunistico.data.ClassificaProdotto;
+import parcofaunistico.data.Dipendente;
 import parcofaunistico.data.Esemplare;
+import parcofaunistico.data.Habitat;
 import parcofaunistico.data.IncassoBiglietto;
+import parcofaunistico.data.Ordine;
+import parcofaunistico.data.Prodotto;
+import parcofaunistico.data.RendimentoGiornaliero;
+import parcofaunistico.data.Specie;
 import parcofaunistico.data.Visitatore;
+import parcofaunistico.data.ZonaAmministrativa;
+import parcofaunistico.data.ZonaRicreativa;
 
 public final class DBModel implements Model {
 
     private final Connection connection;
 
-    public DBModel(Connection connection) {
+    public DBModel(final Connection connection) {
         Objects.requireNonNull(connection, "Model created with null connection");
         this.connection = connection;
     }
@@ -29,7 +38,7 @@ public final class DBModel implements Model {
 
     @Override
     public List<Esemplare> loadEsemplari() {
-        var esemplari = Esemplare.DAO.list(this.connection);
+        final var esemplari = Esemplare.DAO.list(this.connection);
         return esemplari;
     }
 
@@ -64,10 +73,59 @@ public final class DBModel implements Model {
     }
 
     @Override
-    public Boolean checkVisitatore(String codiceFiscale) {
+    public Boolean checkVisitatore(final String codiceFiscale) {
         final var trovato = Visitatore.DAO.check(connection, codiceFiscale);
         return trovato;
     }
 
-    
+    @Override
+    public Boolean checkDipendente(final String codiceFiscale) {
+        final var trovato = Dipendente.DAO.check(connection, codiceFiscale);
+        return trovato;
+    }
+
+    @Override
+    public List<Area> loadAree() {
+        return Area.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<ZonaAmministrativa> loadZoneAmministrative() {
+        return ZonaAmministrativa.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<ZonaRicreativa> loadZoneRicreative() {
+        return ZonaRicreativa.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<Habitat> loadHabitat() {
+        return Habitat.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<Dipendente> loadDipendenti() {
+        return Dipendente.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<Specie> loadSpecie() {
+        return Specie.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<Ordine> loadOrdini() {
+        return Ordine.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<Prodotto> loadProdotti() {
+        return Prodotto.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<RendimentoGiornaliero> loadRendimentiGiornalieri() {
+        return RendimentoGiornaliero.DAO.list(this.connection);
+    }
 }

@@ -44,7 +44,7 @@ public class Visitatore {
         public static List<Visitatore> list(Connection connection) {
             var persone = new ArrayList<Visitatore>();
             try(
-                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_PERSONE.get());
+                var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_VISITATORE.get());
                 var resultSet = preparedStatement.executeQuery();
             ) {
                 while(resultSet.next()) {
