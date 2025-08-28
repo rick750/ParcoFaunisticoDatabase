@@ -14,6 +14,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import parcofaunistico.controller.LoginController;
+import parcofaunistico.data.User;
 import parcofaunistico.model.Model;
 
 import java.awt.CardLayout;
@@ -53,7 +54,6 @@ public class LoginPanel extends JPanel {
     private final JTextField usernameField;
     private final JButton sendButton;
     private final LoginController loginContr;
-    private final String nomePanel;
     private final CardLayout layout = new CardLayout();
     private final JPanel btnsPanel;
     private final JPanel fieldPanel;
@@ -65,9 +65,8 @@ public class LoginPanel extends JPanel {
     private final JRadioButton managerBtn;
     private final ButtonGroup btnsGroup;
 
-    public LoginPanel(MainView mainView, Model model, String nomePanel) {
+    public LoginPanel(MainView mainView, Model model) {
         this.mainView = mainView;
-        this.nomePanel = nomePanel;
         this.loginContr = new LoginController(model);
         this.configurePanel();
         this.usernameField = createUsernameField();
@@ -198,7 +197,12 @@ public class LoginPanel extends JPanel {
             if (!loginContr.checkValidity(codiceFiscale)) {
                 this.showError("Il codice fiscale deve essere lungo 16 caratteri!");
             } else if (confirmUser(codiceFiscale)) {
-                this.mainView.showMainMenu();
+                switch(this.selected) {
+                    case "Manager" -> this.mainView.setUserPanel(User.MANAGER);
+                    case "Visitatore" -> this.mainView.setUserPanel(User.VISITATORE);
+                    case "Dipendente" -> this.mainView.setUserPanel(User.DIPENDENTE);
+                }
+                this.mainView.showUserPanel();
             }
             this.usernameField.setText("");
         };

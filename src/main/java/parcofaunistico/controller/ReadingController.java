@@ -1,25 +1,20 @@
 package parcofaunistico.controller;
 
-import parcofaunistico.data.BelongingQueries;
 import parcofaunistico.data.DAOException;
-import parcofaunistico.data.Queries;
 import parcofaunistico.model.Model;
 import parcofaunistico.view.MainView;
 
-import java.util.Map;
 import java.util.Objects;
 
 public final class ReadingController {
     private final Model model;
     private final MainView view;
-    private final Map<Integer, Queries> readingQueries;
 
     public ReadingController(Model model, MainView view) {
         Objects.requireNonNull(model, "Controller created with null model");
         Objects.requireNonNull(view, "Controller created with null view");
         this.view = view;
         this.model = model;
-        this.readingQueries = BelongingQueries.getReadingQueries();
     }
 
     public void userRequestedPersone() {
@@ -79,9 +74,76 @@ public final class ReadingController {
     public void userRequestedAcquistiProdotti() {
         try {
             final var acquisti = this.model.loadAcquistiProdotti();
-            this.view.showPanel(acquisti, "NUmero di vendite dei prodotti");
+            this.view.showPanel(acquisti, "Numero di vendite dei prodotti");
         } catch (DAOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void userRequestedAree() {
+       try {
+         final var aree = this.model.loadAree();
+         this.view.showPanel(aree, "Aree del parco");
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
+    }
+
+    public void userRequestedZoneAmministrative() {
+        try {
+            final var zoneAmm = this.model.loadZoneAmministrative();
+            this.view.showPanel(zoneAmm, "Zone Amministrative del parco");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void userRequestedZoneRicreative() {
+        try {
+            final var zoneRic = this.model.loadZoneRicreative();
+            this.view.showPanel(zoneRic, "Zone Ricreative del parco");
+        } catch (Exception e) {
+           e.printStackTrace();
+        }
+    }
+
+    public void userRequestedHabitat() {
+        final var habitat = this.model.loadHabitat();
+        this.view.showPanel(habitat, "Habitat del parco");
+    }
+
+    public void userRequestedSpecie() {
+        final var specie = this.model.loadSpecie();
+        this.view.showPanel(specie, "Specie registrate");
+    }
+
+    public void userRequestedOrdini() {
+        final var ordini = this.model.loadOrdini();
+        this.view.showPanel(ordini, "Ordini registrati");
+    }
+
+    public void userRequestedProdotti() {
+        final var prodotti = this.model.loadProdotti();
+        this.view.showPanel(prodotti, "Prodotti in vendita");
+    }
+
+    public void userRequestedSconti() {
+        final var sconti = this.model.loadSconti();
+        this.view.showPanel(sconti, "Tipologie di sconto");
+    }
+
+    public void userRequestedVisitatori() {
+        final var visitatori = this.model.loadVisitatori();
+        this.view.showPanel(visitatori, "Visitatori del parco registrati");
+    }
+
+    public void userRequestedDipendenti() {
+        final var dipendenti = this.model.loadDipendenti();
+        this.view.showPanel(dipendenti, "Dipendenti del parco registrati");
+    }
+
+    public void userRequestedRendimentiGiornalieri() {
+        final var rendimenti = this.model.loadRendimentiGiornalieri();
+        this.view.showPanel(rendimenti, "Rendimenti Giornalieri delle zone Ricreative");
     }
 }

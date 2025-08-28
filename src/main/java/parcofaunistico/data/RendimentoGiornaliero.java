@@ -19,9 +19,9 @@ public class RendimentoGiornaliero {
 
     @Override
     public String toString() {
-        return this.data + ", "
-             + this.numeroVendite + ", "
-             + this.fatturato;
+        return "Data: " + this.data + ", "
+             + "Numero Vendite: " + this.numeroVendite + ", "
+             + "Fatturato: " + this.fatturato;
     }
 
     public static final class DAO {

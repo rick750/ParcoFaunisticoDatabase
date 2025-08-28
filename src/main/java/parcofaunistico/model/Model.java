@@ -15,6 +15,7 @@ import parcofaunistico.data.IncassoBiglietto;
 import parcofaunistico.data.Ordine;
 import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.RendimentoGiornaliero;
+import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Specie;
 import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaAmministrativa;
@@ -30,7 +31,7 @@ public interface Model {
 
     List<Prodotto> loadProdotti();
 
-     List<AcquistiProdotto> loadAcquistiProdotti();
+    List<AcquistiProdotto> loadAcquistiProdotti();
 
     List<Affluenza> loadAffluenze();
 
@@ -45,6 +46,20 @@ public interface Model {
     Boolean checkVisitatore(String codiceFiscale);
 
     Boolean checkDipendente(String codiceFiscale);
+
+    List<Area> loadAree();
+    
+    List<ZonaAmministrativa> loadZoneAmministrative();
+
+    List<ZonaRicreativa> loadZoneRicreative();
+
+    List<Habitat> loadHabitat();
+
+    List<Dipendente> loadDipendenti();
+
+    List<Specie> loadSpecie();
+
+    List<Sconto> loadSconti();
 
     static Model fromConnection(Connection connection) {
         return new DBModel(connection);

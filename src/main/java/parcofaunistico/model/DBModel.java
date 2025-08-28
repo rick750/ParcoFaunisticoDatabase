@@ -16,6 +16,7 @@ import parcofaunistico.data.IncassoBiglietto;
 import parcofaunistico.data.Ordine;
 import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.RendimentoGiornaliero;
+import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Specie;
 import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaAmministrativa;
@@ -127,5 +128,10 @@ public final class DBModel implements Model {
     @Override
     public List<RendimentoGiornaliero> loadRendimentiGiornalieri() {
         return RendimentoGiornaliero.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<Sconto> loadSconti() {
+        return Sconto.DAO.list(this.connection);
     }
 }
