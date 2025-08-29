@@ -5,13 +5,16 @@ import java.util.Map;
 import javax.swing.JTextField;
 
 import parcofaunistico.data.Parametri;
+import parcofaunistico.model.WritingModel;
 
 public class RegistrazioneVisitatoreController {
     private final Map<Parametri, JTextField> textfields;
+    private final WritingModel writingModel;
     private String errorMessage;
 
-    public RegistrazioneVisitatoreController( final Map<Parametri, JTextField> fields) {
+    public RegistrazioneVisitatoreController(final WritingModel writingModel, final Map<Parametri, JTextField> fields) {
         this.textfields = fields;
+        this.writingModel = writingModel;
     }
 
     public boolean check() {
@@ -74,5 +77,10 @@ public class RegistrazioneVisitatoreController {
 
     public String getErrorMessage() {
         return this.errorMessage;
+    }
+
+
+    public boolean executeInsertQuery() {
+        return this.writingModel.insertVisitatore(textfields);
     }
 }

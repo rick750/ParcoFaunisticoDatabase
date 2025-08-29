@@ -41,7 +41,6 @@ public class RegVisitatorePanel extends JPanel{
     private static final Font FIELD_FONT = getResponsiveFont(Font.BOLD, 28);
     private static final Font BTN_FONT = new Font("Monospaced", Font.BOLD, 26);
     private final MainView mainView;
-    private final WritingModel writingModel;
     private final JTextField codicefiscaleField;
     private final JTextField nomeField;
     private final JTextField cognomeField;
@@ -54,8 +53,6 @@ public class RegVisitatorePanel extends JPanel{
     private final RegistrazioneVisitatoreController regController;
     public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel) {
         this.mainView = mainView;
-        this.writingModel = writingModel;
-
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(new JLabel("Benvenuto al menù di registrazione"));
 
@@ -85,7 +82,7 @@ public class RegVisitatorePanel extends JPanel{
             }
         );
 
-        this.regController = new RegistrazioneVisitatoreController(this.textfields);
+        this.regController = new RegistrazioneVisitatoreController(writingModel, this.textfields);
     }
 
     private void arrangeComponents() {
@@ -143,6 +140,8 @@ public class RegVisitatorePanel extends JPanel{
         button.addActionListener(act -> {
             if (! this.regController.check()) {
                 this.showErrorMessage(this.regController.getErrorMessage());
+            } else {
+                this.regController.executeInsertQuery();
             }
         });
         return button;
