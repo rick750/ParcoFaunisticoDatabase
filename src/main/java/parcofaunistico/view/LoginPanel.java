@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import parcofaunistico.controller.LoginController;
 import parcofaunistico.data.User;
-import parcofaunistico.model.Model;
+import parcofaunistico.model.ReadingModel;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -65,7 +65,7 @@ public class LoginPanel extends JPanel {
     private final JRadioButton managerBtn;
     private final ButtonGroup btnsGroup;
 
-    public LoginPanel(MainView mainView, Model model) {
+    public LoginPanel(MainView mainView, ReadingModel model) {
         this.mainView = mainView;
         this.loginContr = new LoginController(model);
         this.configurePanel();
@@ -80,7 +80,11 @@ public class LoginPanel extends JPanel {
         this.dipendenteBtn = new JRadioButton(NOME_DIPENDENTE);
         this.managerBtn = new JRadioButton(NOME_MANAGER);
         this.btnsPanel = new JPanel();
+        this.btnsPanel.setLayout(new BoxLayout(this.btnsPanel, BoxLayout.Y_AXIS));
         setUpRadioButtons();
+        final JButton backButton = new JButton("INDIETRO");
+        backButton.addActionListener(e -> this.mainView.showMenuPanel());
+        this.btnsPanel.add(backButton);
 
         this.add(fieldPanel, CARD_FIELD);
         this.add(btnsPanel, CARD_BUTTONS);
@@ -198,9 +202,9 @@ public class LoginPanel extends JPanel {
                 this.showError("Il codice fiscale deve essere lungo 16 caratteri!");
             } else if (confirmUser(codiceFiscale)) {
                 switch(this.selected) {
-                    case "Manager" -> this.mainView.setUserPanel(User.MANAGER);
-                    case "Visitatore" -> this.mainView.setUserPanel(User.VISITATORE);
-                    case "Dipendente" -> this.mainView.setUserPanel(User.DIPENDENTE);
+                    case "Manager" -> this.mainView.setUserPanel(User.MANAGER, codiceFiscale);
+                    case "Visitatore" -> this.mainView.setUserPanel(User.VISITATORE, codiceFiscale);
+                    case "Dipendente" -> this.mainView.setUserPanel(User.DIPENDENTE, codiceFiscale);
                 }
                 this.mainView.showUserPanel();
             }

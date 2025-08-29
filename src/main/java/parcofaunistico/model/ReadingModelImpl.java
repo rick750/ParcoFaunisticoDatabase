@@ -11,6 +11,7 @@ import parcofaunistico.data.Area;
 import parcofaunistico.data.ClassificaProdotto;
 import parcofaunistico.data.Dipendente;
 import parcofaunistico.data.Esemplare;
+import parcofaunistico.data.GiornataLavorativa;
 import parcofaunistico.data.Habitat;
 import parcofaunistico.data.IncassoBiglietto;
 import parcofaunistico.data.Ordine;
@@ -22,18 +23,18 @@ import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaAmministrativa;
 import parcofaunistico.data.ZonaRicreativa;
 
-public final class DBModel implements Model {
+public final class ReadingModelImpl implements ReadingModel {
 
     private final Connection connection;
 
-    public DBModel(final Connection connection) {
+    public ReadingModelImpl(final Connection connection) {
         Objects.requireNonNull(connection, "Model created with null connection");
         this.connection = connection;
     }
 
     @Override
     public List<Visitatore> loadVisitatori() {
-        var visitatori = Visitatore.DAO.list(this.connection);
+        final var visitatori = Visitatore.DAO.list(this.connection);
         return visitatori;
     }
 
@@ -133,5 +134,15 @@ public final class DBModel implements Model {
     @Override
     public List<Sconto> loadSconti() {
         return Sconto.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<GiornataLavorativa> loadGiornateLavorative(final String codiceFiscale) {
+        return GiornataLavorativa.DAO.list(this.connection, codiceFiscale);
+    }
+
+    @Override
+    public List<Ordine> loadOrdiniVisitatore(final String codiceFiscale) {
+        return Ordine.DAO.getVisitatoreOrdini(connection, codiceFiscale);
     }
 }

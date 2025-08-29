@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import parcofaunistico.controller.ReadingController;
 
 public class ManagerPanel extends JPanel{
-    public ManagerPanel(final ReadingController readingController) {
+    public ManagerPanel(final ReadingController readingController, final String codiceFiscale) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         final var btnAree = new JButton("Pagina aree");
@@ -75,8 +75,5 @@ public class ManagerPanel extends JPanel{
         this.add(btnIncBiglietti);
         this.add(new JLabel(" "));
         this.add(btnRendimentiGiornalieri);
-        
-
-        
     }
 }

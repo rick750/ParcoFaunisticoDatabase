@@ -13,7 +13,7 @@ public class DipendentiPanel extends JPanel {
 
     private final Optional<ReadingController> readContr;
     
-    public DipendentiPanel(final ReadingController rContr) {
+    public DipendentiPanel(final ReadingController rContr, final String codiceFiscale) {
         this.readContr = Optional.of(rContr);
         setPreferredSize(this.getPreferredSize());
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
@@ -78,6 +78,13 @@ public class DipendentiPanel extends JPanel {
             }
         });
 
+        final var btnGiornateLavorative = new JButton("Pagina Giornate Lavorative");
+        btnGiornateLavorative.addActionListener(e -> {
+            if (readContr.isPresent()) {
+                readContr.get().userRequestedGiornateLavorative(codiceFiscale);
+            }
+        });
+
         add(btnAree);
         add(new JLabel(" "));
         add(btnZoneAmministrative);
@@ -93,6 +100,8 @@ public class DipendentiPanel extends JPanel {
         add(btnOrdini);
         add(new JLabel(" "));
         add(btnProdotti);
+        add(new JLabel(" "));
+        add(btnGiornateLavorative);
     }
 
 }

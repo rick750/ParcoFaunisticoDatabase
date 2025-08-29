@@ -22,6 +22,7 @@ public final class MainView extends JFrame{
 
     private static final String CARD_ACCEDI_REGISTRATI = "accReg";
     private static final String CARD_LOGIN = "login";
+    private static final String CARD_REGISTRAZIONE = "registrazione";
     private static final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int WIDTH = (int) SCREENSIZE.getWidth();
     private static final int HEIGHT = (int) SCREENSIZE.getHeight();
@@ -33,17 +34,20 @@ public final class MainView extends JFrame{
     private final JPanel cardPanel = new JPanel(this.layout);
     private final JPanel emptyPanel;
     private final LoginPanel loginPanel;
+    private final RegVisitatorePanel registrazionePanel;
     private final AccediRegistratiPanel accRegPanel;
 
     public MainView(final MainController mainController, final Runnable onClose) {
         this.readingController = Optional.empty();
         setupMainFrame(onClose);
         this.emptyPanel = new JPanel();
-        this.loginPanel = new LoginPanel(this, mainController.getModel());
-        this.accRegPanel = new AccediRegistratiPanel(this, CARD_LOGIN);
+        this.loginPanel = new LoginPanel(this, mainController.getReadingModel());
+        this.registrazionePanel = new RegVisitatorePanel(this, mainController.getWritingModel());
+        this.accRegPanel = new AccediRegistratiPanel(this, CARD_LOGIN, CARD_REGISTRAZIONE);
 
         this.cardPanel.add(emptyPanel, EMPTY);
         this.cardPanel.add(loginPanel, CARD_LOGIN);
+        this.cardPanel.add(registrazionePanel, CARD_REGISTRAZIONE);
         this.cardPanel.add(accRegPanel, CARD_ACCEDI_REGISTRATI);
         this.add(cardPanel);
         this.layout.show(this.cardPanel, CARD_ACCEDI_REGISTRATI);
@@ -88,22 +92,22 @@ public final class MainView extends JFrame{
         this.layout.show(this.cardPanel, nome);
     }
 
-    public void setUserPanel(final User user) {
+    public void setUserPanel(final User user, final String codiceFiscale) {
         switch(user) {
             case MANAGER -> {
-                final var panel = new ManagerPanel(this.readingController.get());
+                final var panel = new ManagerPanel(this.readingController.get(), codiceFiscale);
                 this.cardPanel.add(panel, CARD_USER);
                 this.layout.show(this.cardPanel, CARD_USER);
             }
 
             case VISITATORE -> {
-                final var panel = new VisitatorePanel(this.readingController.get());
+                final var panel = new VisitatorePanel(this.readingController.get(), codiceFiscale);
                 this.cardPanel.add(panel, CARD_USER);
                 this.layout.show(this.cardPanel, CARD_USER);
             }
 
             case DIPENDENTE -> {
-                final var panel = new DipendentiPanel(this.readingController.get());
+                final var panel = new DipendentiPanel(this.readingController.get(), codiceFiscale);
                 this.cardPanel.add(panel, CARD_USER);
                 this.layout.show(this.cardPanel, CARD_USER);
             }
@@ -112,6 +116,11 @@ public final class MainView extends JFrame{
 
     public void showUserPanel() {
         this.layout.show(this.cardPanel, CARD_USER);
+        this.emptyPanel.removeAll();
+    }
+
+    public void showMenuPanel() {
+        this.layout.show(this.cardPanel, CARD_ACCEDI_REGISTRATI);
         this.emptyPanel.removeAll();
     }
 }

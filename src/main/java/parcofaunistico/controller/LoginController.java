@@ -2,7 +2,7 @@ package parcofaunistico.controller;
 
 import java.util.Objects;
 
-import parcofaunistico.model.Model;
+import parcofaunistico.model.ReadingModel;
 
 public class LoginController {
     
@@ -11,9 +11,9 @@ public class LoginController {
     private static final String NOME_VISITATORE = "Visitatore";
     private String codiceManager = "RVIBNC00S51G273Y";
 
-    private final Model model;
+    private final ReadingModel model;
 
-    public LoginController(final Model model) {
+    public LoginController(final ReadingModel model) {
         Objects.requireNonNull(model, "Controller created with null model");
         this.model = model;
     }

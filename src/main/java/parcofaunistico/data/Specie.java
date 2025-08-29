@@ -20,10 +20,10 @@ public class Specie {
 
     @Override
     public String toString() {
-        return nomeScientifico + ", "
-                + nomeComune + ", "
-                + abitudini + ", "
-                + numeroEsemplari + ", ";
+        return "Nome Scientifico: " + nomeScientifico + ",      "
+                + "Nome Comune: " + nomeComune + ",       "
+                + "Abitudini: " + abitudini + ",    "
+                + "Numero esemplari: " + numeroEsemplari;
     }
 
     public static final class DAO {

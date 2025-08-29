@@ -12,9 +12,11 @@ public class AccediRegistratiPanel extends JPanel{
     private final JButton accediBtn = new JButton("Accedi");
     private final JButton registratiBtn = new JButton("Registrati");
     private final String nomeLogin;
+    private final String nomeRec;
 
-    public AccediRegistratiPanel(final MainView mainView, final String nomeLogin) {
+    public AccediRegistratiPanel(final MainView mainView, final String nomeLogin, final String nomeRec) {
         this.nomeLogin = nomeLogin;
+        this.nomeRec = nomeRec;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.mainPanel = new JPanel(new FlowLayout());
         this.setUpPanels(mainView);
@@ -26,7 +28,7 @@ public class AccediRegistratiPanel extends JPanel{
     private void setUpPanels(final MainView mainView) {
         this.registratiBtn.addActionListener(
             e -> {
-                //mainView.changePanel(this.nomePanel);
+                mainView.changePanel(this.nomeRec);
             }
         );
 

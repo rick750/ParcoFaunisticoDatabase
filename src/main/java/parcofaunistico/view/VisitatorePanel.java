@@ -9,7 +9,7 @@ import parcofaunistico.controller.ReadingController;
 
 public class VisitatorePanel extends JPanel{
     
-    public VisitatorePanel(final ReadingController readingController) {
+    public VisitatorePanel(final ReadingController readingController, final String codiceFiscale) {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         final var btnZonaRicreativa = new JButton("Pagina Zona Ricreative");
@@ -24,6 +24,8 @@ public class VisitatorePanel extends JPanel{
         btnProdotti.addActionListener(e -> readingController.userRequestedProdotti());
         final var btnSconti = new JButton("Pagina Sconti");
         btnSconti.addActionListener(e -> readingController.userRequestedSconti());
+        final var btnOrdini = new JButton("Ordini richiesti");
+        btnOrdini.addActionListener(e -> readingController.userRequestedOrdiniVisitatore(codiceFiscale));
 
         this.add(btnZonaRicreativa);
         this.add(new JLabel(" "));
@@ -36,5 +38,7 @@ public class VisitatorePanel extends JPanel{
         this.add(btnProdotti);
         this.add(new JLabel(" "));
         this.add(btnSconti);
+        this.add(new JLabel(" "));
+        this.add(btnOrdini);
     }
 }

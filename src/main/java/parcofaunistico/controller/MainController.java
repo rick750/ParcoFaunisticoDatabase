@@ -6,11 +6,13 @@ import java.util.List;
 import java.util.Objects;
 
 import parcofaunistico.data.Queries;
-import parcofaunistico.model.Model;
+import parcofaunistico.model.ReadingModel;
+import parcofaunistico.model.WritingModel;
 
 public class MainController {
 
-    Model model;
+    private final ReadingModel readingModel;
+    private final WritingModel writingModel;
 
     private static final List<Queries> QUERIES_DIPENDENTE = new ArrayList<>(Arrays.asList(Queries.SHOW_AREE, Queries.SHOW_ZONA_AMMINISTRATIVA,
     Queries.SHOW_ZONA_RICREATIVA, Queries.SHOW_HABITAT,Queries.SHOW_ESEMPLARE, Queries.SHOW_SPECIE, Queries.SHOW_ORDINE,
@@ -25,13 +27,18 @@ public class MainController {
     Queries.SHOW_CLASSIFICA_PRODOTTI, Queries.SHOW_INCASSI_BIGLIETTI, Queries.SHOW_DIPENDENTE, Queries.SHOW_VISITATORE,
     Queries.SHOW_RENDIMENTO_GIORNALIERO));
 
-    public MainController(final Model model) {
-        Objects.requireNonNull(model, "Controller created with null model");
-        this.model = model;
+    public MainController(final ReadingModel readingModel, final WritingModel writingModel) {
+        Objects.requireNonNull(readingModel, "Controller created with null model");
+        this.readingModel = readingModel;
+        this.writingModel = writingModel;
     }
 
-    public Model getModel() {
-        return this.model;
+    public ReadingModel getReadingModel() {
+        return this.readingModel;
+    }
+
+    public WritingModel getWritingModel() {
+        return this.writingModel;
     }
 
     public List<Queries> getManagerQueries() {

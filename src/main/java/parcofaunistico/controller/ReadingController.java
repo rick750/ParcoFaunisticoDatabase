@@ -1,16 +1,16 @@
 package parcofaunistico.controller;
 
 import parcofaunistico.data.DAOException;
-import parcofaunistico.model.Model;
+import parcofaunistico.model.ReadingModel;
 import parcofaunistico.view.MainView;
 
 import java.util.Objects;
 
 public final class ReadingController {
-    private final Model model;
+    private final ReadingModel model;
     private final MainView view;
 
-    public ReadingController(Model model, MainView view) {
+    public ReadingController(ReadingModel model, MainView view) {
         Objects.requireNonNull(model, "Controller created with null model");
         Objects.requireNonNull(view, "Controller created with null view");
         this.view = view;
@@ -146,4 +146,15 @@ public final class ReadingController {
         final var rendimenti = this.model.loadRendimentiGiornalieri();
         this.view.showPanel(rendimenti, "Rendimenti Giornalieri delle zone Ricreative");
     }
+
+    public void userRequestedGiornateLavorative(final String codiceFiscale) {
+        final var giornateLavorative = this.model.loadGiornateLavorative(codiceFiscale);
+        this.view.showPanel(giornateLavorative, "Giornate lavorative timbrate dal dipendente: " + codiceFiscale);
+    }
+
+    public void userRequestedOrdiniVisitatore(final String codiceFiscale) {
+        final var ordiniVisitatore = this.model.loadOrdiniVisitatore(codiceFiscale);
+        this.view.showPanel(ordiniVisitatore, "Ordini richiesti dal visitatore: " + codiceFiscale);
+    }
+    
 }

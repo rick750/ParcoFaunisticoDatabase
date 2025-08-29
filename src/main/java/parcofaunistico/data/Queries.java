@@ -57,8 +57,9 @@ public enum Queries {
             """),
 
     SHOW_ORDINE("""
-            SELECT *
-            FROM ORDINE
+            SELECT o.*, p.codice_prodotto, p.nome AS nomeProd, p.descrizione, p.prezzo_unitario, (o.quantita_acquistata * p.prezzo_unitario ) AS PrezzoOrdine
+            FROM ORDINE o, PRODOTTO p
+            WHERE o.codice_prodotto = p.codice_prodotto
             """),
 
     SHOW_RENDIMENTO_GIORNALIERO("""
@@ -158,7 +159,21 @@ public enum Queries {
         SELECT p.codice_fiscale, p.nome
         FROM PERSONA p
         WHERE p.codice_fiscale = """
-    );
+    ),
+
+    SHOW_GIORNATA_LAVORATIVA("""
+        SELECT g.*, d.codice_fiscale
+        FROM GIORNATA_LAVORATIVA g, DIPENDENTE d
+        WHERE d.codice_fiscale = g.codice_fiscale
+        AND d.codice_fiscale = """),
+
+    SHOW_VISITATORE_ORDINI("""
+        SELECT v.codice_fiscale, r.codice_fiscale, o.*, p.codice_prodotto, p.nome AS nomeProd, p.descrizione, p.prezzo_unitario, (o.quantita_acquistata * p.prezzo_unitario ) AS PrezzoOrdine
+        FROM VISITATORE v, RICHIESTA r, ORDINE o, PRODOTTO P
+        WHERE p.codice_prodotto = o.codice_prodotto
+        AND o.codice_ordine = r.codice_ordine
+        AND r.codice_fiscale = v.codice_fiscale
+        AND v.codice_fiscale = """);
 
     private final String query;
 
