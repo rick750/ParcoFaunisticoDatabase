@@ -2,21 +2,23 @@ package parcofaunistico.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
 import java.util.Map;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
 
 import parcofaunistico.controller.RegistrazioneVisitatoreController;
 import parcofaunistico.data.Parametri;
@@ -24,22 +26,12 @@ import parcofaunistico.model.WritingModel;
 
 public class RegVisitatorePanel extends JPanel{
     private static final long serialVersionUID = 1L;
-    private static final int BASE_SCREEN_WIDTH = 1920;
     private static final double RESIZE_FACTOR = 1.0;
-    private static final String FONT_NAME = "DialogInput";
     private static final double FIELD_HEIGHT_RATIO = 0.05;
     private static final double FIELD_WIDTH_RATIO = 0.15;
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCREEN_WIDTH = (int) (SCREEN_SIZE.getWidth() * RESIZE_FACTOR);
     private static final int SCREEN_HEIGHT = (int) (SCREEN_SIZE.getHeight() * RESIZE_FACTOR);
-    private static final Color BG_COLOR = new Color(15, 35, 65);
-    private static final Color LABEL_COLOR = new Color(144, 238, 144);
-    private static final Color BTN_BG_COLOR = new Color(255, 215, 0);
-    private static final Color BTN_FG_COLOR = new Color(15, 35, 65);
-    private static final Font SUBTITLE_FONT = getResponsiveFont(Font.BOLD, 40);
-    private static final Font LABEL_FONT = getResponsiveFont(Font.BOLD, 30);
-    private static final Font FIELD_FONT = getResponsiveFont(Font.BOLD, 28);
-    private static final Font BTN_FONT = new Font("Monospaced", Font.BOLD, 26);
     private final MainView mainView;
     private final JTextField codicefiscaleField;
     private final JTextField nomeField;
@@ -51,10 +43,12 @@ public class RegVisitatorePanel extends JPanel{
     private final JButton sendButton;
     private final Map<Parametri, JTextField> textfields;
     private final RegistrazioneVisitatoreController regController;
+
     public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel) {
         this.mainView = mainView;
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(new JLabel("Benvenuto al menù di registrazione"));
+        this.setLayout(new GridBagLayout());
+        this.setBackground(UIManager.getColor("Panel.background"));
+        this.setOpaque(true);
 
         this.codicefiscaleField = createField();
         this.nomeField = createField();
@@ -74,68 +68,85 @@ public class RegVisitatorePanel extends JPanel{
         this.textfields.put(Parametri.EMAIL, emailField);
         this.arrangeComponents();
 
-        final JButton backButton = new JButton("INDIETRO");
-        this.add(backButton);
-        backButton.addActionListener(
-            e -> {
-                mainView.showMenuPanel();
-            }
-        );
-
         this.regController = new RegistrazioneVisitatoreController(writingModel, this.textfields);
     }
 
     private void arrangeComponents() {
-        this.add(Box.createVerticalGlue());
-        this.add(createLabel("Insert a username to continue", SUBTITLE_FONT, LABEL_COLOR));
-        this.add(Box.createVerticalGlue());
-        this.add(createInputPanel("Codice Fiscale", codicefiscaleField));
-        this.add(Box.createVerticalGlue());
-        this.add(createInputPanel("nome", nomeField));
-        this.add(Box.createVerticalGlue());
-        this.add(createInputPanel("cognome", cognomeField));
-        this.add(Box.createVerticalGlue());
-        this.add(createInputPanel("età", etaField));
-        this.add(Box.createVerticalGlue());
-        this.add(createInputPanel("indirizzo", indirizzoField));
-        this.add(Box.createVerticalGlue());
-        this.add(createInputPanel("telefono", telefonoField));
-        this.add(Box.createVerticalGlue());
-        this.add(createInputPanel("email", emailField));
-        this.add(Box.createVerticalGlue());
-        this.add(this.sendButton);
-        this.add(Box.createVerticalGlue());
-        this.sendButton.setOpaque(true);
+        final GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.fill = GridBagConstraints.NONE;
+
+        int row = 0;
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        final JLabel title = createLabel("Benvenuto al menù di registrazione");
+        title.setFont(UIManager.getFont("BigLabel.font"));
+        title.setForeground(new Color(255, 215, 0));
+        title.setBackground(new Color(18, 30, 49));
+        title.setOpaque(true);
+        this.add(title, gbc);
+
+        gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.LINE_END;
+
+        addRow("Codice Fiscale", codicefiscaleField, ++row, gbc);
+        addRow("Nome", nomeField, ++row, gbc);
+        addRow("Cognome", cognomeField, ++row, gbc);
+        addRow("Età", etaField, ++row, gbc);
+        addRow("Indirizzo", indirizzoField, ++row, gbc);
+        addRow("Telefono", telefonoField, ++row, gbc);
+        addRow("Email", emailField, ++row, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        this.add(sendButton, gbc);
+
+        gbc.gridy = ++row;
+        final JButton backButton = new JButton("INDIETRO");
+        backButton.setFont(UIManager.getFont("Button.font"));
+        backButton.setAlignmentX(CENTER_ALIGNMENT);
+        backButton.addActionListener(e -> mainView.showMenuPanel());
+        this.add(backButton, gbc);
     }
 
-    private JPanel createInputPanel(final String text, final JTextField field) {
-        final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(BG_COLOR);
-        panel.add(createLabel(text, LABEL_FONT, LABEL_COLOR));
-        panel.add(field);
-        return panel;
+    private void addRow(final String labelText, final JTextField field, final int row, final GridBagConstraints gbc) {
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        gbc.anchor = GridBagConstraints.LINE_END;
+        this.add(createLabel(labelText), gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        this.add(field, gbc);
     }
 
     private JButton createSendButton() {
-        final JButton button = new JButton("SEND");
-        button.setFont(BTN_FONT);
+        final JButton button = new JButton("INVIA");
+        button.setFont(UIManager.getFont("Button.font"));
         button.setAlignmentX(CENTER_ALIGNMENT);
-        button.setBackground(BTN_BG_COLOR);
-        button.setForeground(BTN_FG_COLOR);
+        button.setBackground(UIManager.getColor("Button.background"));
+        button.setForeground(UIManager.getColor("Button.foreground"));
         button.setBorderPainted(false);
         button.setFocusPainted(false);
 
-        button.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mouseEntered(final MouseEvent evt) {
-                button.setBackground(BTN_BG_COLOR.brighter());
+        button.addMouseListener(
+            new MouseAdapter() {
+                @Override
+                public void mouseEntered(final MouseEvent evt) {
+                    button.setBackground(button.getBackground().brighter());
+                }
+                @Override
+                public void mouseExited(final MouseEvent evt) {
+                    button.setBackground(UIManager.getColor("Button.background"));
+                }
             }
-
-            public void mouseExited(final MouseEvent evt) {
-                button.setBackground(BTN_BG_COLOR);
-            }
-        });
+        );
 
         button.addActionListener(act -> {
             if (! this.regController.check()) {
@@ -153,22 +164,17 @@ public class RegVisitatorePanel extends JPanel{
         field.setPreferredSize(new Dimension(
             (int) (SCREEN_WIDTH * FIELD_WIDTH_RATIO),
             (int) (SCREEN_HEIGHT * FIELD_HEIGHT_RATIO)));
-        field.setFont(FIELD_FONT);
+        field.setFont(UIManager.getFont("TextField.font"));
         return field;
     }
 
-    private JLabel createLabel(final String text, final Font font, final Color fg) {
+    private JLabel createLabel(final String text) {
         final JLabel label = new JLabel(text);
-        label.setFont(font);
-        label.setForeground(fg);
+        label.setFont(UIManager.getFont("Label.font"));
+        label.setForeground(UIManager.getColor("Label.foreground"));
         label.setAlignmentX(CENTER_ALIGNMENT);
         label.setFocusable(false);
         return label;
-    }
-
-     private static Font getResponsiveFont(final int style, final int size) {
-        final double scale = (double) SCREEN_WIDTH / BASE_SCREEN_WIDTH;
-        return new Font(FONT_NAME, style, (int) (size * scale));
     }
 
     private void showErrorMessage(final String message) {

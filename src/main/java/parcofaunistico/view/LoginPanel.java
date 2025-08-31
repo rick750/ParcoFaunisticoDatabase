@@ -12,16 +12,18 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 import parcofaunistico.controller.LoginController;
 import parcofaunistico.data.User;
 import parcofaunistico.model.ReadingModel;
 
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -34,22 +36,12 @@ public class LoginPanel extends JPanel {
     private static final String CARD_BUTTONS = "buttons";
     private static final String CARD_FIELD = "field";
     private static final long serialVersionUID = 1L;
-    private static final int BASE_SCREEN_WIDTH = 1920;
     private static final double RESIZE_FACTOR = 1.0;
-    private static final String FONT_NAME = "DialogInput";
     private static final double FIELD_HEIGHT_RATIO = 0.05;
     private static final double FIELD_WIDTH_RATIO = 0.15;
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCREEN_WIDTH = (int) (SCREEN_SIZE.getWidth() * RESIZE_FACTOR);
     private static final int SCREEN_HEIGHT = (int) (SCREEN_SIZE.getHeight() * RESIZE_FACTOR);
-    private static final Color BG_COLOR = new Color(15, 35, 65);
-    private static final Color LABEL_COLOR = new Color(144, 238, 144);
-    private static final Color BTN_BG_COLOR = new Color(255, 215, 0);
-    private static final Color BTN_FG_COLOR = new Color(15, 35, 65);
-    private static final Font SUBTITLE_FONT = getResponsiveFont(Font.BOLD, 40);
-    private static final Font LABEL_FONT = getResponsiveFont(Font.BOLD, 30);
-    private static final Font FIELD_FONT = getResponsiveFont(Font.BOLD, 28);
-    private static final Font BTN_FONT = new Font("Monospaced", Font.BOLD, 26);
 
     private final JTextField usernameField;
     private final JButton sendButton;
@@ -82,12 +74,8 @@ public class LoginPanel extends JPanel {
         this.btnsPanel = new JPanel();
         this.btnsPanel.setLayout(new BoxLayout(this.btnsPanel, BoxLayout.Y_AXIS));
         setUpRadioButtons();
-        final JButton backButton = new JButton("INDIETRO");
-        backButton.addActionListener(e -> this.mainView.showMenuPanel());
-        this.btnsPanel.add(backButton);
 
         this.add(fieldPanel, CARD_FIELD);
-        this.add(btnsPanel, CARD_BUTTONS);
         this.layout.show(this, CARD_BUTTONS);
     }
 
@@ -95,12 +83,24 @@ public class LoginPanel extends JPanel {
         this.btnsGroup.add(visitatoreBtn);
         this.btnsGroup.add(dipendenteBtn);
         this.btnsGroup.add(managerBtn);
-
+        styleRadioButton(visitatoreBtn);
+        styleRadioButton(dipendenteBtn);
+        styleRadioButton(managerBtn);
         this.btnsPanel.add(visitatoreBtn);
         this.btnsPanel.add(dipendenteBtn);
         this.btnsPanel.add(managerBtn);
+        final JButton backButton = new JButton("INDIETRO");
+        backButton.addActionListener(e -> this.mainView.showMenuPanel());
+        backButton.setAlignmentX(CENTER_ALIGNMENT);
+        this.btnsPanel.add(Box.createVerticalStrut(20));
+        this.btnsPanel.add(backButton);
 
- 
+        JPanel wrapper = new JPanel(new GridBagLayout());
+        wrapper.setBackground(UIManager.getColor("Panel.background"));
+        wrapper.add(this.btnsPanel);
+
+        this.add(wrapper, CARD_BUTTONS);
+
         for (final AbstractButton btn : Collections.list(btnsGroup.getElements())) {
             btn.addActionListener(
                 e -> {
@@ -115,8 +115,20 @@ public class LoginPanel extends JPanel {
         }
     }
 
+
+    private void styleRadioButton(JRadioButton btn) {
+        btn.setFont(UIManager.getFont("Button.font"));
+        btn.setBackground(UIManager.getColor("Button.background"));
+        btn.setForeground(UIManager.getColor("Button.foreground"));
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false);
+        btn.setOpaque(true);
+        btn.setMaximumSize(new Dimension(300, 60));
+        btn.setAlignmentX(CENTER_ALIGNMENT);
+    }
+
     private void configurePanel() {
-        this.setBackground(BG_COLOR);
+        this.setBackground(UIManager.getColor("Panel.background"));
         this.setLayout(this.layout);
     }
 
@@ -125,50 +137,54 @@ public class LoginPanel extends JPanel {
     }
 
     private void arrangeComponents() {
-        this.fieldPanel.add(Box.createVerticalGlue());
-        this.fieldPanel.add(createLabel("Insert a username to continue", SUBTITLE_FONT, LABEL_COLOR));
-        this.fieldPanel.add(Box.createVerticalGlue());
-        this.fieldPanel.add(createInputPanel());
-        this.fieldPanel.add(Box.createVerticalGlue());
-        this.fieldPanel.add(this.sendButton);
-        this.fieldPanel.add(Box.createVerticalGlue());
-        this.usernameField.setOpaque(true);
-        this.sendButton.setOpaque(true);
+        fieldPanel.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.NONE;
+
+        gbc.gridy = 0;
+        fieldPanel.add(createInputPanel(), gbc);
+
+        gbc.gridy = 1;
+        fieldPanel.add(sendButton, gbc);
+
+        gbc.gridy = 2;
         final JButton backButton = new JButton("INDIETRO");
-        this.fieldPanel.add(backButton);
-        backButton.addActionListener(
-            e -> {
-                layout.show(getMainPanel(), CARD_BUTTONS);
-            }
-        );
+        backButton.addActionListener(e -> layout.show(getMainPanel(), CARD_BUTTONS));
+        fieldPanel.add(backButton, gbc);
+
+        usernameField.setOpaque(true);
+        sendButton.setOpaque(true);
     }
 
     private JPanel createInputPanel() {
         final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(BG_COLOR);
-        panel.add(createLabel("Username:", LABEL_FONT, LABEL_COLOR));
+        panel.setBackground(UIManager.getColor("Panel.backgorund"));
+        panel.add(createLabel("Codice Fiscale:"));
         panel.add(usernameField);
         return panel;
     }
 
     private JButton createSendButton() {
-        final JButton button = new JButton("SEND");
-        button.setFont(BTN_FONT);
+        final JButton button = new JButton("INVIA");
+        button.setFont(UIManager.getFont("Button.font"));
         button.setAlignmentX(CENTER_ALIGNMENT);
-        button.setBackground(BTN_BG_COLOR);
-        button.setForeground(BTN_FG_COLOR);
+        button.setBackground(UIManager.getColor("Button.background"));
+        button.setForeground(UIManager.getColor("Button.foreground"));
         button.setBorderPainted(false);
         button.setFocusPainted(false);
 
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(final MouseEvent evt) {
-                button.setBackground(BTN_BG_COLOR.brighter());
+                button.getBackground().brighter();
             }
 
             @Override
             public void mouseExited(final MouseEvent evt) {
-                button.setBackground(BTN_BG_COLOR);
+                button.setBackground(UIManager.getColor("Button.background"));
             }
         });
 
@@ -181,15 +197,15 @@ public class LoginPanel extends JPanel {
         field.setPreferredSize(new Dimension(
             (int) (SCREEN_WIDTH * FIELD_WIDTH_RATIO),
             (int) (SCREEN_HEIGHT * FIELD_HEIGHT_RATIO)));
-        field.setFont(FIELD_FONT);
+        field.setFont(UIManager.getFont("Field.font"));
         field.addActionListener(sendActionListener());
         return field;
     }
 
-    private JLabel createLabel(final String text, final Font font, final Color fg) {
+    private JLabel createLabel(final String text) {
         final JLabel label = new JLabel(text);
-        label.setFont(font);
-        label.setForeground(fg);
+        label.setFont(UIManager.getFont("Label.font"));
+        label.setForeground(UIManager.getColor("Label.foreground"));
         label.setAlignmentX(CENTER_ALIGNMENT);
         label.setFocusable(false);
         return label;
@@ -221,7 +237,7 @@ public class LoginPanel extends JPanel {
         );
 
         JOptionPane.showMessageDialog(
-            this,
+            null,
             message,
             "Informazione",
             JOptionPane.INFORMATION_MESSAGE
@@ -235,10 +251,5 @@ public class LoginPanel extends JPanel {
             message,
             "Input Error",
             JOptionPane.ERROR_MESSAGE);
-    }
-
-    private static Font getResponsiveFont(final int style, final int size) {
-        final double scale = (double) SCREEN_WIDTH / BASE_SCREEN_WIDTH;
-        return new Font(FONT_NAME, style, (int) (size * scale));
     }
 }

@@ -23,8 +23,11 @@ public class VociPanel<T> extends JPanel {
         this.setLayout(new BorderLayout());
 
         this.contentPanel = new JPanel();
+        this.contentPanel.setOpaque(false);
         this.contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
         JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
         this.add(scrollPane, BorderLayout.CENTER);
 
         var bottom = new JPanel();
