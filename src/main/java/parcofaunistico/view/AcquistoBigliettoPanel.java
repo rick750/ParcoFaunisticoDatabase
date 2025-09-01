@@ -24,7 +24,7 @@ import parcofaunistico.controller.RegistrazioneVisitatoreController;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
-public class RegVisitatorePanel extends JPanel{
+public class AcquistoBigliettoPanel extends JPanel{
     private static final long serialVersionUID = 1L;
     private static final double RESIZE_FACTOR = 1.0;
     private static final double FIELD_HEIGHT_RATIO = 0.05;
@@ -44,7 +44,7 @@ public class RegVisitatorePanel extends JPanel{
     private final Map<Parametri, JTextField> textfields;
     private final RegistrazioneVisitatoreController regController;
 
-    public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel) {
+    public AcquistoBigliettoPanel(final MainView mainView, final WritingModel writingModel) {
         this.mainView = mainView;
         this.setLayout(new GridBagLayout());
         this.setBackground(UIManager.getColor("Panel.background"));
