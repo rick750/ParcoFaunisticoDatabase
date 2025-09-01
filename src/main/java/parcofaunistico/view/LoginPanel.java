@@ -7,6 +7,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,6 +21,8 @@ import parcofaunistico.data.User;
 import parcofaunistico.model.ReadingModel;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -161,7 +165,7 @@ public class LoginPanel extends JPanel {
 
     private JPanel createInputPanel() {
         final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        panel.setBackground(UIManager.getColor("Panel.backgorund"));
+        panel.setBackground(UIManager.getColor("Panel.backgrund"));
         panel.add(createLabel("Codice Fiscale:"));
         panel.add(usernameField);
         return panel;
@@ -179,7 +183,10 @@ public class LoginPanel extends JPanel {
         button.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(final MouseEvent evt) {
-                button.getBackground().brighter();
+                Color bg = button.getBackground();
+                if (bg != null) {
+                    button.setBackground(bg.brighter());
+                }
             }
 
             @Override
@@ -215,7 +222,7 @@ public class LoginPanel extends JPanel {
         return e -> {
             final String codiceFiscale = usernameField.getText().trim();
             if (!loginContr.checkValidity(codiceFiscale)) {
-                this.showError("Il codice fiscale deve essere lungo 16 caratteri!");
+                this.showErrorDialog("Il codice fiscale deve essere lungo 16 caratteri!");
             } else if (confirmUser(codiceFiscale)) {
                 switch(this.selected) {
                     case "Manager" -> this.mainView.setUserPanel(User.MANAGER, codiceFiscale);
@@ -236,20 +243,39 @@ public class LoginPanel extends JPanel {
             isNew ? " non " : " "
         );
 
-        JOptionPane.showMessageDialog(
-            null,
-            message,
-            "Informazione",
-            JOptionPane.INFORMATION_MESSAGE
-        );
+        showInfoDialog(message, "Informazione", Color.WHITE, Color.BLACK);
         return !isNew;
     }
 
-    private void showError(final String message) {
-        JOptionPane.showMessageDialog(
-            this,
-            message,
-            "Input Error",
-            JOptionPane.ERROR_MESSAGE);
+    private void showErrorDialog(final String message) {
+        showInfoDialog(message, "Input Error", Color.WHITE, Color.BLACK);
+    }
+
+    private void showInfoDialog(String message, String title, Color bg, Color fg) {
+        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = pane.createDialog(this, title);
+        setBackgroundAndForegroundRecursively(pane, bg, fg);
+        if (dialog.getContentPane() != null) {
+            setBackgroundAndForegroundRecursively(dialog.getContentPane(), bg, fg);
+        }
+        dialog.pack();
+        dialog.setModal(true);
+        dialog.setVisible(true);
+    }
+
+    private void setBackgroundAndForegroundRecursively(Component c, Color bg, Color fg) {
+        if (c == null) return;
+        try {
+            c.setBackground(bg);
+        } catch (Exception ignored) {}
+        try {
+            c.setForeground(fg);
+        } catch (Exception ignored) {}
+        if (c instanceof JComponent) {
+            ((JComponent) c).setOpaque(true);
+        }
+        for (Component child : ((c instanceof JComponent) ? ((JComponent) c).getComponents() : new Component[0])) {
+            setBackgroundAndForegroundRecursively(child, bg, fg);
+        }
     }
 }

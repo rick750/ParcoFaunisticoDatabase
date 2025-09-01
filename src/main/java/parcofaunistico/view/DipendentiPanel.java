@@ -1,10 +1,12 @@
 package parcofaunistico.view;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.util.Optional;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import parcofaunistico.controller.ReadingController;
@@ -16,92 +18,67 @@ public class DipendentiPanel extends JPanel {
     public DipendentiPanel(final ReadingController rContr, final String codiceFiscale) {
         this.readContr = Optional.of(rContr);
         setPreferredSize(this.getPreferredSize());
-        setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-
-        add(new JLabel("\n"));
-        add(new JLabel("Parco Faunistico"));
-        add(new JLabel("\n"));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         final var btnAree = new JButton("Pagina aree");
-        btnAree.addActionListener(e -> {
-            if (this.readContr.isPresent()) {
-                readContr.get().userRequestedAree();
-            }
-        });
+        centerButton(btnAree);
+        btnAree.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedAree));
 
         final var btnZoneAmministrative = new JButton("Pagina Zone Amministrative");
-        btnZoneAmministrative.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedZoneAmministrative();
-            }
-        });
+        centerButton(btnZoneAmministrative);
+        btnZoneAmministrative.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedZoneAmministrative));
 
-        final var btnZoneRicreative = new JButton("Pagina Zone RIcreative");
-        btnZoneRicreative.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedZoneRicreative();
-            }
-        });
+        final var btnZoneRicreative = new JButton("Pagina Zone Ricreative");
+        centerButton(btnZoneRicreative);
+        btnZoneRicreative.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedZoneRicreative));
 
         final var btnHabitat = new JButton("Pagina Habitat");
-        btnHabitat.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedHabitat();
-            }
-        });
+        centerButton(btnHabitat);
+        btnHabitat.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedHabitat));
 
         final var btnSpecie = new JButton("Pagina Specie");
-         btnSpecie.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedSpecie();
-            }
-        });
+        centerButton(btnSpecie);
+        btnSpecie.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedSpecie));
 
         final var btnEsemplari = new JButton("Pagina Esemplari");
-        btnEsemplari.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedEsemplari();
-            }
-        });
+        centerButton(btnEsemplari);
+        btnEsemplari.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedEsemplari));
 
         final var btnOrdini = new JButton("Pagina Ordini");
-        btnOrdini.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedOrdini();
-            }
-        });
+        centerButton(btnOrdini);
+        btnOrdini.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedOrdini));
 
         final var btnProdotti = new JButton("Pagina prodotti");
-        btnProdotti.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedProdotti();
-            }
-        });
+        centerButton(btnProdotti);
+        btnProdotti.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedProdotti));
 
         final var btnGiornateLavorative = new JButton("Pagina Giornate Lavorative");
-        btnGiornateLavorative.addActionListener(e -> {
-            if (readContr.isPresent()) {
-                readContr.get().userRequestedGiornateLavorative(codiceFiscale);
-            }
-        });
+        centerButton(btnGiornateLavorative);
+        btnGiornateLavorative.addActionListener(e -> readContr.ifPresent(rc -> rc.userRequestedGiornateLavorative(codiceFiscale)));
 
         add(btnAree);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnZoneAmministrative);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnZoneRicreative);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnHabitat);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnSpecie);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnEsemplari);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnOrdini);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnProdotti);
-        add(new JLabel(" "));
+        add(Box.createVerticalStrut(8));
         add(btnGiornateLavorative);
+    }
+
+    private static void centerButton(JButton b) {
+        b.setAlignmentX(Component.CENTER_ALIGNMENT);
+        Dimension pref = b.getPreferredSize();
+        b.setMaximumSize(new Dimension(Math.max(pref.width, 220), pref.height));
     }
 
 }

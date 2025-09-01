@@ -14,7 +14,7 @@ import parcofaunistico.controller.ReadingController;
 import parcofaunistico.data.DAOUtils;
  
 public final class App {
- 
+    
     public static void main(String[] args) throws SQLException {
         setUpUI();
         final var connection = DAOUtils.localMySQLConnection("parco_faunistico", "root", "");

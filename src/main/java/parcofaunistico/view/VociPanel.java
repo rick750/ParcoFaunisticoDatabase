@@ -1,6 +1,7 @@
 package parcofaunistico.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -23,11 +24,14 @@ public class VociPanel<T> extends JPanel {
         this.setLayout(new BorderLayout());
 
         this.contentPanel = new JPanel();
-        this.contentPanel.setOpaque(false);
+        this.contentPanel.setOpaque(true);
+        this.contentPanel.setBackground(Color.WHITE);
         this.contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.PAGE_AXIS));
         JScrollPane scrollPane = new JScrollPane(contentPanel);
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setOpaque(true);
+        scrollPane.setBackground(Color.WHITE);
+        scrollPane.getViewport().setOpaque(true);
+        scrollPane.getViewport().setBackground(Color.WHITE);
         this.add(scrollPane, BorderLayout.CENTER);
 
         var bottom = new JPanel();
@@ -52,6 +56,7 @@ public class VociPanel<T> extends JPanel {
     private void addVoci(Container container, List<T> voci) {
         for (final T voce : voci) {
             final var label = new JLabel(voce.toString());
+            label.setForeground(Color.black);
             label.setBorder(new EmptyBorder(0, 10, 10, 0));
             container.add(label);
         }
