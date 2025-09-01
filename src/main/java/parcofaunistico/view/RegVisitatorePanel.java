@@ -43,9 +43,11 @@ public class RegVisitatorePanel extends JPanel{
     private final JButton sendButton;
     private final Map<Parametri, JTextField> textfields;
     private final RegistrazioneVisitatoreController regController;
+    private final AcquistoBigliettoPanel acquistoBigliettoPanel;
 
-    public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel) {
+    public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel, final AcquistoBigliettoPanel acquistoPanel) {
         this.mainView = mainView;
+        this.acquistoBigliettoPanel = acquistoPanel;
         this.setLayout(new GridBagLayout());
         this.setBackground(UIManager.getColor("Panel.background"));
         this.setOpaque(true);
@@ -156,12 +158,14 @@ public class RegVisitatorePanel extends JPanel{
                 final var title = "Conferma registrazione";
                 final var message = success ? "La registrazione è andata a buon fine" : "\"La registrazione non è andata a buon fine\"";
                 if (success)  {
+                    this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(), "nessuno");
                     final var executeBtn = new JButton("OK");
                     final Dialog dialog = new Dialog(title, message, false);
                     dialog.setLocationRelativeTo(this);
                     executeBtn.addActionListener(e -> {
-                        System.out.println("Ciao");
-                        dialog.dispose();
+                        dialog.dispose(); 
+                        this.mainView.showAcquistoBigliettoPanel();
+                        
                     });
                     dialog.addButton(executeBtn);
                     dialog.setVisible(true);

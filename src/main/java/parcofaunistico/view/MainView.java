@@ -23,6 +23,7 @@ public final class MainView extends JFrame{
     private static final String CARD_ACCEDI_REGISTRATI = "accReg";
     private static final String CARD_LOGIN = "login";
     private static final String CARD_REGISTRAZIONE = "registrazione";
+    private static final String CARD_ACQUISTO_BIGLIETTO = "acquistoBiglietto";
     private static final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int WIDTH = (int) SCREENSIZE.getWidth();
     private static final int HEIGHT = (int) SCREENSIZE.getHeight();
@@ -35,6 +36,7 @@ public final class MainView extends JFrame{
     private final JPanel emptyPanel;
     private final LoginPanel loginPanel;
     private final RegVisitatorePanel registrazionePanel;
+    private final AcquistoBigliettoPanel acquistoBigliettoPanel;
     private final AccediRegistratiPanel accRegPanel;
 
     public MainView(final MainController mainController, final Runnable onClose) {
@@ -42,11 +44,13 @@ public final class MainView extends JFrame{
         setupMainFrame(onClose);
         this.emptyPanel = new JPanel();
         this.loginPanel = new LoginPanel(this, mainController.getReadingModel());
-        this.registrazionePanel = new RegVisitatorePanel(this, mainController.getWritingModel());
+        this.acquistoBigliettoPanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
+        this.registrazionePanel = new RegVisitatorePanel(this, mainController.getWritingModel(), acquistoBigliettoPanel);
         this.accRegPanel = new AccediRegistratiPanel(this, CARD_LOGIN, CARD_REGISTRAZIONE);
 
         this.cardPanel.add(emptyPanel, EMPTY);
         this.cardPanel.add(loginPanel, CARD_LOGIN);
+        this.cardPanel.add(acquistoBigliettoPanel, CARD_ACQUISTO_BIGLIETTO);
         this.cardPanel.add(registrazionePanel, CARD_REGISTRAZIONE);
         this.cardPanel.add(accRegPanel, CARD_ACCEDI_REGISTRATI);
         this.add(cardPanel);
@@ -121,6 +125,11 @@ public final class MainView extends JFrame{
 
     public void showMenuPanel() {
         this.layout.show(this.cardPanel, CARD_ACCEDI_REGISTRATI);
+        this.emptyPanel.removeAll();
+    }
+
+    public void showAcquistoBigliettoPanel() {
+        this.layout.show(this.cardPanel, CARD_ACQUISTO_BIGLIETTO);
         this.emptyPanel.removeAll();
     }
 }

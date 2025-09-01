@@ -68,6 +68,19 @@ public class Visitatore {
             return persone;
         }
 
+        public static int getAge(final Connection connection, final String codiceFiscale) {
+            int eta;
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getAgeQuery(codiceFiscale));
+                    var resultSet = preparedStatement.executeQuery();) {
+                    resultSet.next();
+                    eta = resultSet.getInt("eta");
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            }
+            return eta;
+        }
+
         public static boolean check(Connection connection, String codiceFiscale) {
             try (
                     var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(codiceFiscale));
@@ -119,13 +132,10 @@ public class Visitatore {
                     righeInserite = stmtVisitatori.executeUpdate();
                     System.out.println("Righe inserite: " + righeInserite);
                 } catch (Exception e) {
-                    System.out.println("Problemi nell'inserimento di VISITATORE");
                     e.printStackTrace();
                     return false;
                 }
             } catch (Exception e) {
-                System.out.println("Problemi nell'inserimento di PERSONA");
-                e.printStackTrace();
                 return false;
             }
 
@@ -134,6 +144,10 @@ public class Visitatore {
 
         private static String getCheckQuery(String codiceFiscale) {
             return Queries.CHECK_VISITATORE.get() + "\'" + codiceFiscale + "\'";
+        }
+
+        private static String getAgeQuery(String codiceFiscale) {
+            return Queries.SHOW_VISITATORE_SINGOLO.get() + "\'" + codiceFiscale + "\'";
         }
     }
 

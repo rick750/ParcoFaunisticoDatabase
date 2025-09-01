@@ -1,11 +1,22 @@
 package parcofaunistico.data;
 
 public enum Parametri {
+    CODICE_TRANSAZIONE,
+    CODICE_SCONTO,
     CODICE_FISCALE,
+    CODICE_GRUPPO,
+    CODICE_BIGLIETTO,
+    CODICE_PERCORSO,
     NOME,
     COGNOME,
     ETA,
     INDIRIZZO,
     TELEFONO,
-    EMAIL;
+    EMAIL,
+    DATA_EFFETTUAZIONE,
+    DATA_VALIDITA,
+    NOME_ZONA,
+    PREZZO_BASE,
+    PREZZO_EFFETTIVO
+    ;
 }

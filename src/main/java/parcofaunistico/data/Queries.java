@@ -7,6 +7,11 @@ public enum Queries {
             WHERE p.codice_fiscale = v.codice_fiscale;
             """),
 
+    SHOW_VISITATORE_SINGOLO("""
+            SELECT *
+            FROM PERSONA p
+            WHERE p.codice_fiscale = """),
+
     SHOW_DIPENDENTE("""
             SELECT *
             FROM PERSONA p, DIPENDENTE d
@@ -71,6 +76,11 @@ public enum Queries {
             SELECT *
             FROM SCONTO
             """),
+
+    SHOW_SCONTO_SINGOLO("""
+            SELECT *
+            FROM SCONTO
+            WHERE codice_sconto = """),
 
     SHOW_AFFLUENZA("""
             SELECT v.nome, COUNT(*) as numVisite
@@ -173,7 +183,26 @@ public enum Queries {
         WHERE p.codice_prodotto = o.codice_prodotto
         AND o.codice_ordine = r.codice_ordine
         AND r.codice_fiscale = v.codice_fiscale
-        AND v.codice_fiscale = """);
+        AND v.codice_fiscale = """),
+
+    SHOW_PERCORSI("""
+        SELECT *
+        FROM PERCORSO            
+        """),
+
+    SHOW_ULTIMO_PAGAMENTO("""
+        SELECT *
+        FROM PAGAMENTO_VISITA
+        ORDER BY codice_transazione DESC
+        LIMIT 1;            
+        """),
+
+    SHOW_ULTIMO_BIGLIETTO("""
+        SELECT *
+        FROM BIGLIETTO
+        ORDER BY codice_biglietto DESC
+        LIMIT 1;           
+        """);
 
     private final String query;
 

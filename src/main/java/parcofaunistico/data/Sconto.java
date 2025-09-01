@@ -43,5 +43,24 @@ public class Sconto {
             }
             return sconti;            
         }
+
+        public static Double getPercentuale(final Connection connection, final String codiceSconto) {
+            Double percentuale;
+            try(
+                var preparedStatement = DAOUtils.prepare(connection, getQuery(codiceSconto));
+                var resultSet = preparedStatement.executeQuery();
+            ) {
+                resultSet.next();
+                percentuale = resultSet.getDouble("percentuale");
+            }
+               catch (SQLException e) {
+                throw new DAOException(e);
+            }
+            return percentuale;       
+        }
+
+        private static String getQuery(final String codiceSconto) {
+            return Queries.SHOW_SCONTO_SINGOLO.get() + "\'" + codiceSconto + "\'";
+        }
     }
 }
