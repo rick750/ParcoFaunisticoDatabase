@@ -7,11 +7,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import java.awt.GridBagLayout;
@@ -40,9 +40,12 @@ public class AcquistoBigliettoPanel extends JPanel{
     private JLabel codBigliettoLabel;
     private JLabel prezzoBaselabel;
     private JLabel prezzoEffettivoLabel;
+    private JTextField dataValidita;
+    private JTextField percorso;
     private JButton sendButton;
     private RegistrazionePagamentoController regController;
     private final WritingModel writingModel;
+    private boolean visitatore;
 
     public AcquistoBigliettoPanel(final MainView mainView, final WritingModel writingModel) {
         this.mainView = mainView;
@@ -52,19 +55,22 @@ public class AcquistoBigliettoPanel extends JPanel{
         this.setOpaque(true);
     }
 
-    public void setData(final boolean persona, final String codFiscale, final String codGruppo) {
-        this.regController = new RegistrazionePagamentoController(writingModel, persona, codFiscale, codGruppo);
+    public void setData(final boolean visitatore, final String codFiscale, final int eta, final int numPartecipanti, final String codGruppo) {
+        this.visitatore = visitatore;
+        this.regController = new RegistrazionePagamentoController(writingModel, this, visitatore, codFiscale, eta, numPartecipanti, codGruppo);
         final var paymentData = this.regController.getPaymentData();
         final var ticketData = this.regController.getTicketData();
-        this.codiceTransazioneLabel = this.createLabel("codice Transazione: " + paymentData.get(Parametri.CODICE_TRANSAZIONE));
-        this.codicefiscaleLabel = this.createLabel("Codice Fiscale: " + paymentData.get(Parametri.CODICE_FISCALE));
-        this.codiceGruppoLabel = this.createLabel("Codice Gruppo: " + paymentData.get(Parametri.CODICE_GRUPPO));
-        this.dataEffettuazioneLabel = this.createLabel("Data effettuazione: " + paymentData.get(Parametri.DATA_EFFETTUAZIONE));
-        this.codiceScontoLabel = this.createLabel("Codice sconto: " + paymentData.get(Parametri.CODICE_SCONTO));
-        this.nomeZonaLabel = this.createLabel("Nome zona effettuazione pagamento: " + paymentData.get(Parametri.NOME_ZONA));
-        this.codBigliettoLabel = this.createLabel("Codice Biglietto generato: " + ticketData.get(Parametri.CODICE_BIGLIETTO));
-        this.prezzoBaselabel = this.createLabel("Prezzo Base: " + ticketData.get(Parametri.PREZZO_BASE));
-        this.prezzoEffettivoLabel = this.createLabel("Prezzo Effettivo: " + ticketData.get(Parametri.PREZZO_EFFETTIVO));
+        this.codiceTransazioneLabel = this.createLabel(paymentData.get(Parametri.CODICE_TRANSAZIONE));
+        this.codicefiscaleLabel = this.createLabel(paymentData.get(Parametri.CODICE_FISCALE));
+        this.codiceGruppoLabel = this.createLabel(paymentData.get(Parametri.CODICE_GRUPPO));
+        this.dataEffettuazioneLabel = this.createLabel(paymentData.get(Parametri.DATA_EFFETTUAZIONE));
+        this.codiceScontoLabel = this.createLabel(paymentData.get(Parametri.CODICE_SCONTO));
+        this.nomeZonaLabel = this.createLabel(paymentData.get(Parametri.NOME_ZONA));
+        this.codBigliettoLabel = this.createLabel(ticketData.get(Parametri.CODICE_BIGLIETTO));
+        this.prezzoBaselabel = this.createLabel(ticketData.get(Parametri.PREZZO_BASE));
+        this.prezzoEffettivoLabel = this.createLabel(ticketData.get(Parametri.PREZZO_EFFETTIVO));
+        this.dataValidita = this.createField();
+        this.percorso = this.createField();
        
         this.sendButton = createSendButton();
         this.arrangeComponents();
@@ -91,15 +97,17 @@ public class AcquistoBigliettoPanel extends JPanel{
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        addRow(codiceTransazioneLabel, ++row, gbc);
-        addRow(this.codicefiscaleLabel, ++row, gbc);
-        addRow(this.codiceGruppoLabel, ++row, gbc);
-        addRow(this.dataEffettuazioneLabel, ++row, gbc);
-        addRow(this.codiceScontoLabel, ++row, gbc);
-        addRow(this.nomeZonaLabel, ++row, gbc);
-        addRow(this.codBigliettoLabel, ++row, gbc);
-        addRow(this.prezzoBaselabel, ++row, gbc);
-        addRow(this.prezzoEffettivoLabel, ++row, gbc);
+        addRow(createLabel("Codice transazione: "), codiceTransazioneLabel, ++row, gbc);
+        addRow(createLabel("Codice fiscale: "),this.codicefiscaleLabel, ++row, gbc);
+        addRow(createLabel("Codice gruppo: "),this.codiceGruppoLabel, ++row, gbc);
+        addRow(createLabel("Data effettuazione: "),this.dataEffettuazioneLabel, ++row, gbc);
+        addRow(createLabel("Codice sconto: "),this.codiceScontoLabel, ++row, gbc);
+        addRow(createLabel("nome Zona effettuazione: "),this.nomeZonaLabel, ++row, gbc);
+        addRow(createLabel("Codice biglietto: "),this.codBigliettoLabel, ++row, gbc);
+        addRow(createLabel("Prezzo base: "),this.prezzoBaselabel, ++row, gbc);
+        addRow(createLabel("Prezzo effettivo: "),this.prezzoEffettivoLabel, ++row, gbc);
+        addRow(createLabel("Data Validità: "),this.dataValidita, ++row, gbc);
+        addRow(createLabel("Codice percorso: "),this.percorso, ++row, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++row;
@@ -115,11 +123,16 @@ public class AcquistoBigliettoPanel extends JPanel{
         this.add(backButton, gbc);
     }
 
-    private void addRow(final JLabel label, final int row, final GridBagConstraints gbc) {
+    private void addRow(final JLabel label, final JComponent component, final int row, final GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.anchor = GridBagConstraints.LINE_END;
         this.add(label, gbc);
+
+        gbc.gridx = 1;
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        this.add(component, gbc);
     }
 
     private JButton createSendButton() {
@@ -145,7 +158,7 @@ public class AcquistoBigliettoPanel extends JPanel{
         );
 
         button.addActionListener(act -> {
-            
+            this.regController.checkPathAndDate(this.percorso.getText(), this.dataValidita.getText());
         });
         return button;
     }
@@ -164,17 +177,36 @@ public class AcquistoBigliettoPanel extends JPanel{
         final JLabel label = new JLabel(text);
         label.setFont(UIManager.getFont("Label.font"));
         label.setForeground(UIManager.getColor("Label.foreground"));
-        label.setHorizontalAlignment(SwingConstants.CENTER);
         label.setAlignmentX(CENTER_ALIGNMENT);
         label.setFocusable(false);
         return label;
     }
 
-    private void showErrorMessage(final String message) {
+    public void showErrorMessage(final String message) {
         JOptionPane.showMessageDialog(
             this,
             message,
             "Attenzione",
             JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void showConfirmDialog() {
+        final String title = "Conferma inserimento...";
+        final String message = "I dati sono stati inseriti correttamente. Premere OK per ultimare l'inserimento";
+        final Dialog confirmDialog = new Dialog(title, message, true);
+        final JButton ok = new JButton("OK");
+        ok.addActionListener(act -> {
+            confirmDialog.dispose();
+            if (visitatore) {
+                mainView.notifyVisitatoreInsert();
+            } else {
+                mainView.notifyGruppoInsert();
+            }
+            this.regController.executeInsertQuery();
+            mainView.showMenuPanel();
+        });
+        confirmDialog.setLocationRelativeTo(this);
+        confirmDialog.addButton(ok);
+        confirmDialog.setVisible(true);
     }
 }

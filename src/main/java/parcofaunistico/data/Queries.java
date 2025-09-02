@@ -165,6 +165,11 @@ public enum Queries {
             WHERE d.codice_fiscale = """
     ),
 
+    CHECK_PERCORSO("""
+            SELECT codice_percorso
+            FROM PERCORSO
+            WHERE codice_percorso = """),
+
     FIND_NOME("""
         SELECT p.codice_fiscale, p.nome
         FROM PERSONA p
@@ -201,6 +206,13 @@ public enum Queries {
         SELECT *
         FROM BIGLIETTO
         ORDER BY codice_biglietto DESC
+        LIMIT 1;           
+        """),
+
+    SHOW_ULTIMO_GRUPPO("""
+        SELECT *
+        FROM GRUPPO
+        ORDER BY codice_gruppo DESC
         LIMIT 1;           
         """);
 

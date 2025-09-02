@@ -1,5 +1,6 @@
 package parcofaunistico.controller;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 import javax.swing.JTextField;
@@ -81,6 +82,10 @@ public class RegistrazioneVisitatoreController {
 
 
     public boolean executeInsertQuery() {
-        return this.writingModel.insertVisitatore(textfields);
+        final var visitatore = new EnumMap<Parametri, String>(Parametri.class);
+        for (final var entry : this.textfields.entrySet()) {
+                visitatore.put(entry.getKey(), entry.getValue().getText());
+            }
+        return this.writingModel.insertVisitatore(visitatore);
     }
 }

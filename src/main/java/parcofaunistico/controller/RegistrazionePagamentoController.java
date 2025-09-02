@@ -7,24 +7,28 @@ import java.util.Map;
 
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
+import parcofaunistico.view.AcquistoBigliettoPanel;
 
 public class RegistrazionePagamentoController {
     private static final String NOME_ZONA = "ZA01";
     private static final Double PREZZO_BASE = 20.0;
-    private String errorMessage;
-    private final String codiceFiscale;
     private final String codiceGruppo;
+    private final String codiceFiscale;
     private final String codiceTransazione;
     private final String codiceBiglietto;
-    private String dataValidita;
     private Double prezzoEffettivo;
-    private String codicePercorso;
     private final Date dataEffettuazione;
     private String codiceSconto;
-    public RegistrazionePagamentoController(final WritingModel writingModel, final boolean persona, 
-                                            final String codiceFiscale, final String codiceGruppo) {
-        this.codiceFiscale = codiceFiscale;
+    private final AcquistoBigliettoPanel panel;
+    private final WritingModel model;
+    private Map<Parametri, String> datiPagamento;
+    public RegistrazionePagamentoController(final WritingModel writingModel, final AcquistoBigliettoPanel panel, 
+                                            final boolean persona, final String codiceFiscale,
+                                            final int eta, final int numPartecipanti, final String codiceGruppo) {
+        this.panel = panel;
+        this.model = writingModel;
         this.codiceGruppo = codiceGruppo;
+        this.codiceFiscale = codiceFiscale;
         final LocalDate oggi = LocalDate.now();
         this.dataEffettuazione = Date.valueOf(oggi);
 
@@ -35,12 +39,20 @@ public class RegistrazionePagamentoController {
         this.codiceTransazione = prefisso + String.format("%03d", numero);
 
         if(persona) {
-            final int eta = writingModel.getVisitatoreEta(codiceFiscale);
             System.out.println("Ho trovato come età: " + eta);
             if (eta <= 6) {
                 this.codiceSconto = "S03";
             } else if( eta > 6 && eta <= 15) {
                 this.codiceSconto = "S04";
+            } else {
+                this.codiceSconto = "nessuno";
+            }
+        } else {
+            System.out.println("Ho trovato come numero partecipanti: " + numPartecipanti);
+            if (numPartecipanti >= 6 && numPartecipanti <= 15) {
+                this.codiceSconto = "S01";
+            } else if (numPartecipanti > 15) {
+                this.codiceSconto = "S02";
             } else {
                 this.codiceSconto = "nessuno";
             }
@@ -81,5 +93,48 @@ public class RegistrazionePagamentoController {
         dati.put(Parametri.PREZZO_EFFETTIVO, this.prezzoEffettivo.toString());
         dati.put(Parametri.NOME_ZONA, NOME_ZONA);
         return dati;
+    }
+
+    public void checkPathAndDate(final String percorso, final String dataValidita) {
+        String errorMessage;
+        try {
+            final Date data = Date.valueOf(dataValidita);
+            if (!(data.after(this.dataEffettuazione) || data.equals(this.dataEffettuazione))) {
+                errorMessage = "La data deve essere la stessa oppure successiva al giorno corrente";
+                panel.showErrorMessage(errorMessage);
+            } else {
+                if(! this.model.checkPathName(percorso)) {
+                    errorMessage = "Il codice percorso inserito non figura tra quelli del parco";
+                    panel.showErrorMessage(errorMessage);
+                } else {
+                    this.datiPagamento = this.getPaymentData();
+                    datiPagamento.putAll(this.getTicketData());
+                    datiPagamento.put(Parametri.DATA_VALIDITA, dataValidita);
+                    datiPagamento.put(Parametri.CODICE_PERCORSO, percorso);
+                    if ("nessuno".equals(datiPagamento.get(Parametri.CODICE_GRUPPO))) {
+                        datiPagamento.put(Parametri.CODICE_GRUPPO, null);
+                    }
+                    if ("nessuno".equals(datiPagamento.get(Parametri.CODICE_FISCALE))) {
+                        datiPagamento.put(Parametri.CODICE_FISCALE, null);
+                    }
+                    if ("nessuno".equals(datiPagamento.get(Parametri.CODICE_SCONTO))) {
+                        datiPagamento.put(Parametri.CODICE_SCONTO, null);
+                    }
+                    this.panel.showConfirmDialog();
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            errorMessage = "La data non è stata inserita nel formato previsto (anno/mese/giorno)";
+            panel.showErrorMessage(errorMessage);
+        }
+
+        
+    }
+
+    public void executeInsertQuery() {
+          if (!this.model.insertPagamentoBiglietto(datiPagamento)) {  
+                final String errorMessage = "Errore nell'inserimento del nuovo pagamento visita";
+                panel.showErrorMessage(errorMessage);
+        }
     }
 }

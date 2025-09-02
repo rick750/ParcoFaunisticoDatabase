@@ -65,11 +65,10 @@ public class PagamentoBiglietto {
                 System.out.println("Righe inserite: " + righeInserite);
     
             } catch (final Exception e) {
-                System.out.println("Problemi nell'inserimento di PERSONA");
+                System.out.println("Problemi nell'inserimento di PAGAMENTO_VISITA");
                 e.printStackTrace();
                 return false;
             }
-
             return true;
         }
     }

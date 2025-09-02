@@ -54,7 +54,6 @@ public class Biglietto {
             final Double prezzoEffettivo = Double.parseDouble(dati.get(Parametri.PREZZO_EFFETTIVO));
             final String codicePercorso = dati.get(Parametri.CODICE_PERCORSO);
 
-            // Primo inserimento nella tabella persone
             final String queryBiglietto = """
                         INSERT INTO BIGLIETTO(codice_biglietto, data_validita, codice_fiscale, codice_gruppo,
                          codice_transazione, prezzo_base, prezzo_effettivo, codice_percorso)

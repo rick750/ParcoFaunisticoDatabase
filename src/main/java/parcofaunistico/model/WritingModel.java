@@ -1,19 +1,28 @@
 package parcofaunistico.model;
 
+import java.util.List;
 import java.util.Map;
-
-import javax.swing.JTextField;
 
 import parcofaunistico.data.Parametri;
 
 public interface WritingModel {
-    boolean insertVisitatore(final Map<Parametri, JTextField> textfields);
+    boolean insertVisitatore(Map<Parametri, String> textfields);
 
-    int getVisitatoreEta(String codiceFiscale);
+    Map<Parametri, String> getVisitatore(String codiceFiscale);
+
+    Boolean checkVisitatore(String codiceFiscale);
+
+    boolean insertGruppo(String codiceGruppo, int numPartecipanti, List<Map<Parametri, String>> partecipanti);
+
+    boolean insertPagamentoBiglietto(Map<Parametri, String> fields);
 
     String getLastPayment();
 
     String getLastTicket();
 
     Double getDiscountPercent(String codiceSconto);
+
+    Boolean checkPathName(String percorso);
+
+    String getLastGroupCode();
 }

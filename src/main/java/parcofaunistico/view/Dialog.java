@@ -40,7 +40,7 @@ public final class Dialog extends JDialog {
         area.setLineWrap(true);
         area.setEditable(false);
         area.setFocusable(false);
-        area.setOpaque(false);
+        area.setOpaque(true);
         area.setBorder(null);
 
         final FlowLayout flowLayout = new FlowLayout();

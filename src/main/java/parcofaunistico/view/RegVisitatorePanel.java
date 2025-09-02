@@ -84,7 +84,7 @@ public class RegVisitatorePanel extends JPanel{
         gbc.gridy = row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        final JLabel title = createLabel("Benvenuto al menù di registrazione");
+        final JLabel title = createLabel("Benvenuto al menù di registrazione VISITATORE");
         title.setFont(UIManager.getFont("BigLabel.font"));
         title.setForeground(new Color(255, 215, 0));
         title.setBackground(new Color(18, 30, 49));
@@ -154,25 +154,20 @@ public class RegVisitatorePanel extends JPanel{
             if (! this.regController.check()) {
                 this.showErrorMessage(this.regController.getErrorMessage());
             } else {
-                final var success = this.regController.executeInsertQuery();
                 final var title = "Conferma registrazione";
-                final var message = success ? "La registrazione è andata a buon fine" : "\"La registrazione non è andata a buon fine\"";
-                if (success)  {
-                    this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(), "nessuno");
-                    final var executeBtn = new JButton("OK");
-                    final Dialog dialog = new Dialog(title, message, false);
-                    dialog.setLocationRelativeTo(this);
-                    executeBtn.addActionListener(e -> {
-                        dialog.dispose(); 
-                        this.mainView.showAcquistoBigliettoPanel();
+                final var message = "I dati sono stati inseriti correttamente";
+                this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(),
+                                                    Integer.parseInt(this.etaField.getText()), 1, "nessuno");
+                final var executeBtn = new JButton("OK");
+                final Dialog dialog = new Dialog(title, message, false);
+                dialog.setLocationRelativeTo(this);
+                executeBtn.addActionListener(e -> {
+                    dialog.dispose(); 
+                    this.mainView.showAcquistoBigliettoPanel(true);
                         
-                    });
-                    dialog.addButton(executeBtn);
-                    dialog.setVisible(true);
-                } else {
-                    final Dialog dialog = new Dialog(title, message, true);
-                    dialog.setVisible(true);
-                }
+                });
+                dialog.addButton(executeBtn);
+                dialog.setVisible(true);
             }
         });
         return button;
@@ -203,5 +198,9 @@ public class RegVisitatorePanel extends JPanel{
             message,
             "Attenzione",
             JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void executeInsertVisitatore() {
+        this.regController.executeInsertQuery();
     }
 }

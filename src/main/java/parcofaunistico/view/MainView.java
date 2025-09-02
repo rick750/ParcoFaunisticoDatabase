@@ -23,7 +23,10 @@ public final class MainView extends JFrame{
     private static final String CARD_ACCEDI_REGISTRATI = "accReg";
     private static final String CARD_LOGIN = "login";
     private static final String CARD_REGISTRAZIONE = "registrazione";
-    private static final String CARD_ACQUISTO_BIGLIETTO = "acquistoBiglietto";
+    private static final String CARD_REGISTRAZIONE_VISITATORE = "registrazioneVisitatore";
+    private static final String CARD_REGISTRAZIONE_GRUPPO = "registrazioneGruppo";
+    private static final String CARD_ACQUISTO_BIGLIETTO_VISITATORE = "acquistoBigliettoVisitatore";
+    private static final String CARD_ACQUISTO_BIGLIETTO_GRUPPO = "acquistoBigliettoGruppo";
     private static final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int WIDTH = (int) SCREENSIZE.getWidth();
     private static final int HEIGHT = (int) SCREENSIZE.getHeight();
@@ -35,8 +38,11 @@ public final class MainView extends JFrame{
     private final JPanel cardPanel = new JPanel(this.layout);
     private final JPanel emptyPanel;
     private final LoginPanel loginPanel;
-    private final RegVisitatorePanel registrazionePanel;
-    private final AcquistoBigliettoPanel acquistoBigliettoPanel;
+    private final RegistrazioneSceltaPanel registrazionePanel;
+    private final RegVisitatorePanel regVisitatorePanel;
+    private final RegGruppoPanel regGruppoPanel;
+    private final AcquistoBigliettoPanel acBigliettoVisitatorePanel;
+    private final AcquistoBigliettoPanel acBigliettoGruppoPanel;
     private final AccediRegistratiPanel accRegPanel;
 
     public MainView(final MainController mainController, final Runnable onClose) {
@@ -44,14 +50,20 @@ public final class MainView extends JFrame{
         setupMainFrame(onClose);
         this.emptyPanel = new JPanel();
         this.loginPanel = new LoginPanel(this, mainController.getReadingModel());
-        this.acquistoBigliettoPanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
-        this.registrazionePanel = new RegVisitatorePanel(this, mainController.getWritingModel(), acquistoBigliettoPanel);
+        this.registrazionePanel = new RegistrazioneSceltaPanel(this, CARD_REGISTRAZIONE_VISITATORE, CARD_REGISTRAZIONE_GRUPPO);
+        this.acBigliettoVisitatorePanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
+        this.acBigliettoGruppoPanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
+        this.regVisitatorePanel = new RegVisitatorePanel(this, mainController.getWritingModel(), acBigliettoVisitatorePanel);
+        this.regGruppoPanel = new RegGruppoPanel(this, mainController.getWritingModel(), acBigliettoGruppoPanel);
         this.accRegPanel = new AccediRegistratiPanel(this, CARD_LOGIN, CARD_REGISTRAZIONE);
 
         this.cardPanel.add(emptyPanel, EMPTY);
         this.cardPanel.add(loginPanel, CARD_LOGIN);
-        this.cardPanel.add(acquistoBigliettoPanel, CARD_ACQUISTO_BIGLIETTO);
         this.cardPanel.add(registrazionePanel, CARD_REGISTRAZIONE);
+        this.cardPanel.add(acBigliettoGruppoPanel, CARD_ACQUISTO_BIGLIETTO_GRUPPO);
+        this.cardPanel.add(acBigliettoVisitatorePanel, CARD_ACQUISTO_BIGLIETTO_VISITATORE);
+        this.cardPanel.add(regVisitatorePanel, CARD_REGISTRAZIONE_VISITATORE);
+        this.cardPanel.add(regGruppoPanel, CARD_REGISTRAZIONE_GRUPPO);
         this.cardPanel.add(accRegPanel, CARD_ACCEDI_REGISTRATI);
         this.add(cardPanel);
         this.layout.show(this.cardPanel, CARD_ACCEDI_REGISTRATI);
@@ -128,8 +140,21 @@ public final class MainView extends JFrame{
         this.emptyPanel.removeAll();
     }
 
-    public void showAcquistoBigliettoPanel() {
-        this.layout.show(this.cardPanel, CARD_ACQUISTO_BIGLIETTO);
+    public void showAcquistoBigliettoPanel(final boolean persona) {
+        if (persona) {
+           this.layout.show(this.cardPanel, CARD_ACQUISTO_BIGLIETTO_VISITATORE); 
+        } else {
+           this.layout.show(this.cardPanel, CARD_ACQUISTO_BIGLIETTO_GRUPPO);  
+        }
+        
         this.emptyPanel.removeAll();
+    }
+
+    public void notifyVisitatoreInsert() {
+        this.regVisitatorePanel.executeInsertVisitatore();
+    }
+
+    public void notifyGruppoInsert() {
+        this.regGruppoPanel.executeInsertGruppo();
     }
 }

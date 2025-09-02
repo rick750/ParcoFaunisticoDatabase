@@ -4,10 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.JTextField;
 
 public class Visitatore {
 
@@ -81,6 +80,31 @@ public class Visitatore {
             return eta;
         }
 
+        public static Map<Parametri, String> getVisitatore(final Connection connection, final String codiceFiscale) {
+            final var visitatore = new EnumMap<Parametri, String>(Parametri.class);
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getAgeQuery(codiceFiscale));
+                    var resultSet = preparedStatement.executeQuery();) {
+                    resultSet.next();
+                    visitatore.put(Parametri.CODICE_FISCALE, codiceFiscale);
+                    final var nome = resultSet.getString("nome");
+                    visitatore.put(Parametri.NOME, nome);
+                    final var cognome = resultSet.getString("cognome");
+                    visitatore.put(Parametri.COGNOME, cognome);
+                    final var eta = resultSet.getInt("eta");
+                    visitatore.put(Parametri.ETA, String.valueOf(eta));
+                    final var indirizzo = resultSet.getString("indirizzo");
+                    visitatore.put(Parametri.INDIRIZZO, indirizzo);
+                    final var telefono = resultSet.getString("telefono");
+                    visitatore.put(Parametri.TELEFONO, telefono);
+                    final var email = resultSet.getString("email");
+                    visitatore.put(Parametri.EMAIL, email);
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            }
+            return visitatore;
+        }
+
         public static boolean check(Connection connection, String codiceFiscale) {
             try (
                     var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(codiceFiscale));
@@ -95,14 +119,14 @@ public class Visitatore {
             }
         }
 
-        public static boolean insert(Connection connection, Map<Parametri, JTextField> textfields) {
-            final String codiceFiscale = textfields.get(Parametri.CODICE_FISCALE).getText();
-            final String nome = textfields.get(Parametri.NOME).getText();
-            final String cognome = textfields.get(Parametri.COGNOME).getText();
-            final int eta = Integer.parseInt(textfields.get(Parametri.ETA).getText());
-            final String indirizzo = textfields.get(Parametri.INDIRIZZO).getText();
-            final String telefono = textfields.get(Parametri.TELEFONO).getText();
-            final String email = textfields.get(Parametri.EMAIL).getText();
+        public static boolean insert(Connection connection, Map<Parametri, String> textfields) {
+            final String codiceFiscale = textfields.get(Parametri.CODICE_FISCALE);
+            final String nome = textfields.get(Parametri.NOME);
+            final String cognome = textfields.get(Parametri.COGNOME);
+            final int eta = Integer.parseInt(textfields.get(Parametri.ETA));
+            final String indirizzo = textfields.get(Parametri.INDIRIZZO);
+            final String telefono = textfields.get(Parametri.TELEFONO);
+            final String email = textfields.get(Parametri.EMAIL);
 
             // Primo inserimento nella tabella persone
             final String queryPersone = """
