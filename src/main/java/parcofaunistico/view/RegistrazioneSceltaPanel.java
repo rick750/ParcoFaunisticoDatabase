@@ -11,15 +11,13 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.UIManager;
 
+import parcofaunistico.data.Pannelli;
+
 public class RegistrazioneSceltaPanel extends JPanel{
     private final JButton visitatoreBtn = new JButton("Visitatore");
     private final JButton gruppoBtn = new JButton("Gruppo");
-    private final String nomeVisitatore;
-    private final String nomeGruppo;
 
-    public RegistrazioneSceltaPanel(final MainView mainView, final String nomeVisitatore, final String nomeGruppo) {
-        this.nomeVisitatore = nomeVisitatore;
-        this.nomeGruppo = nomeGruppo;
+    public RegistrazioneSceltaPanel(final MainView mainView) {
 
         this.setLayout(new GridBagLayout());
         this.setOpaque(true);
@@ -44,8 +42,8 @@ public class RegistrazioneSceltaPanel extends JPanel{
         visitatoreBtn.setFocusPainted(false);
         gruppoBtn.setFocusPainted(false);
 
-        this.gruppoBtn.addActionListener(e -> mainView.changePanel(this.nomeGruppo));
-        this.visitatoreBtn.addActionListener(e -> mainView.changePanel(this.nomeVisitatore));
+        this.gruppoBtn.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_GRUPPO));
+        this.visitatoreBtn.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_VISITATORE));
 
         final GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;

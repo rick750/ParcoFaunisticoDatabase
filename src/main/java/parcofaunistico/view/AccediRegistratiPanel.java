@@ -11,17 +11,14 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.UIManager;
 
+import parcofaunistico.data.Pannelli;
+
 public class AccediRegistratiPanel extends JPanel{
 
     private final JButton accediBtn = new JButton("Accedi");
     private final JButton registratiBtn = new JButton("Registrati");
-    private final String nomeLogin;
-    private final String nomeRec;
 
-    public AccediRegistratiPanel(final MainView mainView, final String nomeLogin, final String nomeRec) {
-        this.nomeLogin = nomeLogin;
-        this.nomeRec = nomeRec;
-
+    public AccediRegistratiPanel(final MainView mainView) {
         this.setLayout(new GridBagLayout());
         this.setOpaque(true);
         this.setBackground(UIManager.getColor("Panel.background"));
@@ -45,8 +42,8 @@ public class AccediRegistratiPanel extends JPanel{
         accediBtn.setFocusPainted(false);
         registratiBtn.setFocusPainted(false);
 
-        this.registratiBtn.addActionListener(e -> mainView.changePanel(this.nomeRec));
-        this.accediBtn.addActionListener(e -> mainView.changePanel(this.nomeLogin));
+        this.registratiBtn.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE));
+        this.accediBtn.addActionListener(e -> mainView.showPanel(Pannelli.LOGIN));
 
         final GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;

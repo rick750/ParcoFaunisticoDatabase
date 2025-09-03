@@ -54,7 +54,10 @@ public class RegistrazioneOrdineController {
         }
 
         check = this.writingModel.checkZonaRicreativa(this.textFields.get(Parametri.NOME_ZONA).getText());
-       
+        if(!check) {
+            this.errorMessage = "Il nome della zona ricreativa deve essere già registrato";
+            return false;
+        }
         return true;
     }
 

@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import parcofaunistico.controller.RegistrazioneGruppoController;
+import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
@@ -128,7 +129,7 @@ public class RegGruppoPanel extends JPanel {
         final JButton backButton = new JButton("INDIETRO");
         backButton.setFont(UIManager.getFont("Button.font"));
         backButton.setAlignmentX(CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> mainView.showMenuPanel());
+        backButton.addActionListener(e -> mainView.showPanel(Pannelli.ACCEDI_REGISTRATI));
         this.add(backButton, gbc);
     }
 
@@ -182,10 +183,11 @@ public class RegGruppoPanel extends JPanel {
                 dialog.setLocationRelativeTo(this);
                 executeBtn.addActionListener(e -> {
                     dialog.dispose();
+                    System.out.println("mostro il pannello di pagamento visita gruppo");
                     this.acquistoBigliettoPanel.setData(false, "nessuno",
                             0, regController.getNumPartecipanti(),
                             this.codicegruppoLabel.getText());
-                    this.mainView.showAcquistoBigliettoPanel(false);
+                    this.mainView.showPanel(Pannelli.ACQUISTO_BIGLIETTO_GRUPPO);
                 });
                 cancelBtn.addActionListener(e -> {
                     dialog.dispose();

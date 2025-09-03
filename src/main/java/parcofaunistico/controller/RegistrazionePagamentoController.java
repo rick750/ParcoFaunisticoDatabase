@@ -132,7 +132,8 @@ public class RegistrazionePagamentoController {
     }
 
     public void executeInsertQuery() {
-          if (!this.model.insertPagamentoBiglietto(datiPagamento)) {  
+          if (!this.model.insertPagamentoBiglietto(datiPagamento)) {
+            System.out.println("Ho completato l'inserimento del pagamento visita");  
                 final String errorMessage = "Errore nell'inserimento del nuovo pagamento visita";
                 panel.showErrorMessage(errorMessage);
         }

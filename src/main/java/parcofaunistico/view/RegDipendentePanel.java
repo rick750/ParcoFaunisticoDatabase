@@ -22,12 +22,13 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import parcofaunistico.controller.RegistrazioneVisitatoreController;
+import parcofaunistico.controller.RegistrazioneDipendenteController;
 import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
-public class RegVisitatorePanel extends JPanel {
+public class RegDipendentePanel extends JPanel {
+    public static final String CARD_USER = "user";
     private static final long serialVersionUID = 1L;
     private static final double RESIZE_FACTOR = 1.0;
     private static final double FIELD_HEIGHT_RATIO = 0.05;
@@ -43,15 +44,15 @@ public class RegVisitatorePanel extends JPanel {
     private final JTextField indirizzoField;
     private final JTextField telefonoField;
     private final JTextField emailField;
+    private final JTextField mansioneField;
+    private final JTextField descrizioneMansioneField;
+    private final JTextField lavoroField;
     private final JButton sendButton;
     private final Map<Parametri, JTextField> textfields;
-    private final RegistrazioneVisitatoreController regController;
-    private final AcquistoBigliettoPanel acquistoBigliettoPanel;
+    private final RegistrazioneDipendenteController regController;
 
-    public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel,
-            final AcquistoBigliettoPanel acquistoPanel) {
+    public RegDipendentePanel(final MainView mainView, final WritingModel writingModel) {
         this.mainView = mainView;
-        this.acquistoBigliettoPanel = acquistoPanel;
         this.setLayout(new GridBagLayout());
         this.setBackground(UIManager.getColor("Panel.background"));
         this.setOpaque(true);
@@ -63,6 +64,9 @@ public class RegVisitatorePanel extends JPanel {
         this.indirizzoField = createField();
         this.telefonoField = createField();
         this.emailField = createField();
+        this.mansioneField = createField();
+        this.descrizioneMansioneField = createField();
+        this.lavoroField = createField();
         this.sendButton = createSendButton();
         this.textfields = new EnumMap<>(Parametri.class);
         this.textfields.put(Parametri.CODICE_FISCALE, codicefiscaleField);
@@ -72,9 +76,12 @@ public class RegVisitatorePanel extends JPanel {
         this.textfields.put(Parametri.INDIRIZZO, indirizzoField);
         this.textfields.put(Parametri.TELEFONO, telefonoField);
         this.textfields.put(Parametri.EMAIL, emailField);
+        this.textfields.put(Parametri.MANSIONE, mansioneField);
+        this.textfields.put(Parametri.DESCRIZIONE_MANSIONE, descrizioneMansioneField);
+        this.textfields.put(Parametri.NOME_ZONA, lavoroField);
         this.arrangeComponents();
 
-        this.regController = new RegistrazioneVisitatoreController(writingModel, this.textfields);
+        this.regController = new RegistrazioneDipendenteController(writingModel);
     }
 
     private void arrangeComponents() {
@@ -88,7 +95,7 @@ public class RegVisitatorePanel extends JPanel {
         gbc.gridy = row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        final JLabel title = createLabel("Benvenuto al menù di registrazione VISITATORE");
+        final JLabel title = createLabel("Benvenuto al menù di registrazione DIPENDENTE");
         title.setFont(UIManager.getFont("BigLabel.font"));
         title.setForeground(new Color(255, 215, 0));
         title.setBackground(new Color(18, 30, 49));
@@ -98,13 +105,16 @@ public class RegVisitatorePanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        addRow("Codice Fiscale", codicefiscaleField, ++row, gbc);
-        addRow("Nome", nomeField, ++row, gbc);
-        addRow("Cognome", cognomeField, ++row, gbc);
-        addRow("Età", etaField, ++row, gbc);
-        addRow("Indirizzo", indirizzoField, ++row, gbc);
-        addRow("Telefono", telefonoField, ++row, gbc);
-        addRow("Email", emailField, ++row, gbc);
+        addRow("Codice Fiscale: ", codicefiscaleField, ++row, gbc);
+        addRow("Nome: ", nomeField, ++row, gbc);
+        addRow("Cognome: ", cognomeField, ++row, gbc);
+        addRow("Età: ", etaField, ++row, gbc);
+        addRow("Indirizzo: ", indirizzoField, ++row, gbc);
+        addRow("Telefono: ", telefonoField, ++row, gbc);
+        addRow("Email: ", emailField, ++row, gbc);
+        addRow("Mansione: ", mansioneField, ++row, gbc);
+        addRow("Descrizione Mansione: ", descrizioneMansioneField, ++row, gbc);
+        addRow("Lavoro in zona: ", lavoroField, ++row, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++row;
@@ -116,7 +126,7 @@ public class RegVisitatorePanel extends JPanel {
         final JButton backButton = new JButton("INDIETRO");
         backButton.setFont(UIManager.getFont("Button.font"));
         backButton.setAlignmentX(CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> mainView.showPanel(Pannelli.ACCEDI_REGISTRATI));
+        backButton.addActionListener(e -> mainView.showPanel(Pannelli.USER));
         this.add(backButton, gbc);
     }
 
@@ -155,19 +165,22 @@ public class RegVisitatorePanel extends JPanel {
                 });
 
         button.addActionListener(act -> {
+            this.regController.setData(this.textfields);
             if (!this.regController.check()) {
                 this.showErrorMessage(this.regController.getErrorMessage());
             } else {
                 final var title = "Conferma registrazione";
                 final var message = "I dati sono stati inseriti correttamente";
-                this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(),
-                        Integer.parseInt(this.etaField.getText()), 1, "nessuno");
                 final var executeBtn = new JButton("OK");
                 final Dialog dialog = new Dialog(title, message, false);
                 dialog.setLocationRelativeTo(this);
                 executeBtn.addActionListener(e -> {
                     dialog.dispose();
-                    this.mainView.showPanel(Pannelli.ACQUISTO_BIGLIETTO_VISITATORE);
+                    this.regController.executeInsertQuery();
+                    final var entries = this.textfields.entrySet();
+                    for (final var entry : entries) {
+                        entry.getValue().setText("");
+                    }
 
                 });
                 dialog.addButton(executeBtn);
@@ -230,8 +243,5 @@ public class RegVisitatorePanel extends JPanel {
             setBackgroundAndForegroundRecursively(child, bg, fg);
         }
     }
-
-    public void executeInsertVisitatore() {
-        this.regController.executeInsertQuery();
-    }
 }
+

@@ -1,9 +1,11 @@
 package parcofaunistico.data;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Dipendente {
     private final String codiceFiscale;
@@ -90,8 +92,96 @@ public class Dipendente {
             }
         }
 
+        private static boolean checkExistance(final Connection connection, final String codiceFiscale) {
+            try (
+                var preparedStatement = DAOUtils.prepare(connection, getPersonaCheckQuery(codiceFiscale));
+                var resultSet = preparedStatement.executeQuery();
+            ) {
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }            
+            } catch (final Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
+        public static boolean insert(Connection connection, Map<Parametri, String> textfields) {
+            final String codiceFiscale = textfields.get(Parametri.CODICE_FISCALE);
+            final String nome = textfields.get(Parametri.NOME);
+            final String cognome = textfields.get(Parametri.COGNOME);
+            final int eta = Integer.parseInt(textfields.get(Parametri.ETA));
+            final String indirizzo = textfields.get(Parametri.INDIRIZZO);
+            final String telefono = textfields.get(Parametri.TELEFONO);
+            final String email = textfields.get(Parametri.EMAIL);
+            final String mansione = textfields.get(Parametri.MANSIONE);
+            final String descrizioneMans = textfields.get(Parametri.DESCRIZIONE_MANSIONE);
+            final String nomeArea = textfields.get(Parametri.NOME_ZONA);
+
+            // Primo inserimento nella tabella persone
+            final String queryPersone = """
+                        INSERT INTO PERSONA(codice_fiscale, nome, cognome, eta, indirizzo, telefono, email)
+                        VALUES (?, ?, ?, ?, ?, ?, ?)
+                    """;
+
+            try (PreparedStatement stmtPersone = connection.prepareStatement(queryPersone)) {
+                stmtPersone.setString(1, codiceFiscale);
+                stmtPersone.setString(2, nome);
+                stmtPersone.setString(3, cognome);
+                stmtPersone.setInt(4, eta);
+                stmtPersone.setString(5, indirizzo);
+                stmtPersone.setString(6, telefono);
+                stmtPersone.setString(7, email);
+                int righeInserite;
+                if (! checkExistance(connection, codiceFiscale)) {
+                    righeInserite = stmtPersone.executeUpdate();
+                    System.out.println("Righe inserite in persona: " + righeInserite);
+                }
+                final String queryDipendente = """
+                            INSERT INTO DIPENDENTE(codice_fiscale, mansione, descrizione_mansione)
+                            VALUES (?, ?, ?)
+                        """;
+
+                try (PreparedStatement stmtDipendente = connection.prepareStatement(queryDipendente)) {
+                    stmtDipendente.setString(1, codiceFiscale);
+                    stmtDipendente.setString(2, mansione);
+                    stmtDipendente.setString(3, descrizioneMans);
+                    righeInserite = stmtDipendente.executeUpdate();
+                    System.out.println("Righe inserite in dipendente: " + righeInserite);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+
+                 final String queryLavoro = """
+                            INSERT INTO LAVORA(nome, codice_fiscale)
+                            VALUES (?, ?)
+                        """;
+
+                try (PreparedStatement stmtLavoro = connection.prepareStatement(queryLavoro)) {
+                    stmtLavoro.setString(1, nomeArea);
+                    stmtLavoro.setString(2, codiceFiscale);
+                    righeInserite = stmtLavoro.executeUpdate();
+                    System.out.println("Righe inserite in lavora: " + righeInserite);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
+            return true;
+        }
+
         private static String getCheckQuery(final String codiceFiscale) {
             return Queries.CHECK_DIPENDENTE.get() + "\'"+codiceFiscale+ "\'";
+        }
+
+        private static String getPersonaCheckQuery(final String codiceFiscale) {
+            return Queries.CHECK_PERSONA.get() + "\'"+codiceFiscale+ "\'";
         }
     }
 }

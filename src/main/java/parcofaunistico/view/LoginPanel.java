@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import parcofaunistico.controller.LoginController;
+import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.User;
 import parcofaunistico.model.ReadingModel;
 
@@ -94,7 +95,7 @@ public class LoginPanel extends JPanel {
         this.btnsPanel.add(dipendenteBtn);
         this.btnsPanel.add(managerBtn);
         final JButton backButton = new JButton("INDIETRO");
-        backButton.addActionListener(e -> this.mainView.showMenuPanel());
+        backButton.addActionListener(e -> this.mainView.showPanel(Pannelli.ACCEDI_REGISTRATI));
         backButton.setAlignmentX(CENTER_ALIGNMENT);
         this.btnsPanel.add(Box.createVerticalStrut(20));
         this.btnsPanel.add(backButton);
@@ -229,7 +230,6 @@ public class LoginPanel extends JPanel {
                     case "Visitatore" -> this.mainView.setUserPanel(User.VISITATORE, codiceFiscale);
                     case "Dipendente" -> this.mainView.setUserPanel(User.DIPENDENTE, codiceFiscale);
                 }
-                this.mainView.showUserPanel();
             }
             this.usernameField.setText("");
         };

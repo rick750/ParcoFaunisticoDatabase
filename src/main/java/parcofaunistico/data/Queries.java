@@ -1,6 +1,13 @@
 package parcofaunistico.data;
 
 public enum Queries {
+
+    CHECK_PERSONA("""
+            SELECT codice_fiscale
+            FROM PERSONA
+            WHERE codice_fiscale = """
+    ),
+
     SHOW_VISITATORE("""
             SELECT *
             FROM PERSONA p, VISITATORE v
@@ -22,6 +29,12 @@ public enum Queries {
             SELECT *
             FROM AREA
             """),
+
+    CHECK_AREA("""
+            SELECT nome
+            FROM AREA
+            WHERE nome = """
+        ),
 
     SHOW_ZONA_RICREATIVA("""
             SELECT zr.nome, a.orario_apertura, a.orario_chiusura

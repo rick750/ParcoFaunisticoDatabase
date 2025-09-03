@@ -119,6 +119,21 @@ public class Visitatore {
             }
         }
 
+        private static boolean checkExistance(final Connection connection, final String codiceFiscale) {
+            try (
+                var preparedStatement = DAOUtils.prepare(connection, getPersonaCheckQuery(codiceFiscale));
+                var resultSet = preparedStatement.executeQuery();
+            ) {
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }            
+            } catch (final Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
         public static boolean insert(Connection connection, Map<Parametri, String> textfields) {
             final String codiceFiscale = textfields.get(Parametri.CODICE_FISCALE);
             final String nome = textfields.get(Parametri.NOME);
@@ -142,9 +157,11 @@ public class Visitatore {
                 stmtPersone.setString(5, indirizzo);
                 stmtPersone.setString(6, telefono);
                 stmtPersone.setString(7, email);
-                int righeInserite = stmtPersone.executeUpdate();
-                System.out.println("Righe inserite: " + righeInserite);
-
+                int righeInserite;
+                if(! checkExistance(connection, codiceFiscale)) {
+                    righeInserite = stmtPersone.executeUpdate();
+                    System.out.println("Righe inserite in persona: " + righeInserite);
+                }
                 // Secondo inserimento nella tabella visitatori
                 final String queryVisitatori = """
                             INSERT INTO VISITATORE(codice_fiscale)
@@ -154,7 +171,7 @@ public class Visitatore {
                 try (PreparedStatement stmtVisitatori = connection.prepareStatement(queryVisitatori)) {
                     stmtVisitatori.setString(1, codiceFiscale);
                     righeInserite = stmtVisitatori.executeUpdate();
-                    System.out.println("Righe inserite: " + righeInserite);
+                    System.out.println("Righe inserite in visitatore: " + righeInserite);
                 } catch (Exception e) {
                     e.printStackTrace();
                     return false;
@@ -168,6 +185,10 @@ public class Visitatore {
 
         private static String getCheckQuery(String codiceFiscale) {
             return Queries.CHECK_VISITATORE.get() + "\'" + codiceFiscale + "\'";
+        }
+
+        private static String getPersonaCheckQuery(final String codiceFiscale) {
+            return Queries.CHECK_PERSONA.get() + "\'"+codiceFiscale+ "\'";
         }
 
         private static String getAgeQuery(String codiceFiscale) {

@@ -19,6 +19,7 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import parcofaunistico.controller.RegistrazionePagamentoController;
+import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
@@ -70,6 +71,7 @@ public class AcquistoBigliettoPanel extends JPanel {
 
         this.sendButton = createSendButton();
         this.arrangeComponents();
+        this.repaint();
     }
 
     private void arrangeComponents() {
@@ -120,7 +122,7 @@ public class AcquistoBigliettoPanel extends JPanel {
         final JButton backButton = new JButton("INDIETRO");
         backButton.setFont(UIManager.getFont("Button.font"));
         backButton.setAlignmentX(CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> mainView.showMenuPanel());
+        backButton.addActionListener(e -> mainView.showPanel(Pannelli.ACCEDI_REGISTRATI));
         this.add(backButton, gbc);
     }
 
@@ -235,10 +237,13 @@ public class AcquistoBigliettoPanel extends JPanel {
             if (visitatore) {
                 mainView.notifyVisitatoreInsert();
             } else {
+                System.out.println("notifico che bisogna inserire il gruppo");
                 mainView.notifyGruppoInsert();
             }
             this.regController.executeInsertQuery();
-            mainView.showMenuPanel();
+            this.dataValidita.setText("");
+            this.percorso.setText("");
+            mainView.showPanel(Pannelli.ACCEDI_REGISTRATI);
         });
         confirmDialog.setLocationRelativeTo(this);
         confirmDialog.addButton(ok);

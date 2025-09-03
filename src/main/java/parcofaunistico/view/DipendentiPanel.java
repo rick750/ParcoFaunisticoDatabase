@@ -12,10 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import parcofaunistico.controller.ReadingController;
+import parcofaunistico.data.Pannelli;
 import parcofaunistico.model.WritingModel;
 
 public class DipendentiPanel extends JPanel {
-    private static final String CARD_ORDINE = "ordine";
     private final Optional<ReadingController> readContr;
     
     
@@ -63,7 +63,7 @@ public class DipendentiPanel extends JPanel {
 
         final var btnNuovoOrdine = new JButton("Nuovo ordine visitatore");
         centerButton(btnNuovoOrdine);
-        btnNuovoOrdine.addActionListener(e -> mainView.changePanel(CARD_ORDINE));
+        btnNuovoOrdine.addActionListener(e -> mainView.showPanel(Pannelli.ORDINE));
 
         final var btnGiornataLavorativa = new JButton("Aggiungi giornata lavorativa");
         centerButton(btnNuovoOrdine);

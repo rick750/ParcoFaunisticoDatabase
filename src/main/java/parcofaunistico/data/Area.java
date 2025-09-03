@@ -80,5 +80,23 @@ public class Area {
             }
             return aree;            
         }
+
+        public static boolean check(Connection connection, String nomeArea) {
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(nomeArea));
+                    var resultSet = preparedStatement.executeQuery();) {
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
+        private static String getCheckQuery(String nomeArea) {
+            return Queries.CHECK_AREA.get() + "\'" + nomeArea + "\'";
+        }
     }
 }

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import parcofaunistico.data.Area;
 import parcofaunistico.data.Biglietto;
+import parcofaunistico.data.Dipendente;
 import parcofaunistico.data.GiornataLavorativa;
 import parcofaunistico.data.Gruppo;
 import parcofaunistico.data.Ordine;
@@ -54,7 +56,9 @@ public class WritingModelImpl implements WritingModel{
              " nome: " + partecipante.get(Parametri.NOME) +
              " cognome: " + partecipante.get(Parametri.COGNOME) +
              " età: " + partecipante.get(Parametri.ETA));
-            fatto = this.insertVisitatore(partecipante);
+            if (!this.checkVisitatore(partecipante.get(Parametri.CODICE_FISCALE))) {
+                fatto = this.insertVisitatore(partecipante);
+            }
             codiciFiscali.addLast(partecipante.get(Parametri.CODICE_FISCALE));
             System.out.println("Inserito visitatore: " + codiciFiscali.getLast());
         }
@@ -136,5 +140,20 @@ public class WritingModelImpl implements WritingModel{
     @Override
     public boolean checkGiornataLavorativa(String codiceFiscale, String data) {
         return GiornataLavorativa.DAO.check(connection, codiceFiscale, data);
+    }
+
+    @Override
+    public boolean checkArea(String nomeArea) {
+        return Area.DAO.check(connection, nomeArea);
+    }
+
+    @Override
+    public boolean insertDipendente(Map<Parametri, String> fields) {
+        return Dipendente.DAO.insert(connection, fields);
+    }
+
+    @Override
+    public boolean checkDipendente(String codiceFiscale) {
+        return Dipendente.DAO.check(connection, codiceFiscale);
     }
 }

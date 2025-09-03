@@ -21,10 +21,12 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import parcofaunistico.controller.RegistrazioneOrdineController;
+import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
 public class OrdiniPanel extends JPanel{
+    public static final String CARD_USER = "user";
     private static final long serialVersionUID = 1L;
     private static final double RESIZE_FACTOR = 1.0;
     private static final double FIELD_HEIGHT_RATIO = 0.05;
@@ -73,7 +75,7 @@ public class OrdiniPanel extends JPanel{
         gbc.gridy = row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        final JLabel title = createLabel("Benvenuto al menù di registrazione VISITATORE");
+        final JLabel title = createLabel("Menù ordini per il VISITATORE");
         title.setFont(UIManager.getFont("BigLabel.font"));
         title.setForeground(new Color(255, 215, 0));
         title.setBackground(new Color(18, 30, 49));
@@ -98,7 +100,7 @@ public class OrdiniPanel extends JPanel{
         final JButton backButton = new JButton("INDIETRO");
         backButton.setFont(UIManager.getFont("Button.font"));
         backButton.setAlignmentX(CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> mainView.showUserPanel());
+        backButton.addActionListener(e -> mainView.showPanel(Pannelli.USER));
         this.add(backButton, gbc);
     }
 

@@ -29,6 +29,12 @@ public class RegistrazioneVisitatoreController {
             this.errorMessage = "Il codicefiscale deve essere lungo esattamente 16 cifre";
             return false;
         }
+
+        /*check = this.checkExistance();
+        if(!check) {
+            this.errorMessage = "Il codice fiscale inserito è già registrato";
+            return false;
+        }*/
         
         check = this.checkNomeCognome();
         if (!check) {
@@ -55,6 +61,10 @@ public class RegistrazioneVisitatoreController {
             }
         }
         return false;
+    }
+
+    public boolean checkExistance() {
+        return this.writingModel.checkVisitatore(this.textfields.get(Parametri.CODICE_FISCALE).getText());
     }
 
     private boolean checkNomeCognome() {

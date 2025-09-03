@@ -41,4 +41,10 @@ public interface WritingModel {
     boolean insertGiornataLavorativa(String codiceFiscale);
 
     boolean checkGiornataLavorativa(String codiceFiscale, String data);
+
+    boolean checkArea(String nomeArea);
+
+    boolean insertDipendente(Map<Parametri, String> fields);
+
+    boolean checkDipendente(String codiceFiscale);
 }

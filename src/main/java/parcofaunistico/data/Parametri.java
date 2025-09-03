@@ -16,6 +16,8 @@ public enum Parametri {
     INDIRIZZO,
     TELEFONO,
     EMAIL,
+    MANSIONE,
+    DESCRIZIONE_MANSIONE,
     DATA_EFFETTUAZIONE,
     GIORNO,
     DATA_VALIDITA,
@@ -24,6 +26,5 @@ public enum Parametri {
     NOME_ZONA,
     PREZZO_BASE,
     PREZZO_EFFETTIVO,
-    QUANTITA
-    ;
+    QUANTITA;
 }
