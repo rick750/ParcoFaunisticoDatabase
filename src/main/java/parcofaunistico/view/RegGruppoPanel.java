@@ -1,12 +1,10 @@
 package parcofaunistico.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
@@ -295,5 +293,10 @@ public class RegGruppoPanel extends JPanel {
 
     public void executeInsertGruppo() {
         this.regController.executeInsertQuery();
+    }
+
+    public void restartData() {
+        this.codicegruppoLabel.setText(this.regController.getActualGroupCode());
+        this.numPartecipantiLabel.setText(String.valueOf(this.regController.getNumPartecipanti()));
     }
 }

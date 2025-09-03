@@ -29,6 +29,11 @@ public enum Queries {
             WHERE a.nome = zr.nome
             """),
 
+    CHECK_ZONA_RICREATIVA("""
+                    SELECT nome
+                    FROM ZONA_RICREATIVA
+                    WHERE nome = """),
+
     SHOW_ZONA_AMMINISTRATIVA("""
             SELECT za.nome, a.orario_apertura, a.orario_chiusura
             FROM ZONA_AMMINISTRATIVA za, AREA a
@@ -66,6 +71,13 @@ public enum Queries {
             FROM ORDINE o, PRODOTTO p
             WHERE o.codice_prodotto = p.codice_prodotto
             """),
+
+    SHOW_ULTIMO_ORDINE("""
+        SELECT *
+        FROM ORDINE
+        ORDER BY codice_ordine DESC
+        LIMIT 1;           
+        """),
 
     SHOW_RENDIMENTO_GIORNALIERO("""
             SELECT *
@@ -158,6 +170,11 @@ public enum Queries {
             FROM VISITATORE v
             WHERE v.codice_fiscale = """
     ),
+
+    CHECK_PRODOTTO("""
+            SELECT p.*
+            FROM PRODOTTO p
+            WHERE p.codice_prodotto = """),
     
     CHECK_DIPENDENTE("""
             SELECT d.codice_fiscale

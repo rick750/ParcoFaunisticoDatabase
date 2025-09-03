@@ -7,12 +7,16 @@ import java.util.Map;
 import java.util.Objects;
 
 import parcofaunistico.data.Biglietto;
+import parcofaunistico.data.GiornataLavorativa;
 import parcofaunistico.data.Gruppo;
+import parcofaunistico.data.Ordine;
 import parcofaunistico.data.PagamentoBiglietto;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.data.Percorso;
+import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Visitatore;
+import parcofaunistico.data.ZonaRicreativa;
 
 public class WritingModelImpl implements WritingModel{
     
@@ -24,12 +28,12 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public boolean insertVisitatore(Map<Parametri, String> textfields) {
+    public boolean insertVisitatore(final Map<Parametri, String> textfields) {
         return Visitatore.DAO.insert(connection, textfields);
     }
 
     @Override
-    public Map<Parametri, String> getVisitatore(String codiceFiscale) {
+    public Map<Parametri, String> getVisitatore(final String codiceFiscale) {
         return Visitatore.DAO.getVisitatore(connection, codiceFiscale);
     }
 
@@ -40,8 +44,8 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public boolean insertGruppo(String codiceGruppo, int numPartecipanti,
-            List<Map<Parametri, String>> partecipanti) {
+    public boolean insertGruppo(final String codiceGruppo, final int numPartecipanti,
+            final List<Map<Parametri, String>> partecipanti) {
         boolean fatto = false;
     
         final List<String> codiciFiscali = new ArrayList<>();
@@ -63,7 +67,7 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public boolean insertPagamentoBiglietto(Map<Parametri, String> fields) {
+    public boolean insertPagamentoBiglietto(final Map<Parametri, String> fields) {
         boolean fatto = PagamentoBiglietto.DAO.insert(connection, fields);
         fatto = Biglietto.DAO.insert(connection, fields);
         return fatto;
@@ -80,7 +84,7 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public Double getDiscountPercent(String codiceSconto) {
+    public Double getDiscountPercent(final String codiceSconto) {
         return Sconto.DAO.getPercentuale(connection, codiceSconto);
     }
 
@@ -92,5 +96,45 @@ public class WritingModelImpl implements WritingModel{
     @Override
     public String getLastGroupCode() {
         return Gruppo.DAO.getLast(connection);
+    }
+
+    @Override
+    public boolean checkProdotto(final String codiceProdotto) {
+        return Prodotto.DAO.check(connection, codiceProdotto);
+    }
+
+    @Override
+    public boolean checkZonaRicreativa(final String nomeZona) {
+        return ZonaRicreativa.DAO.check(connection, nomeZona);
+    }
+
+    @Override
+    public String getNomeProdotto(final String codiceProdotto) {
+        return Prodotto.DAO.getName(connection, codiceProdotto);
+    }
+
+    @Override
+    public Double getPrezzoProdotto(final String codiceProdotto) {
+        return Prodotto.DAO.getPrezzo(connection, codiceProdotto);
+    }
+
+    @Override
+    public String getActualOrderCode() {
+        return Ordine.DAO.getLast(connection);
+    }
+
+    @Override
+    public boolean insertOrdine(final Map<Parametri, String> fields) {
+        return Ordine.DAO.insert(connection, fields);
+    }
+
+    @Override
+    public boolean insertGiornataLavorativa(String codiceFiscale) {
+        return GiornataLavorativa.DAO.insert(connection, codiceFiscale);
+    }
+
+    @Override
+    public boolean checkGiornataLavorativa(String codiceFiscale, String data) {
+        return GiornataLavorativa.DAO.check(connection, codiceFiscale, data);
     }
 }

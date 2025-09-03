@@ -16,6 +16,7 @@ import javax.swing.JScrollPane;
 import parcofaunistico.controller.MainController;
 import parcofaunistico.controller.ReadingController;
 import parcofaunistico.data.User;
+import parcofaunistico.model.WritingModel;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public final class MainView extends JFrame{
     private static final String CARD_REGISTRAZIONE_GRUPPO = "registrazioneGruppo";
     private static final String CARD_ACQUISTO_BIGLIETTO_VISITATORE = "acquistoBigliettoVisitatore";
     private static final String CARD_ACQUISTO_BIGLIETTO_GRUPPO = "acquistoBigliettoGruppo";
+    private static final String CARD_ORDINE = "ordine";
     private static final Dimension SCREENSIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int WIDTH = (int) SCREENSIZE.getWidth();
     private static final int HEIGHT = (int) SCREENSIZE.getHeight();
@@ -35,6 +37,7 @@ public final class MainView extends JFrame{
     public static final String EMPTY = "empty";
 
     private Optional<ReadingController> readingController;
+    private WritingModel writingModel;
     private final CardLayout layout = new CardLayout();
     private final JPanel cardPanel = new JPanel(this.layout);
     private final JPanel emptyPanel;
@@ -45,9 +48,11 @@ public final class MainView extends JFrame{
     private final AcquistoBigliettoPanel acBigliettoVisitatorePanel;
     private final AcquistoBigliettoPanel acBigliettoGruppoPanel;
     private final AccediRegistratiPanel accRegPanel;
+    private final OrdiniPanel ordiniPanel;
 
     public MainView(final MainController mainController, final Runnable onClose) {
         this.readingController = Optional.empty();
+        this.writingModel = mainController.getWritingModel();
         setupMainFrame(onClose);
         this.emptyPanel = new JPanel();
         this.loginPanel = new LoginPanel(this, mainController.getReadingModel());
@@ -56,6 +61,7 @@ public final class MainView extends JFrame{
         this.acBigliettoGruppoPanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
         this.regVisitatorePanel = new RegVisitatorePanel(this, mainController.getWritingModel(), acBigliettoVisitatorePanel);
         this.regGruppoPanel = new RegGruppoPanel(this, mainController.getWritingModel(), acBigliettoGruppoPanel);
+        this.ordiniPanel = new OrdiniPanel(this, mainController.getWritingModel());
 
         final JScrollPane scrollGruppo = new JScrollPane(this.regGruppoPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -71,6 +77,7 @@ public final class MainView extends JFrame{
         this.cardPanel.add(regVisitatorePanel, CARD_REGISTRAZIONE_VISITATORE);
         this.cardPanel.add(scrollGruppo, CARD_REGISTRAZIONE_GRUPPO);
         this.cardPanel.add(accRegPanel, CARD_ACCEDI_REGISTRATI);
+        this.cardPanel.add(ordiniPanel, CARD_ORDINE);
         this.add(cardPanel);
         this.layout.show(this.cardPanel, CARD_ACCEDI_REGISTRATI);
         this.setVisible(true);
@@ -129,7 +136,7 @@ public final class MainView extends JFrame{
             }
 
             case DIPENDENTE -> {
-                final var panel = new DipendentiPanel(this.readingController.get(), codiceFiscale);
+                final var panel = new DipendentiPanel(this.readingController.get(), this.writingModel, this, codiceFiscale);
                 this.cardPanel.add(panel, CARD_USER);
                 this.layout.show(this.cardPanel, CARD_USER);
             }
@@ -162,5 +169,6 @@ public final class MainView extends JFrame{
 
     public void notifyGruppoInsert() {
         this.regGruppoPanel.executeInsertGruppo();
+        this.regGruppoPanel.restartData();
     }
 }

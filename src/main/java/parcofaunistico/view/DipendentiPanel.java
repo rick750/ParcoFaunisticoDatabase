@@ -2,6 +2,8 @@ package parcofaunistico.view;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 
 import javax.swing.Box;
@@ -10,12 +12,15 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import parcofaunistico.controller.ReadingController;
+import parcofaunistico.model.WritingModel;
 
 public class DipendentiPanel extends JPanel {
-
+    private static final String CARD_ORDINE = "ordine";
     private final Optional<ReadingController> readContr;
     
-    public DipendentiPanel(final ReadingController rContr, final String codiceFiscale) {
+    
+    public DipendentiPanel(final ReadingController rContr, final WritingModel writingModel, 
+                            final MainView mainView, final String codiceFiscale) {
         this.readContr = Optional.of(rContr);
         setPreferredSize(this.getPreferredSize());
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -56,6 +61,38 @@ public class DipendentiPanel extends JPanel {
         centerButton(btnGiornateLavorative);
         btnGiornateLavorative.addActionListener(e -> readContr.ifPresent(rc -> rc.userRequestedGiornateLavorative(codiceFiscale)));
 
+        final var btnNuovoOrdine = new JButton("Nuovo ordine visitatore");
+        centerButton(btnNuovoOrdine);
+        btnNuovoOrdine.addActionListener(e -> mainView.changePanel(CARD_ORDINE));
+
+        final var btnGiornataLavorativa = new JButton("Aggiungi giornata lavorativa");
+        centerButton(btnNuovoOrdine);
+        btnGiornataLavorativa.addActionListener(e -> {
+            final String title = "Inserimento giornata lavorativa";
+            String message;
+            if(writingModel.insertGiornataLavorativa(codiceFiscale)) {
+                message = "Giornata lavorativa inserita correttamente";
+            } else {
+                message = "Problemi durante l'inserimento di una nuova giornata lavorativa";
+            }
+            final Dialog dialog = new Dialog(title, message, true);
+            dialog.setLocationRelativeTo(this);
+            dialog.setVisible(true);
+        });
+
+        if (writingModel.checkGiornataLavorativa(codiceFiscale, LocalDate.now().toString())) {
+            btnGiornataLavorativa.setEnabled(false);
+        }
+
+        final LocalTime oraAttuale = LocalTime.now();
+
+        final LocalTime inizio = LocalTime.of(9, 0, 0);
+        final LocalTime fine   = LocalTime.of(18, 0, 0);
+
+        if (oraAttuale.isBefore(inizio) || oraAttuale.isAfter(fine)) {
+            btnGiornataLavorativa.setEnabled(false);
+        }
+
         add(btnAree);
         add(Box.createVerticalStrut(8));
         add(btnZoneAmministrative);
@@ -73,11 +110,15 @@ public class DipendentiPanel extends JPanel {
         add(btnProdotti);
         add(Box.createVerticalStrut(8));
         add(btnGiornateLavorative);
+        add(Box.createVerticalStrut(8));
+        add(btnNuovoOrdine);
+        add(Box.createVerticalStrut(8));
+        add(btnGiornataLavorativa);
     }
 
-    private static void centerButton(JButton b) {
+    private static void centerButton(final JButton b) {
         b.setAlignmentX(Component.CENTER_ALIGNMENT);
-        Dimension pref = b.getPreferredSize();
+        final Dimension pref = b.getPreferredSize();
         b.setMaximumSize(new Dimension(Math.max(pref.width, 220), pref.height));
     }
 

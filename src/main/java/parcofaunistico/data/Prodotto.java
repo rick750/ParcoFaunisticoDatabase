@@ -47,5 +47,49 @@ public class Prodotto {
             }
             return prodotti;            
         }
+
+        public static boolean check(Connection connection, String codiceProdotto) {
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(codiceProdotto));
+                    var resultSet = preparedStatement.executeQuery();) {
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
+        public static String getName(final Connection connection, final String codiceProdotto) {
+            String name;
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(codiceProdotto));
+                    var resultSet = preparedStatement.executeQuery();) {
+                    resultSet.next();
+                    name = resultSet.getString("nome");
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            }
+            return name;
+        }
+
+        public static double getPrezzo(final Connection connection, final String codiceProdotto) {
+            Double prezzo;
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(codiceProdotto));
+                    var resultSet = preparedStatement.executeQuery();) {
+                    resultSet.next();
+                    prezzo = resultSet.getDouble("prezzo_unitario");
+            } catch (SQLException e) {
+                throw new DAOException(e);
+            }
+            return prezzo;
+        }
+
+         private static String getCheckQuery(String codiceProdotto) {
+            return Queries.CHECK_PRODOTTO.get() + "\'" + codiceProdotto + "\'";
+        }
     }
 }

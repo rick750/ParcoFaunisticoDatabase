@@ -2,9 +2,11 @@ package parcofaunistico.data;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Ordine {
     private final String codiceOrdine;
@@ -67,6 +69,46 @@ public class Ordine {
             return ordini;            
         }
 
+        public static boolean insert(Connection connection, Map<Parametri, String> textfields) {
+            final String codiceProdotto = textfields.get(Parametri.CODICE_PRODOTTO);
+            final String codiceOrdine = textfields.get(Parametri.CODICE_ORDINE);
+            final int quantita = Integer.parseInt(textfields.get(Parametri.QUANTITA));
+            final Date data = Date.valueOf(textfields.get(Parametri.DATA_EFFETTUAZIONE));
+            final String nomeZona = String.valueOf(textfields.get(Parametri.NOME_ZONA));
+            final String codiceFiscale = String.valueOf(textfields.get(Parametri.CODICE_FISCALE));
+
+            final String queryOrdine = """
+                        INSERT INTO ORDINE(codice_prodotto, codice_ordine, quantita_acquistata, data, nome)
+                        VALUES (?, ?, ?, ?, ?)
+                    """;
+            final String queryRichiesta = """
+                        INSERT INTO RICHIESTA(codice_fiscale, codice_prodotto, codice_ordine)
+                        VALUES (?, ?, ?)
+                    """; 
+
+            try (PreparedStatement stmtOrdine = connection.prepareStatement(queryOrdine)) {
+                stmtOrdine.setString(1, codiceProdotto);
+                stmtOrdine.setString(2, codiceOrdine);
+                stmtOrdine.setInt(3, quantita);
+                stmtOrdine.setDate(4, data);
+                stmtOrdine.setString(5, nomeZona);
+                int righeInserite = stmtOrdine.executeUpdate();
+                System.out.println("Righe inserite in ordini: " + righeInserite);
+                try (PreparedStatement stmtRichiesta = connection.prepareStatement(queryRichiesta)){
+                    stmtRichiesta.setString(1, codiceFiscale);
+                    stmtRichiesta.setString(2, codiceProdotto);
+                    stmtRichiesta.setString(3, codiceOrdine);
+                    righeInserite = stmtRichiesta.executeUpdate();
+                    System.out.println("Righe inserite in richieste: " + righeInserite); 
+                } catch (Exception e) {
+                    return false;
+                }
+            } catch (Exception e) {
+                return false;
+            }
+            return true;
+        }
+
         public static List<Ordine> getVisitatoreOrdini(final Connection connection, final String codiceFiscale) {
             var ordini = new ArrayList<Ordine>();
             try(
@@ -91,6 +133,20 @@ public class Ordine {
                 throw new DAOException(e);
             }
             return ordini;   
+        }
+
+        public static String getLast(Connection connection) {
+            String codiceOrdine;
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, Queries.SHOW_ULTIMO_ORDINE.get());
+                    var resultSet = preparedStatement.executeQuery();) {
+                    resultSet.next();
+                    codiceOrdine = resultSet.getString("codice_ordine");
+                
+            } catch (final SQLException e) {
+                throw new DAOException(e);
+            }
+            return codiceOrdine;
         }
 
          private static String getQuery(final String codiceFiscale) {

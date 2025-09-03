@@ -87,7 +87,12 @@ public class RegistrazioneGruppoController {
     }
 
     public boolean executeInsertQuery() {
-        return this.writingModel.insertGruppo(getActualGroupCode(), numPartecipanti, partecipanti);
+        final var done = this.writingModel.insertGruppo(getActualGroupCode(), numPartecipanti, partecipanti);
+        if (!done) {
+            return false;
+        }
+        this.clearPartecipanti();
+        return done;
     }
 
     public int getNumPartecipanti() {

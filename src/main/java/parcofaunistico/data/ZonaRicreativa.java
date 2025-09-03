@@ -45,5 +45,24 @@ public class ZonaRicreativa {
             }
             return zoneRicreative;            
         }
+
+        public static boolean check(Connection connection, String nomeZona) {
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getCheckQuery(nomeZona));
+                    var resultSet = preparedStatement.executeQuery();) {
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
+        private static String getCheckQuery(String nomeZona) {
+            return Queries.CHECK_ZONA_RICREATIVA.get() + "\'" + nomeZona + "\'";
+        }
+
     }
 }

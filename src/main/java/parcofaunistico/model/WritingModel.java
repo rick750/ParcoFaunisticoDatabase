@@ -25,4 +25,20 @@ public interface WritingModel {
     Boolean checkPathName(String percorso);
 
     String getLastGroupCode();
+    
+    boolean checkProdotto(String text);
+
+    boolean checkZonaRicreativa(String text);
+
+    String getNomeProdotto(String text);
+
+    Double getPrezzoProdotto(String text);
+
+    String getActualOrderCode();
+
+    boolean insertOrdine(Map<Parametri, String> fields);
+
+    boolean insertGiornataLavorativa(String codiceFiscale);
+
+    boolean checkGiornataLavorativa(String codiceFiscale, String data);
 }
