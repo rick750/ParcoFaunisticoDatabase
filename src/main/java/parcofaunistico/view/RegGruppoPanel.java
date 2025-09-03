@@ -2,6 +2,7 @@ package parcofaunistico.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -23,14 +24,8 @@ import parcofaunistico.controller.RegistrazioneGruppoController;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
-public class RegGruppoPanel extends JPanel{
+public class RegGruppoPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    private static final double RESIZE_FACTOR = 1.0;
-    private static final double FIELD_HEIGHT_RATIO = 0.05;
-    private static final double FIELD_WIDTH_RATIO = 0.15;
-    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final int SCREEN_WIDTH = (int) (SCREEN_SIZE.getWidth() * RESIZE_FACTOR);
-    private static final int SCREEN_HEIGHT = (int) (SCREEN_SIZE.getHeight() * RESIZE_FACTOR);
     private final MainView mainView;
     private final JLabel codicegruppoLabel;
     private final JLabel numPartecipantiLabel;
@@ -47,7 +42,8 @@ public class RegGruppoPanel extends JPanel{
     private final RegistrazioneGruppoController regController;
     private final AcquistoBigliettoPanel acquistoBigliettoPanel;
 
-    public RegGruppoPanel(final MainView mainView, final WritingModel writingModel, final AcquistoBigliettoPanel acquistoPanel) {
+    public RegGruppoPanel(final MainView mainView, final WritingModel writingModel,
+            final AcquistoBigliettoPanel acquistoPanel) {
         this.mainView = mainView;
         this.acquistoBigliettoPanel = acquistoPanel;
         this.regController = new RegistrazioneGruppoController(writingModel);
@@ -96,10 +92,10 @@ public class RegGruppoPanel extends JPanel{
         this.add(title, gbc);
         gbc.gridy = ++row;
         final JLabel subtitle = createLabel("Se il visitatore è già registrato, indicare solo il codice fiscale.");
-        title.setFont(UIManager.getFont("BigLabel.font"));
-        title.setForeground(new Color(255, 215, 0));
-        title.setBackground(new Color(18, 30, 49));
-        title.setOpaque(true);
+        subtitle.setFont(UIManager.getFont("Label.font"));
+        subtitle.setForeground(new Color(255, 215, 0));
+        subtitle.setBackground(new Color(18, 30, 49));
+        subtitle.setOpaque(true);
         this.add(subtitle, gbc);
 
         gbc.gridwidth = 1;
@@ -118,9 +114,16 @@ public class RegGruppoPanel extends JPanel{
         gbc.gridy = ++row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        this.add(addButton, gbc);
-        gbc.gridy = ++row;
-        this.add(sendButton, gbc);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        buttonPanel.setOpaque(false);
+        buttonPanel.add(addButton);
+        buttonPanel.add(sendButton);
+
+        this.add(buttonPanel, gbc);
+
         gbc.gridy = ++row;
         final JButton backButton = new JButton("INDIETRO");
         backButton.setFont(UIManager.getFont("Button.font"));
@@ -129,15 +132,19 @@ public class RegGruppoPanel extends JPanel{
         this.add(backButton, gbc);
     }
 
-    private void addRow(final String labelText, final JComponent component, final int row, final GridBagConstraints gbc) {
+    private void addRow(final String labelText, final JComponent component, final int row,
+            final GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
         this.add(createLabel(labelText), gbc);
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
         this.add(component, gbc);
     }
 
@@ -151,46 +158,47 @@ public class RegGruppoPanel extends JPanel{
         button.setFocusPainted(false);
 
         button.addMouseListener(
-            new MouseAdapter() {
-                @Override
-                public void mouseEntered(final MouseEvent evt) {
-                    button.setBackground(button.getBackground().brighter());
-                }
-                @Override
-                public void mouseExited(final MouseEvent evt) {
-                    button.setBackground(UIManager.getColor("Button.background"));
-                }
-            }
-        );
+                new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(final MouseEvent evt) {
+                        button.setBackground(button.getBackground().brighter());
+                    }
+
+                    @Override
+                    public void mouseExited(final MouseEvent evt) {
+                        button.setBackground(UIManager.getColor("Button.background"));
+                    }
+                });
 
         button.addActionListener(act -> {
-                if(this.regController.checkGruppo()) {
-                    final var title = "Conferma registrazione";
-                    final var message = "I dati del gruppo sono stati inseriti correttamente.\n"
-                    + "Premere OK per passare al pagamento visita o CANCEL per annullare";
-                
-                    final var executeBtn = new JButton("OK");
-                    final var cancelBtn = new JButton("CANCEL");
-                    final Dialog dialog = new Dialog(title, message, false);
-                    dialog.setLocationRelativeTo(this);
-                    executeBtn.addActionListener(e -> {
-                        dialog.dispose();
-                        this.acquistoBigliettoPanel.setData(false, "nessuno",
-                                                        0, regController.getNumPartecipanti(), 
-                                                        this.codicegruppoLabel.getText());
-                        this.mainView.showAcquistoBigliettoPanel(false);
-                    });
-                    cancelBtn.addActionListener(e -> {
-                        dialog.dispose();
-                        this.regController.clearPartecipanti();
-                    });
-                    dialog.addButton(cancelBtn);
-                    dialog.addButton(executeBtn);
-                    dialog.setVisible(true);
-                } else {
-                    this.showErrorMessage(this.regController.getErrorMessage());
-                }
-              
+            if (this.regController.checkGruppo()) {
+                final var title = "Conferma registrazione";
+                final var message = "I dati del gruppo sono stati inseriti correttamente.\n"
+                        + "Premere OK per passare al pagamento visita o CANCEL per annullare";
+
+                final var executeBtn = new JButton("OK");
+                final var cancelBtn = new JButton("CANCEL");
+                final Dialog dialog = new Dialog(title, message, false);
+                dialog.setLocationRelativeTo(this);
+                executeBtn.addActionListener(e -> {
+                    dialog.dispose();
+                    this.acquistoBigliettoPanel.setData(false, "nessuno",
+                            0, regController.getNumPartecipanti(),
+                            this.codicegruppoLabel.getText());
+                    this.mainView.showAcquistoBigliettoPanel(false);
+                });
+                cancelBtn.addActionListener(e -> {
+                    dialog.dispose();
+                    this.regController.clearPartecipanti();
+                    this.numPartecipantiLabel.setText(String.valueOf(this.regController.getNumPartecipanti()));
+                });
+                dialog.addButton(cancelBtn);
+                dialog.addButton(executeBtn);
+                dialog.setVisible(true);
+            } else {
+                this.showErrorMessage(this.regController.getErrorMessage());
+            }
+
         });
         return button;
     }
@@ -205,23 +213,23 @@ public class RegGruppoPanel extends JPanel{
         button.setFocusPainted(false);
 
         button.addMouseListener(
-            new MouseAdapter() {
-                @Override
-                public void mouseEntered(final MouseEvent evt) {
-                    button.setBackground(button.getBackground().brighter());
-                }
-                @Override
-                public void mouseExited(final MouseEvent evt) {
-                    button.setBackground(UIManager.getColor("Button.background"));
-                }
-            }
-        );
+                new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(final MouseEvent evt) {
+                        button.setBackground(button.getBackground().brighter());
+                    }
+
+                    @Override
+                    public void mouseExited(final MouseEvent evt) {
+                        button.setBackground(UIManager.getColor("Button.background"));
+                    }
+                });
 
         button.addActionListener(act -> {
-            if(this.regController.checkVisitatoreExistance(this.textfields.get(Parametri.CODICE_FISCALE).getText())) {
-                 final var title = "Conferma registrazione";
-                final var message = "Il codice fiscale: " + this.textfields.get(Parametri.CODICE_FISCALE).getText() 
-                                    + " è già registrato.\nSi vuole aggiungere questo visitatore al gruppo?";
+            if (this.regController.checkVisitatoreExistance(this.textfields.get(Parametri.CODICE_FISCALE).getText())) {
+                final var title = "Conferma registrazione";
+                final var message = "Il codice fiscale: " + this.textfields.get(Parametri.CODICE_FISCALE).getText()
+                        + " è già registrato.\nSi vuole aggiungere questo visitatore al gruppo?";
                 final var executeBtn = new JButton("OK");
                 final Dialog dialog = new Dialog(title, message, true);
                 dialog.setLocationRelativeTo(this);
@@ -234,28 +242,28 @@ public class RegGruppoPanel extends JPanel{
                 dialog.addButton(executeBtn);
                 dialog.setVisible(true);
             } else {
-                    if (! this.regController.checkVisitatore(this.textfields)) {
+                if (!this.regController.checkVisitatore(this.textfields)) {
                     this.showErrorMessage(this.regController.getErrorMessage());
-                    } else {
-                        this.numPartecipantiLabel.setText(String.valueOf(this.regController.getNumPartecipanti()));
-                        final var title = "Conferma registrazione";
-                        final var message = "I dati del nuovo partecipante sono stati inseriti correttamente";
-                    
-                        final var executeBtn = new JButton("OK");
-                        final Dialog dialog = new Dialog(title, message, false);
-                        dialog.setLocationRelativeTo(this);
-                        executeBtn.addActionListener(e -> {
-                            dialog.dispose();
-                            final var entries = this.textfields.entrySet();
-                            for(final var entry: entries) {
-                                entry.getValue().setText("");
-                            }
-                            this.codicegruppoLabel.setText(this.regController.getActualGroupCode());       
-                        });
-                        dialog.addButton(executeBtn);
-                        dialog.setVisible(true);
-                    }
-            } 
+                } else {
+                    this.numPartecipantiLabel.setText(String.valueOf(this.regController.getNumPartecipanti()));
+                    final var title = "Conferma registrazione";
+                    final var message = "I dati del nuovo partecipante sono stati inseriti correttamente";
+
+                    final var executeBtn = new JButton("OK");
+                    final Dialog dialog = new Dialog(title, message, false);
+                    dialog.setLocationRelativeTo(this);
+                    executeBtn.addActionListener(e -> {
+                        dialog.dispose();
+                        final var entries = this.textfields.entrySet();
+                        for (final var entry : entries) {
+                            entry.getValue().setText("");
+                        }
+                        this.codicegruppoLabel.setText(this.regController.getActualGroupCode());
+                    });
+                    dialog.addButton(executeBtn);
+                    dialog.setVisible(true);
+                }
+            }
         });
         return button;
     }
@@ -263,9 +271,7 @@ public class RegGruppoPanel extends JPanel{
     private JTextField createField() {
         final JTextField field = new JTextField();
         field.setOpaque(true);
-        field.setPreferredSize(new Dimension(
-            (int) (SCREEN_WIDTH * FIELD_WIDTH_RATIO),
-            (int) (SCREEN_HEIGHT * FIELD_HEIGHT_RATIO)));
+        field.setColumns(20);
         field.setFont(UIManager.getFont("TextField.font"));
         return field;
     }
@@ -281,10 +287,10 @@ public class RegGruppoPanel extends JPanel{
 
     public void showErrorMessage(final String message) {
         JOptionPane.showMessageDialog(
-            this,
-            message,
-            "Attenzione",
-            JOptionPane.ERROR_MESSAGE);
+                this,
+                message,
+                "Attenzione",
+                JOptionPane.ERROR_MESSAGE);
     }
 
     public void executeInsertGruppo() {

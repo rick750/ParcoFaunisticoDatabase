@@ -11,6 +11,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import parcofaunistico.controller.MainController;
 import parcofaunistico.controller.ReadingController;
@@ -55,6 +56,11 @@ public final class MainView extends JFrame{
         this.acBigliettoGruppoPanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
         this.regVisitatorePanel = new RegVisitatorePanel(this, mainController.getWritingModel(), acBigliettoVisitatorePanel);
         this.regGruppoPanel = new RegGruppoPanel(this, mainController.getWritingModel(), acBigliettoGruppoPanel);
+
+        final JScrollPane scrollGruppo = new JScrollPane(this.regGruppoPanel,
+                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
         this.accRegPanel = new AccediRegistratiPanel(this, CARD_LOGIN, CARD_REGISTRAZIONE);
 
         this.cardPanel.add(emptyPanel, EMPTY);
@@ -63,7 +69,7 @@ public final class MainView extends JFrame{
         this.cardPanel.add(acBigliettoGruppoPanel, CARD_ACQUISTO_BIGLIETTO_GRUPPO);
         this.cardPanel.add(acBigliettoVisitatorePanel, CARD_ACQUISTO_BIGLIETTO_VISITATORE);
         this.cardPanel.add(regVisitatorePanel, CARD_REGISTRAZIONE_VISITATORE);
-        this.cardPanel.add(regGruppoPanel, CARD_REGISTRAZIONE_GRUPPO);
+        this.cardPanel.add(scrollGruppo, CARD_REGISTRAZIONE_GRUPPO);
         this.cardPanel.add(accRegPanel, CARD_ACCEDI_REGISTRATI);
         this.add(cardPanel);
         this.layout.show(this.cardPanel, CARD_ACCEDI_REGISTRATI);
