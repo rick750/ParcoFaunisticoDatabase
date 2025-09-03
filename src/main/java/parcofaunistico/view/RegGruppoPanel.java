@@ -1,10 +1,12 @@
 package parcofaunistico.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.EnumMap;
@@ -12,6 +14,7 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -82,14 +85,14 @@ public class RegGruppoPanel extends JPanel {
         gbc.gridy = row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        final JLabel title = createLabel("Benvenuto al menù di registrazione GRUPPO.");
+        final JLabel title = createLabel("Benvenuto al menù di registrazione GRUPPO");
         title.setFont(UIManager.getFont("BigLabel.font"));
         title.setForeground(new Color(255, 215, 0));
         title.setBackground(new Color(18, 30, 49));
         title.setOpaque(true);
         this.add(title, gbc);
         gbc.gridy = ++row;
-        final JLabel subtitle = createLabel("Se il visitatore è già registrato, indicare solo il codice fiscale.");
+        final JLabel subtitle = createLabel("Se il visitatore è già registrato, indicare solo il codice fiscale");
         subtitle.setFont(UIManager.getFont("Label.font"));
         subtitle.setForeground(new Color(255, 215, 0));
         subtitle.setBackground(new Color(18, 30, 49));
@@ -115,7 +118,7 @@ public class RegGruppoPanel extends JPanel {
         gbc.fill = GridBagConstraints.NONE;
         gbc.weightx = 0.0;
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
+        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
         buttonPanel.setOpaque(false);
         buttonPanel.add(addButton);
         buttonPanel.add(sendButton);
@@ -283,12 +286,40 @@ public class RegGruppoPanel extends JPanel {
         return label;
     }
 
-    public void showErrorMessage(final String message) {
-        JOptionPane.showMessageDialog(
-                this,
-                message,
-                "Attenzione",
-                JOptionPane.ERROR_MESSAGE);
+    
+    private void showErrorMessage(final String message) {
+        showInfoDialog(message, "Input Error", Color.WHITE, Color.BLACK);
+    }
+
+    private void showInfoDialog(final String message, final String title, final Color bg, final Color fg) {
+        final JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+        final JDialog dialog = pane.createDialog(this, title);
+        setBackgroundAndForegroundRecursively(pane, bg, fg);
+        if (dialog.getContentPane() != null) {
+            setBackgroundAndForegroundRecursively(dialog.getContentPane(), bg, fg);
+        }
+        dialog.pack();
+        dialog.setModal(true);
+        dialog.setVisible(true);
+    }
+
+    private void setBackgroundAndForegroundRecursively(final Component c, final Color bg, final Color fg) {
+        if (c == null)
+            return;
+        try {
+            c.setBackground(bg);
+        } catch (final Exception ignored) {
+        }
+        try {
+            c.setForeground(fg);
+        } catch (final Exception ignored) {
+        }
+        if (c instanceof JComponent) {
+            ((JComponent) c).setOpaque(true);
+        }
+        for (final Component child : ((c instanceof JComponent) ? ((JComponent) c).getComponents() : new Component[0])) {
+            setBackgroundAndForegroundRecursively(child, bg, fg);
+        }
     }
 
     public void executeInsertGruppo() {
