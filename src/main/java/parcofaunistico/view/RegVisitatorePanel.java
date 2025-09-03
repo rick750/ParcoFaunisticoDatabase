@@ -1,6 +1,7 @@
 package parcofaunistico.view;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -9,6 +10,8 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -19,12 +22,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-
 import parcofaunistico.controller.RegistrazioneVisitatoreController;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
-public class RegVisitatorePanel extends JPanel{
+public class RegVisitatorePanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private static final double RESIZE_FACTOR = 1.0;
     private static final double FIELD_HEIGHT_RATIO = 0.05;
@@ -45,7 +47,8 @@ public class RegVisitatorePanel extends JPanel{
     private final RegistrazioneVisitatoreController regController;
     private final AcquistoBigliettoPanel acquistoBigliettoPanel;
 
-    public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel, final AcquistoBigliettoPanel acquistoPanel) {
+    public RegVisitatorePanel(final MainView mainView, final WritingModel writingModel,
+            final AcquistoBigliettoPanel acquistoPanel) {
         this.mainView = mainView;
         this.acquistoBigliettoPanel = acquistoPanel;
         this.setLayout(new GridBagLayout());
@@ -138,33 +141,33 @@ public class RegVisitatorePanel extends JPanel{
         button.setFocusPainted(false);
 
         button.addMouseListener(
-            new MouseAdapter() {
-                @Override
-                public void mouseEntered(final MouseEvent evt) {
-                    button.setBackground(button.getBackground().brighter());
-                }
-                @Override
-                public void mouseExited(final MouseEvent evt) {
-                    button.setBackground(UIManager.getColor("Button.background"));
-                }
-            }
-        );
+                new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(final MouseEvent evt) {
+                        button.setBackground(button.getBackground().brighter());
+                    }
+
+                    @Override
+                    public void mouseExited(final MouseEvent evt) {
+                        button.setBackground(UIManager.getColor("Button.background"));
+                    }
+                });
 
         button.addActionListener(act -> {
-            if (! this.regController.check()) {
+            if (!this.regController.check()) {
                 this.showErrorMessage(this.regController.getErrorMessage());
             } else {
                 final var title = "Conferma registrazione";
                 final var message = "I dati sono stati inseriti correttamente";
                 this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(),
-                                                    Integer.parseInt(this.etaField.getText()), 1, "nessuno");
+                        Integer.parseInt(this.etaField.getText()), 1, "nessuno");
                 final var executeBtn = new JButton("OK");
                 final Dialog dialog = new Dialog(title, message, false);
                 dialog.setLocationRelativeTo(this);
                 executeBtn.addActionListener(e -> {
-                    dialog.dispose(); 
+                    dialog.dispose();
                     this.mainView.showAcquistoBigliettoPanel(true);
-                        
+
                 });
                 dialog.addButton(executeBtn);
                 dialog.setVisible(true);
@@ -177,8 +180,8 @@ public class RegVisitatorePanel extends JPanel{
         final JTextField field = new JTextField();
         field.setOpaque(true);
         field.setPreferredSize(new Dimension(
-            (int) (SCREEN_WIDTH * FIELD_WIDTH_RATIO),
-            (int) (SCREEN_HEIGHT * FIELD_HEIGHT_RATIO)));
+                (int) (SCREEN_WIDTH * FIELD_WIDTH_RATIO),
+                (int) (SCREEN_HEIGHT * FIELD_HEIGHT_RATIO)));
         field.setFont(UIManager.getFont("TextField.font"));
         return field;
     }
@@ -193,11 +196,38 @@ public class RegVisitatorePanel extends JPanel{
     }
 
     private void showErrorMessage(final String message) {
-        JOptionPane.showMessageDialog(
-            this,
-            message,
-            "Attenzione",
-            JOptionPane.ERROR_MESSAGE);
+        showInfoDialog(message, "Input Error", Color.WHITE, Color.BLACK);
+    }
+
+    private void showInfoDialog(final String message, final String title, final Color bg, final Color fg) {
+        final JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+        final JDialog dialog = pane.createDialog(this, title);
+        setBackgroundAndForegroundRecursively(pane, bg, fg);
+        if (dialog.getContentPane() != null) {
+            setBackgroundAndForegroundRecursively(dialog.getContentPane(), bg, fg);
+        }
+        dialog.pack();
+        dialog.setModal(true);
+        dialog.setVisible(true);
+    }
+
+    private void setBackgroundAndForegroundRecursively(final Component c, final Color bg, final Color fg) {
+        if (c == null)
+            return;
+        try {
+            c.setBackground(bg);
+        } catch (final Exception ignored) {
+        }
+        try {
+            c.setForeground(fg);
+        } catch (final Exception ignored) {
+        }
+        if (c instanceof JComponent) {
+            ((JComponent) c).setOpaque(true);
+        }
+        for (final Component child : ((c instanceof JComponent) ? ((JComponent) c).getComponents() : new Component[0])) {
+            setBackgroundAndForegroundRecursively(child, bg, fg);
+        }
     }
 
     public void executeInsertVisitatore() {

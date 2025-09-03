@@ -1,13 +1,13 @@
 package parcofaunistico.view;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
+import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -22,14 +22,8 @@ import parcofaunistico.controller.RegistrazionePagamentoController;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
-public class AcquistoBigliettoPanel extends JPanel{
+public class AcquistoBigliettoPanel extends JPanel {
     private static final long serialVersionUID = 1L;
-    private static final double RESIZE_FACTOR = 1.0;
-    private static final double FIELD_HEIGHT_RATIO = 0.05;
-    private static final double FIELD_WIDTH_RATIO = 0.15;
-    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-    private static final int SCREEN_WIDTH = (int) (SCREEN_SIZE.getWidth() * RESIZE_FACTOR);
-    private static final int SCREEN_HEIGHT = (int) (SCREEN_SIZE.getHeight() * RESIZE_FACTOR);
     private final MainView mainView;
     private JLabel codiceTransazioneLabel;
     private JLabel codicefiscaleLabel;
@@ -55,9 +49,11 @@ public class AcquistoBigliettoPanel extends JPanel{
         this.setOpaque(true);
     }
 
-    public void setData(final boolean visitatore, final String codFiscale, final int eta, final int numPartecipanti, final String codGruppo) {
+    public void setData(final boolean visitatore, final String codFiscale, final int eta, final int numPartecipanti,
+            final String codGruppo) {
         this.visitatore = visitatore;
-        this.regController = new RegistrazionePagamentoController(writingModel, this, visitatore, codFiscale, eta, numPartecipanti, codGruppo);
+        this.regController = new RegistrazionePagamentoController(writingModel, this, visitatore, codFiscale, eta,
+                numPartecipanti, codGruppo);
         final var paymentData = this.regController.getPaymentData();
         final var ticketData = this.regController.getTicketData();
         this.codiceTransazioneLabel = this.createLabel(paymentData.get(Parametri.CODICE_TRANSAZIONE));
@@ -71,7 +67,7 @@ public class AcquistoBigliettoPanel extends JPanel{
         this.prezzoEffettivoLabel = this.createLabel(ticketData.get(Parametri.PREZZO_EFFETTIVO));
         this.dataValidita = this.createField();
         this.percorso = this.createField();
-       
+
         this.sendButton = createSendButton();
         this.arrangeComponents();
     }
@@ -88,26 +84,31 @@ public class AcquistoBigliettoPanel extends JPanel{
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         final JLabel title = createLabel("Riepilogo pagamento del biglietto:");
-        title.setFont(UIManager.getFont("BigLabel.font"));
+        title.setFont(UIManager.getFont("Label.font"));
         title.setForeground(new Color(255, 215, 0));
         title.setBackground(new Color(18, 30, 49));
         title.setOpaque(true);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
+        title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         this.add(title, gbc);
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
 
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        addRow(createLabel("Codice transazione: "), codiceTransazioneLabel, ++row, gbc);
-        addRow(createLabel("Codice fiscale: "),this.codicefiscaleLabel, ++row, gbc);
-        addRow(createLabel("Codice gruppo: "),this.codiceGruppoLabel, ++row, gbc);
-        addRow(createLabel("Data effettuazione: "),this.dataEffettuazioneLabel, ++row, gbc);
-        addRow(createLabel("Codice sconto: "),this.codiceScontoLabel, ++row, gbc);
-        addRow(createLabel("nome Zona effettuazione: "),this.nomeZonaLabel, ++row, gbc);
-        addRow(createLabel("Codice biglietto: "),this.codBigliettoLabel, ++row, gbc);
-        addRow(createLabel("Prezzo base: "),this.prezzoBaselabel, ++row, gbc);
-        addRow(createLabel("Prezzo effettivo: "),this.prezzoEffettivoLabel, ++row, gbc);
-        addRow(createLabel("Data Validità: "),this.dataValidita, ++row, gbc);
-        addRow(createLabel("Codice percorso: "),this.percorso, ++row, gbc);
+        addRow("Codice transazione: ", codiceTransazioneLabel, ++row, gbc);
+        addRow("Codice fiscale: ", this.codicefiscaleLabel, ++row, gbc);
+        addRow("Codice gruppo: ", this.codiceGruppoLabel, ++row, gbc);
+        addRow("Data effettuazione: ", this.dataEffettuazioneLabel, ++row, gbc);
+        addRow("Codice sconto: ", this.codiceScontoLabel, ++row, gbc);
+        addRow("nome Zona effettuazione: ", this.nomeZonaLabel, ++row, gbc);
+        addRow("Codice biglietto: ", this.codBigliettoLabel, ++row, gbc);
+        addRow("Prezzo base: ", this.prezzoBaselabel, ++row, gbc);
+        addRow("Prezzo effettivo: ", this.prezzoEffettivoLabel, ++row, gbc);
+        addRow("Data Validità: ", this.dataValidita, ++row, gbc);
+        addRow("Codice percorso: ", this.percorso, ++row, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++row;
@@ -123,16 +124,25 @@ public class AcquistoBigliettoPanel extends JPanel{
         this.add(backButton, gbc);
     }
 
-    private void addRow(final JLabel label, final JComponent component, final int row, final GridBagConstraints gbc) {
+    private void addRow(final String labelText, final JComponent component, final int row,
+            final GridBagConstraints gbc) {
         gbc.gridx = 0;
         gbc.gridy = row;
-        gbc.anchor = GridBagConstraints.LINE_END;
-        this.add(label, gbc);
+        gbc.anchor = GridBagConstraints.LINE_START;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
+        final JLabel lbl = createLabel(labelText);
+        lbl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        this.add(lbl, gbc);
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         this.add(component, gbc);
+
+        gbc.weightx = 0.0;
+        gbc.fill = GridBagConstraints.NONE;
     }
 
     private JButton createSendButton() {
@@ -145,17 +155,17 @@ public class AcquistoBigliettoPanel extends JPanel{
         button.setFocusPainted(false);
 
         button.addMouseListener(
-            new MouseAdapter() {
-                @Override
-                public void mouseEntered(final MouseEvent evt) {
-                    button.setBackground(button.getBackground().brighter());
-                }
-                @Override
-                public void mouseExited(final MouseEvent evt) {
-                    button.setBackground(UIManager.getColor("Button.background"));
-                }
-            }
-        );
+                new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(final MouseEvent evt) {
+                        button.setBackground(button.getBackground().brighter());
+                    }
+
+                    @Override
+                    public void mouseExited(final MouseEvent evt) {
+                        button.setBackground(UIManager.getColor("Button.background"));
+                    }
+                });
 
         button.addActionListener(act -> {
             this.regController.checkPathAndDate(this.percorso.getText(), this.dataValidita.getText());
@@ -166,9 +176,7 @@ public class AcquistoBigliettoPanel extends JPanel{
     private JTextField createField() {
         final JTextField field = new JTextField();
         field.setOpaque(true);
-        field.setPreferredSize(new Dimension(
-            (int) (SCREEN_WIDTH * FIELD_WIDTH_RATIO),
-            (int) (SCREEN_HEIGHT * FIELD_HEIGHT_RATIO)));
+        field.setColumns(20);
         field.setFont(UIManager.getFont("TextField.font"));
         return field;
     }
@@ -177,17 +185,44 @@ public class AcquistoBigliettoPanel extends JPanel{
         final JLabel label = new JLabel(text);
         label.setFont(UIManager.getFont("Label.font"));
         label.setForeground(UIManager.getColor("Label.foreground"));
-        label.setAlignmentX(CENTER_ALIGNMENT);
         label.setFocusable(false);
         return label;
     }
 
+    
     public void showErrorMessage(final String message) {
-        JOptionPane.showMessageDialog(
-            this,
-            message,
-            "Attenzione",
-            JOptionPane.ERROR_MESSAGE);
+        showInfoDialog(message, "Input Error", Color.WHITE, Color.BLACK);
+    }
+
+    private void showInfoDialog(String message, String title, Color bg, Color fg) {
+        JOptionPane pane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE);
+        JDialog dialog = pane.createDialog(this, title);
+        setBackgroundAndForegroundRecursively(pane, bg, fg);
+        if (dialog.getContentPane() != null) {
+            setBackgroundAndForegroundRecursively(dialog.getContentPane(), bg, fg);
+        }
+        dialog.pack();
+        dialog.setModal(true);
+        dialog.setVisible(true);
+    }
+
+    private void setBackgroundAndForegroundRecursively(Component c, Color bg, Color fg) {
+        if (c == null)
+            return;
+        try {
+            c.setBackground(bg);
+        } catch (Exception ignored) {
+        }
+        try {
+            c.setForeground(fg);
+        } catch (Exception ignored) {
+        }
+        if (c instanceof JComponent) {
+            ((JComponent) c).setOpaque(true);
+        }
+        for (Component child : ((c instanceof JComponent) ? ((JComponent) c).getComponents() : new Component[0])) {
+            setBackgroundAndForegroundRecursively(child, bg, fg);
+        }
     }
 
     public void showConfirmDialog() {
