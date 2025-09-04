@@ -1,29 +1,41 @@
 package parcofaunistico.view;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import parcofaunistico.controller.ReadingController;
+import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
 public class DipendentiPanel extends JPanel {
     private final Optional<ReadingController> readContr;
-    
-    
-    public DipendentiPanel(final ReadingController rContr, final WritingModel writingModel, 
-                            final MainView mainView, final String codiceFiscale) {
-        this.readContr = Optional.of(rContr);
-        setPreferredSize(this.getPreferredSize());
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    private final WritingModel writingModel;
 
+    public DipendentiPanel(final ReadingController rContr, final WritingModel writingModel,
+                           final MainView mainView, final String codiceFiscale) {
+        this.readContr = Optional.of(rContr);
+        this.writingModel = writingModel;
+
+        // Layout principale con BorderLayout
+        setLayout(new BorderLayout());
+
+        // Pannello interno scrollabile
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Pulsanti
         final var btnAree = new JButton("Pagina aree");
         centerButton(btnAree);
         btnAree.addActionListener(e -> readContr.ifPresent(ReadingController::userRequestedAree));
@@ -65,11 +77,11 @@ public class DipendentiPanel extends JPanel {
         btnNuovoOrdine.addActionListener(e -> mainView.showPanel(Pannelli.ORDINE));
 
         final var btnGiornataLavorativa = new JButton("Aggiungi giornata lavorativa");
-        centerButton(btnNuovoOrdine);
+        centerButton(btnGiornataLavorativa);
         btnGiornataLavorativa.addActionListener(e -> {
             final String title = "Inserimento giornata lavorativa";
             String message;
-            if(writingModel.insertGiornataLavorativa(codiceFiscale)) {
+            if (writingModel.insertGiornataLavorativa(codiceFiscale)) {
                 message = "Giornata lavorativa inserita correttamente";
             } else {
                 message = "Problemi durante l'inserimento di una nuova giornata lavorativa";
@@ -84,45 +96,45 @@ public class DipendentiPanel extends JPanel {
         }
 
         final LocalTime oraAttuale = LocalTime.now();
-
-        final LocalTime inizio = LocalTime.of(9, 0, 0);
-        final LocalTime fine   = LocalTime.of(18, 0, 0);
+        final LocalTime inizio = LocalTime.of(9, 0);
+        final LocalTime fine = LocalTime.of(18, 0);
 
         if (oraAttuale.isBefore(inizio) || oraAttuale.isAfter(fine)) {
             btnGiornataLavorativa.setEnabled(false);
         }
 
         final var btnAddAnimale = new JButton("Aggiungi Specie/Esemplare");
+        centerButton(btnAddAnimale);
         btnAddAnimale.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_SPECIE_ESEMPLARE));
 
         final var btnModificaAnimale = new JButton("Modifica Esemplare");
+        centerButton(btnModificaAnimale);
         btnModificaAnimale.addActionListener(e -> mainView.showPanel(Pannelli.MODIFICA_ESEMPLARE));
 
-        add(btnAree);
-        add(Box.createVerticalStrut(8));
-        add(btnZoneAmministrative);
-        add(Box.createVerticalStrut(8));
-        add(btnZoneRicreative);
-        add(Box.createVerticalStrut(8));
-        add(btnHabitat);
-        add(Box.createVerticalStrut(8));
-        add(btnSpecie);
-        add(Box.createVerticalStrut(8));
-        add(btnEsemplari);
-        add(Box.createVerticalStrut(8));
-        add(btnOrdini);
-        add(Box.createVerticalStrut(8));
-        add(btnProdotti);
-        add(Box.createVerticalStrut(8));
-        add(btnGiornateLavorative);
-        add(Box.createVerticalStrut(8));
-        add(btnNuovoOrdine);
-        add(Box.createVerticalStrut(8));
-        add(btnGiornataLavorativa);
-        add(Box.createVerticalStrut(8));
-        add(btnAddAnimale);
-        add(Box.createVerticalStrut(8));
-        add(btnModificaAnimale);
+        // Aggiunta dei componenti al pannello interno
+        Component[] components = {
+            btnAree, btnZoneAmministrative, btnZoneRicreative, btnHabitat, btnSpecie,
+            btnEsemplari, btnOrdini, btnProdotti, btnGiornateLavorative, btnNuovoOrdine,
+            btnGiornataLavorativa, btnAddAnimale, btnModificaAnimale
+        };
+
+        for (Component c : components) {
+            contentPanel.add(c);
+            contentPanel.add(Box.createVerticalStrut(8));
+        }
+
+        // Aggiunta del componente personalizzato
+        CampoConDescrizionePulsante componente = new CampoConDescrizionePulsante(
+            "Inserire a fianco il nome di un esemplare da eliminare", "Elimina", this);
+        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(componente);
+
+        // ScrollPane
+        JScrollPane scrollPane = new JScrollPane(contentPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        this.add(scrollPane, BorderLayout.CENTER);
     }
 
     private static void centerButton(final JButton b) {
@@ -131,4 +143,41 @@ public class DipendentiPanel extends JPanel {
         b.setMaximumSize(new Dimension(Math.max(pref.width, 220), pref.height));
     }
 
+    public void notifyUserRequestDeleteEsemplare(final String nomeEsemplare) {
+        final var text = "Eliminazione esemplare: ";
+        String message = "Sei sicuro di volere eliminare l'esemplare: " + nomeEsemplare + " ?";
+        final var dialog = new Dialog(text, message, true);
+        final JButton ok = new JButton("OK");
+        ok.addActionListener(e -> {
+            dialog.dispose();
+            if (this.writingModel.checkEsemplare(nomeEsemplare)) {
+                final var fields = this.writingModel.getSpecieFromEsemplare(nomeEsemplare);
+                final var done = this.writingModel.deleteEsemplare(nomeEsemplare);
+                if(Integer.parseInt(fields.get(Parametri.NUMERO_ESEMPLARI)) > 1) {
+                    this.writingModel.updateSpecieCount(fields.get(Parametri.NOME_SCIENTIFICO), false);
+                } else {
+                    this.writingModel.deleteSpecie(fields.get(Parametri.NOME_SCIENTIFICO));
+                }
+                String mes;
+                if (done) {
+                    mes = "Esemplare " + nomeEsemplare + " eliminato correttamente";
+                } else {
+                    mes = "Problemi durante eliminazione dell'esemplare " + nomeEsemplare;
+                }
+                final var diag = new Dialog(text, mes, true);
+                diag.setLocationRelativeTo(this);
+                diag.setVisible(true);
+            } else {
+                 final String mes = "L'esemplare riportato non è registrato";
+                final var diag = new Dialog(text, mes, true);
+                diag.setLocationRelativeTo(this);
+                diag.setVisible(true);
+            }
+           
+        });
+
+        dialog.addButton(ok);
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+    }
 }

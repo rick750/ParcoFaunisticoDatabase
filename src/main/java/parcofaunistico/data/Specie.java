@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,14 @@ public class Specie {
         this.nomeComune = nomeC;
         this.abitudini = ab;
         this.numeroEsemplari = num;
+    }
+
+    public String getNomeScientifico() {
+        return nomeScientifico;
+    }
+
+    public int getNumeroEsemplari() {
+        return numeroEsemplari;
     }
 
     @Override
@@ -48,6 +57,24 @@ public class Specie {
                 throw new DAOException(e);
             }
             return specie;            
+        }
+
+        public static Map<Parametri, String> getFromEsemplare(Connection connection, final String nomeEsemplare) {
+            final var fields = new EnumMap<Parametri, String>(Parametri.class);
+            try(
+                var preparedStatement = DAOUtils.prepare(connection, getSpecieSingolaQuery(nomeEsemplare));
+                var resultSet = preparedStatement.executeQuery();
+            ) {
+                    resultSet.next();
+                    final var nomeScientifico = resultSet.getString("nome_scientifico");
+                    final var numeroEsemplari = resultSet.getInt("numero_esemplari");
+                    fields.put(Parametri.NOME_SCIENTIFICO, nomeScientifico);
+                    fields.put(Parametri.NUMERO_ESEMPLARI, String.valueOf(numeroEsemplari));  
+            }
+               catch (SQLException e) {
+                e.printStackTrace();
+            }
+            return fields;            
         }
 
          public static boolean check(Connection connection, String nome_scientifico) {
@@ -93,7 +120,7 @@ public class Specie {
             return true;
         }
 
-        public static boolean update(Connection connection, String nomeScientifico) {
+        public static boolean addEsemplare(Connection connection, String nomeScientifico) {
             final String queryUpdate = """
                 UPDATE SPECIE
                 SET numero_esemplari = numero_esemplari + 1
@@ -110,8 +137,46 @@ public class Specie {
                 return true;
         }
 
+         public static boolean removeEsemplare(Connection connection, String nomeScientifico) {
+            final String queryUpdate = """
+                UPDATE SPECIE
+                SET numero_esemplari = numero_esemplari - 1
+                WHERE nome_scientifico = ?""";
+                try ( PreparedStatement stmt = connection.prepareStatement(queryUpdate)) {
+                        stmt.setString(1, nomeScientifico);
+                        int righeAggiornate = stmt.executeUpdate();
+                        System.out.println("Specie aggiornata. Righe modificate: " + righeAggiornate);
+
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                return true;
+        }
+
+        public static boolean delete(final Connection connection, final String nomeScientifico) {
+            final String deleteQuery = "DELETE FROM SPECIE WHERE nome_scientifico = ?";
+
+            try (PreparedStatement stmt = connection.prepareStatement(deleteQuery)) {
+                stmt.setString(1, nomeScientifico);
+                int righeEliminate = stmt.executeUpdate();
+                System.out.println("Righe eliminate da SPECIE: " + righeEliminate);
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+
+
+
         private static String getCheckQuery(String nome_scientifico) {
             return Queries.CHECK_SPECIE.get() + "\'" + nome_scientifico + "\'";
+        }
+
+        private static String getSpecieSingolaQuery(String nomeEsemplare) {
+            return Queries.SHOW_SPECIE_SINGOLA_FROM_ESEMPLARE.get() + "\'" + nomeEsemplare + "\'";
         }
     }
 }

@@ -95,7 +95,7 @@ public class AggiornamentoAnimaliPanel extends JPanel{
         gbc.gridy = row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        final JLabel title = createLabel("Benvenuto al menù di registrazione SPECIE/ANIMALE");
+        final JLabel title = createLabel("Benvenuto al menù di aggiornamento ESEMPLARE");
         title.setFont(UIManager.getFont("BigLabel.font"));
         title.setForeground(new Color(255, 215, 0));
         title.setBackground(new Color(18, 30, 49));

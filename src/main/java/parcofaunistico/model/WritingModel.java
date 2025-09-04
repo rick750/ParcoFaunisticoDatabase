@@ -48,11 +48,15 @@ public interface WritingModel {
 
     boolean checkDipendente(String codiceFiscale);
 
+    Map<Parametri, String> getSpecieFromEsemplare(String nomeEsemplare);
+
     boolean checkSpecie(String nome_scientifico);
 
     boolean checkEsemplare(String nomeEsemplare);
 
     boolean updateEsemplare(Map<Parametri, String> fields);
+
+    boolean deleteEsemplare(String nomeEsemplare);
 
     boolean checkEsemplareInSpecie(String nomeEsemplare);
 
@@ -60,7 +64,9 @@ public interface WritingModel {
 
     boolean insertSpecie(Map<Parametri, String> fields);
 
-    boolean updateSpecieCount(String nomeScientifico);
+    boolean deleteSpecie(String nomeScientifico);
+
+    boolean updateSpecieCount(String nomeScientifico, Boolean adding);
 
     boolean insertEsemplare(Map<Parametri, String> fields);
 

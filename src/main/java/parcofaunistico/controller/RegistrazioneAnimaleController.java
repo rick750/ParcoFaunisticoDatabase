@@ -133,7 +133,7 @@ public class RegistrazioneAnimaleController {
         boolean fatto;
 
         if(!newSpecie) {
-            fatto = this.writingModel.updateSpecieCount(this.textFields.get(Parametri.NOME_SCIENTIFICO).getText());
+            fatto = this.writingModel.updateSpecieCount(this.textFields.get(Parametri.NOME_SCIENTIFICO).getText(), true);
         }
         
         if(newSpecie) {

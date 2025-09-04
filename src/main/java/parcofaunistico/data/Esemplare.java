@@ -202,6 +202,20 @@ public class Esemplare {
 
             return true;
         }
+
+        public static boolean delete(final Connection connection, final String nomeEsemplare) {
+            final String deleteQuery = "DELETE FROM ESEMPLARE WHERE nome = ?";
+
+            try (PreparedStatement stmt = connection.prepareStatement(deleteQuery)) {
+                stmt.setString(1, nomeEsemplare);
+                int righeEliminate = stmt.executeUpdate();
+                System.out.println("Righe eliminate da esemplare: " + righeEliminate);
+                return true;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
     }
 
     private static String getCheckQuery(String nome) {

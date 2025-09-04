@@ -136,72 +136,91 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public boolean insertGiornataLavorativa(String codiceFiscale) {
+    public boolean insertGiornataLavorativa(final String codiceFiscale) {
         return GiornataLavorativa.DAO.insert(connection, codiceFiscale);
     }
 
     @Override
-    public boolean checkGiornataLavorativa(String codiceFiscale, String data) {
+    public boolean checkGiornataLavorativa(final String codiceFiscale, final String data) {
         return GiornataLavorativa.DAO.check(connection, codiceFiscale, data);
     }
 
     @Override
-    public boolean checkArea(String nomeArea) {
+    public boolean checkArea(final String nomeArea) {
         return Area.DAO.check(connection, nomeArea);
     }
 
     @Override
-    public boolean insertDipendente(Map<Parametri, String> fields) {
+    public boolean insertDipendente(final Map<Parametri, String> fields) {
         return Dipendente.DAO.insert(connection, fields);
     }
 
     @Override
-    public boolean checkDipendente(String codiceFiscale) {
+    public boolean checkDipendente(final String codiceFiscale) {
         return Dipendente.DAO.check(connection, codiceFiscale);
     }
 
     @Override
-    public boolean checkSpecie(String nome_scientifico) {
+    public boolean checkSpecie(final String nome_scientifico) {
         return Specie.DAO.check(connection, nome_scientifico);
     }
 
     @Override
-    public boolean checkEsemplare(String nomeEsemplare) {
+    public Map<Parametri, String> getSpecieFromEsemplare(String nomeEsemplare) {
+        return Specie.DAO.getFromEsemplare(connection, nomeEsemplare);
+    }
+
+    @Override
+    public boolean checkEsemplare(final String nomeEsemplare) {
         return Esemplare.DAO.check(connection, nomeEsemplare);
     }
 
     @Override
-    public boolean checkEsemplareInSpecie(String nomeEsemplare) {
+    public boolean checkEsemplareInSpecie(final String nomeEsemplare) {
         return Esemplare.DAO.checkInSpecie(connection, nomeEsemplare);
     }
 
     @Override
-    public boolean updateEsemplare(Map<Parametri, String> fields) {
+    public boolean updateEsemplare(final Map<Parametri, String> fields) {
         return Esemplare.DAO.update(connection, fields);
     }
 
     @Override
-    public boolean checkDieta(String alimento) {
+    public boolean deleteEsemplare(final String nomeEsemplare) {
+        return Esemplare.DAO.delete(connection, nomeEsemplare);
+    }
+
+    @Override
+    public boolean checkDieta(final String alimento) {
         return Dieta.DAO.check(connection, alimento);
     }
 
     @Override
-    public boolean insertSpecie(Map<Parametri, String> fields) {
+    public boolean insertSpecie(final Map<Parametri, String> fields) {
         return Specie.DAO.insert(connection, fields);
     }
 
     @Override
-    public boolean updateSpecieCount(String nomeScientifico) {
-        return Specie.DAO.update(connection, nomeScientifico);
+    public boolean updateSpecieCount(final String nomeScientifico, final Boolean adding) {
+        if(adding) {
+             return Specie.DAO.addEsemplare(connection, nomeScientifico);
+        } else {
+            return Specie.DAO.removeEsemplare(connection, nomeScientifico);
+        }
     }
 
     @Override
-    public boolean insertEsemplare(Map<Parametri, String> fields) {
+    public boolean deleteSpecie(String nomeScientifico) {
+        return Specie.DAO.delete(connection, nomeScientifico);
+    }
+
+    @Override
+    public boolean insertEsemplare(final Map<Parametri, String> fields) {
         return Esemplare.DAO.insert(connection, fields);
     }
 
     @Override
-    public boolean insertDieta(Map<Parametri, String> fields) {
+    public boolean insertDieta(final Map<Parametri, String> fields) {
         return Dieta.DAO.insert(connection, fields);
     }
 }

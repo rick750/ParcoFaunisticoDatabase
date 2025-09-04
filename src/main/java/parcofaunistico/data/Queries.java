@@ -70,6 +70,12 @@ public enum Queries {
             FROM SPECIE
             """),
 
+    SHOW_SPECIE_SINGOLA_FROM_ESEMPLARE("""
+            SELECT s.*, e.nome
+            FROM SPECIE s, ESEMPLARE e
+            WHERE s.nome_scientifico = e.nome_scientifico
+            AND e.nome = """),
+
     CHECK_SPECIE("""
             SELECT nome_scientifico
             FROM SPECIE
