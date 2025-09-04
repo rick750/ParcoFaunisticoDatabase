@@ -104,16 +104,16 @@ public class RegDipendentePanel extends JPanel {
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        addRow("Codice Fiscale: ", codicefiscaleField, ++row, gbc);
-        addRow("Nome: ", nomeField, ++row, gbc);
-        addRow("Cognome: ", cognomeField, ++row, gbc);
-        addRow("Età: ", etaField, ++row, gbc);
-        addRow("Indirizzo: ", indirizzoField, ++row, gbc);
-        addRow("Telefono: ", telefonoField, ++row, gbc);
-        addRow("Email: ", emailField, ++row, gbc);
-        addRow("Mansione: ", mansioneField, ++row, gbc);
-        addRow("Descrizione Mansione: ", descrizioneMansioneField, ++row, gbc);
-        addRow("Lavoro in zona: ", lavoroField, ++row, gbc);
+        addRow("Codice Fiscale", codicefiscaleField, ++row, gbc);
+        addRow("Nome", nomeField, ++row, gbc);
+        addRow("Cognome", cognomeField, ++row, gbc);
+        addRow("Età", etaField, ++row, gbc);
+        addRow("Indirizzo", indirizzoField, ++row, gbc);
+        addRow("Telefono", telefonoField, ++row, gbc);
+        addRow("Email", emailField, ++row, gbc);
+        addRow("Mansione", mansioneField, ++row, gbc);
+        addRow("Descrizione Mansione", descrizioneMansioneField, ++row, gbc);
+        addRow("Lavoro in zona", lavoroField, ++row, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = ++row;
@@ -133,12 +133,17 @@ public class RegDipendentePanel extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.anchor = GridBagConstraints.LINE_END;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 0.0;
         this.add(createLabel(labelText), gbc);
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
         this.add(field, gbc);
+
+        gbc.fill = GridBagConstraints.NONE;
     }
 
     private JButton createSendButton() {
@@ -238,9 +243,9 @@ public class RegDipendentePanel extends JPanel {
         if (c instanceof JComponent) {
             ((JComponent) c).setOpaque(true);
         }
-        for (final Component child : ((c instanceof JComponent) ? ((JComponent) c).getComponents() : new Component[0])) {
+        for (final Component child : ((c instanceof JComponent) ? ((JComponent) c).getComponents()
+                : new Component[0])) {
             setBackgroundAndForegroundRecursively(child, bg, fg);
         }
     }
 }
-
