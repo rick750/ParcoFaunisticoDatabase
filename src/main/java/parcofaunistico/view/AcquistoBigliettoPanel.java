@@ -19,7 +19,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import parcofaunistico.controller.RegistrazionePagamentoController;
-import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 

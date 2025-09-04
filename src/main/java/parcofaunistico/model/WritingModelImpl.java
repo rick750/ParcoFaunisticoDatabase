@@ -8,7 +8,9 @@ import java.util.Objects;
 
 import parcofaunistico.data.Area;
 import parcofaunistico.data.Biglietto;
+import parcofaunistico.data.Dieta;
 import parcofaunistico.data.Dipendente;
+import parcofaunistico.data.Esemplare;
 import parcofaunistico.data.GiornataLavorativa;
 import parcofaunistico.data.Gruppo;
 import parcofaunistico.data.Ordine;
@@ -17,6 +19,7 @@ import parcofaunistico.data.Parametri;
 import parcofaunistico.data.Percorso;
 import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.Sconto;
+import parcofaunistico.data.Specie;
 import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaRicreativa;
 
@@ -155,5 +158,50 @@ public class WritingModelImpl implements WritingModel{
     @Override
     public boolean checkDipendente(String codiceFiscale) {
         return Dipendente.DAO.check(connection, codiceFiscale);
+    }
+
+    @Override
+    public boolean checkSpecie(String nome_scientifico) {
+        return Specie.DAO.check(connection, nome_scientifico);
+    }
+
+    @Override
+    public boolean checkEsemplare(String nomeEsemplare) {
+        return Esemplare.DAO.check(connection, nomeEsemplare);
+    }
+
+    @Override
+    public boolean checkEsemplareInSpecie(String nomeEsemplare) {
+        return Esemplare.DAO.checkInSpecie(connection, nomeEsemplare);
+    }
+
+    @Override
+    public boolean updateEsemplare(Map<Parametri, String> fields) {
+        return Esemplare.DAO.update(connection, fields);
+    }
+
+    @Override
+    public boolean checkDieta(String alimento) {
+        return Dieta.DAO.check(connection, alimento);
+    }
+
+    @Override
+    public boolean insertSpecie(Map<Parametri, String> fields) {
+        return Specie.DAO.insert(connection, fields);
+    }
+
+    @Override
+    public boolean updateSpecieCount(String nomeScientifico) {
+        return Specie.DAO.update(connection, nomeScientifico);
+    }
+
+    @Override
+    public boolean insertEsemplare(Map<Parametri, String> fields) {
+        return Esemplare.DAO.insert(connection, fields);
+    }
+
+    @Override
+    public boolean insertDieta(Map<Parametri, String> fields) {
+        return Dieta.DAO.insert(connection, fields);
     }
 }

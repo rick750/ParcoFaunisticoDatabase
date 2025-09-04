@@ -15,7 +15,6 @@ import javax.swing.JScrollPane;
 
 import parcofaunistico.controller.MainController;
 import parcofaunistico.controller.ReadingController;
-import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.User;
 import parcofaunistico.model.WritingModel;
 
@@ -42,6 +41,8 @@ public final class MainView extends JFrame{
     private final AccediRegistratiPanel accRegPanel;
     private final OrdiniPanel ordiniPanel;
     private final RegDipendentePanel regDipendentePanel;
+    private final RegAnimaliPanel regAnimaliPanel;
+    private final AggiornamentoAnimaliPanel aggAnimaliPanel;
 
     public MainView(final MainController mainController, final Runnable onClose) {
         this.readingController = Optional.empty();
@@ -56,6 +57,9 @@ public final class MainView extends JFrame{
         this.regGruppoPanel = new RegGruppoPanel(this, mainController.getWritingModel(), acBigliettoGruppoPanel);
         this.ordiniPanel = new OrdiniPanel(this, mainController.getWritingModel());
         this.regDipendentePanel = new RegDipendentePanel(this, writingModel);
+        this.regAnimaliPanel = new RegAnimaliPanel(this, writingModel);
+        this.aggAnimaliPanel = new AggiornamentoAnimaliPanel(this, writingModel);
+
 
         final JScrollPane scrollGruppo = new JScrollPane(this.regGruppoPanel,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -73,6 +77,8 @@ public final class MainView extends JFrame{
         this.cardPanel.add(accRegPanel, Pannelli.ACCEDI_REGISTRATI.get());
         this.cardPanel.add(ordiniPanel, Pannelli.ORDINE.get());
         this.cardPanel.add(regDipendentePanel, Pannelli.REGISTRAZIONE_DIPENDENTE.get());
+        this.cardPanel.add(regAnimaliPanel, Pannelli.REGISTRAZIONE_SPECIE_ESEMPLARE.get());
+        this.cardPanel.add(aggAnimaliPanel, Pannelli.MODIFICA_ESEMPLARE.get());
         this.add(cardPanel);
         this.layout.show(this.cardPanel, Pannelli.ACCEDI_REGISTRATI.get());
         this.setVisible(true);

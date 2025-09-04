@@ -1,4 +1,4 @@
-package parcofaunistico.data;
+package parcofaunistico.view;
 
 public enum Pannelli {
     USER("user"),
@@ -8,6 +8,8 @@ public enum Pannelli {
     REGISTRAZIONE_VISITATORE("regVis"),
     REGISTRAZIONE_GRUPPO("regGruppo"),
     REGISTRAZIONE_DIPENDENTE("regDip"),
+    REGISTRAZIONE_SPECIE_ESEMPLARE("regAnimali"),
+    MODIFICA_ESEMPLARE("modEsemplare"),
     ACQUISTO_BIGLIETTO_VISITATORE("AcqBiglVis"),
     ACQUISTO_BIGLIETTO_GRUPPO("AcqBiglGrup"),
     ORDINE("ordine");

@@ -29,6 +29,11 @@ public class RegistrazioneDipendenteController {
             return false;
         }
 
+        if (this.checkExistance()) {
+            this.errorMessage = "Il codice fiscale inserito è già registrato";
+            return false;
+        }
+
         if (!this.checkMansione()) {
             this.errorMessage = "La mansione e la descrizione non devono contenere numeri";
             return false;
@@ -40,6 +45,10 @@ public class RegistrazioneDipendenteController {
         }
 
         return true;
+    }
+
+    public boolean checkExistance() {
+        return this.writingModel.checkDipendente(this.textFields.get(Parametri.CODICE_FISCALE).getText());
     }
 
     private boolean checkMansione() {

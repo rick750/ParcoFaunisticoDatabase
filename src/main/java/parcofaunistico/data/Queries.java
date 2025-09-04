@@ -59,20 +59,48 @@ public enum Queries {
             WHERE a.nome = h.nome
             """),
 
+    CHECK_HABITAT("""
+            SELECT nome
+            FROM HABITAT
+            WHERE nome = """
+    ),
+
     SHOW_SPECIE("""
             SELECT *
             FROM SPECIE
             """),
+
+    CHECK_SPECIE("""
+            SELECT nome_scientifico
+            FROM SPECIE
+            WHERE nome_scientifico = """
+    ),
 
     SHOW_ESEMPLARE("""
             SELECT *
             FROM ESEMPLARE
             """),
 
+    CHECK_ESEMPLARE("""
+            SELECT nome
+            FROM ESEMPLARE
+            WHERE nome = """ ),
+
+    CHECK_ESEMPLARE_IN_SPECIE("""
+            SELECT s.nome_scientifico, e.nome
+            FROM SPECIE s, ESEMPLARE e
+            WHERE s.nome_scientifico = e.nome_scientifico
+            AND e.nome = """ ),
+
     SHOW_DIETA("""
             SELECT *
             FROM DIETA
             """),
+
+    CHECK_DIETA("""
+            SELECT alimento
+            FROM DIETA
+            WHERE alimento = """),
 
     SHOW_PRODOTTO("""
             SELECT *

@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import parcofaunistico.controller.RegistrazioneGruppoController;
-import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 

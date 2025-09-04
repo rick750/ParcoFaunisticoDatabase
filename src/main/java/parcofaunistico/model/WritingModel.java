@@ -47,4 +47,22 @@ public interface WritingModel {
     boolean insertDipendente(Map<Parametri, String> fields);
 
     boolean checkDipendente(String codiceFiscale);
+
+    boolean checkSpecie(String nome_scientifico);
+
+    boolean checkEsemplare(String nomeEsemplare);
+
+    boolean updateEsemplare(Map<Parametri, String> fields);
+
+    boolean checkEsemplareInSpecie(String nomeEsemplare);
+
+    boolean checkDieta(String alimento);
+
+    boolean insertSpecie(Map<Parametri, String> fields);
+
+    boolean updateSpecieCount(String nomeScientifico);
+
+    boolean insertEsemplare(Map<Parametri, String> fields);
+
+    boolean insertDieta(Map<Parametri, String> fields);
 }

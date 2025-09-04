@@ -1,5 +1,7 @@
 package parcofaunistico.view;
 
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -10,11 +12,13 @@ import java.util.EnumMap;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -22,68 +26,65 @@ import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
-import parcofaunistico.controller.RegistrazioneDipendenteController;
+import parcofaunistico.controller.AggiornamentoAnimaliController;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
-public class RegDipendentePanel extends JPanel {
-    public static final String CARD_USER = "user";
-    private static final long serialVersionUID = 1L;
+public class AggiornamentoAnimaliPanel extends JPanel{
+     private static final long serialVersionUID = 1L;
     private static final double RESIZE_FACTOR = 1.0;
     private static final double FIELD_HEIGHT_RATIO = 0.05;
     private static final double FIELD_WIDTH_RATIO = 0.15;
     private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     private static final int SCREEN_WIDTH = (int) (SCREEN_SIZE.getWidth() * RESIZE_FACTOR);
     private static final int SCREEN_HEIGHT = (int) (SCREEN_SIZE.getHeight() * RESIZE_FACTOR);
+
     private final MainView mainView;
-    private final JTextField codicefiscaleField;
-    private final JTextField nomeField;
-    private final JTextField cognomeField;
-    private final JTextField etaField;
-    private final JTextField indirizzoField;
-    private final JTextField telefonoField;
-    private final JTextField emailField;
-    private final JTextField mansioneField;
-    private final JTextField descrizioneMansioneField;
-    private final JTextField lavoroField;
+    private final JTextField nome_scientifico, nomeEsemplare, eta, altezza, peso, alimento, numero_pasti;
+    private final JCheckBox malato;
     private final JButton sendButton;
     private final Map<Parametri, JTextField> textfields;
-    private final RegistrazioneDipendenteController regController;
+    private final AggiornamentoAnimaliController regController;
 
-    public RegDipendentePanel(final MainView mainView, final WritingModel writingModel) {
+    public AggiornamentoAnimaliPanel(final MainView mainView, final WritingModel writingModel) {
         this.mainView = mainView;
-        this.setLayout(new GridBagLayout());
-        this.setBackground(UIManager.getColor("Panel.background"));
-        this.setOpaque(true);
+        this.setLayout(new BorderLayout());
 
-        this.codicefiscaleField = createField();
-        this.nomeField = createField();
-        this.cognomeField = createField();
-        this.etaField = createField();
-        this.indirizzoField = createField();
-        this.telefonoField = createField();
-        this.emailField = createField();
-        this.mansioneField = createField();
-        this.descrizioneMansioneField = createField();
-        this.lavoroField = createField();
+        final JPanel innerPanel = new JPanel(new GridBagLayout());
+        innerPanel.setBackground(UIManager.getColor("Panel.background"));
+        innerPanel.setOpaque(true);
+
+        this.nome_scientifico = createField();
+        this.nomeEsemplare = createField();
+        this.eta = createField();
+        this.altezza = createField();
+        this.peso = createField();
+        this.malato = new JCheckBox();
+        this.alimento = createField();
+        this.numero_pasti = createField();
         this.sendButton = createSendButton();
-        this.textfields = new EnumMap<>(Parametri.class);
-        this.textfields.put(Parametri.CODICE_FISCALE, codicefiscaleField);
-        this.textfields.put(Parametri.NOME, nomeField);
-        this.textfields.put(Parametri.COGNOME, cognomeField);
-        this.textfields.put(Parametri.ETA, etaField);
-        this.textfields.put(Parametri.INDIRIZZO, indirizzoField);
-        this.textfields.put(Parametri.TELEFONO, telefonoField);
-        this.textfields.put(Parametri.EMAIL, emailField);
-        this.textfields.put(Parametri.MANSIONE, mansioneField);
-        this.textfields.put(Parametri.DESCRIZIONE_MANSIONE, descrizioneMansioneField);
-        this.textfields.put(Parametri.NOME_ZONA, lavoroField);
-        this.arrangeComponents();
 
-        this.regController = new RegistrazioneDipendenteController(writingModel);
+        this.textfields = new EnumMap<>(Parametri.class);
+        this.textfields.put(Parametri.NOME_SCIENTIFICO, nome_scientifico);
+        this.textfields.put(Parametri.NOME_ESEMPLARE, nomeEsemplare);
+        this.textfields.put(Parametri.ETA, eta);
+        this.textfields.put(Parametri.ALTEZZA, altezza);
+        this.textfields.put(Parametri.PESO, peso);
+        this.textfields.put(Parametri.ALIMENTO, alimento);
+        this.textfields.put(Parametri.NUMERO_PASTI, numero_pasti);
+
+        arrangeComponents(innerPanel);
+
+        JScrollPane scrollPane = new JScrollPane(innerPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        this.add(scrollPane, BorderLayout.CENTER);
+
+        this.regController = new AggiornamentoAnimaliController(writingModel);
     }
 
-    private void arrangeComponents() {
+    private void arrangeComponents(JPanel panel) {
         final GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(8, 8, 8, 8);
         gbc.anchor = GridBagConstraints.LINE_END;
@@ -94,51 +95,49 @@ public class RegDipendentePanel extends JPanel {
         gbc.gridy = row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        final JLabel title = createLabel("Benvenuto al menù di registrazione DIPENDENTE");
+        final JLabel title = createLabel("Benvenuto al menù di registrazione SPECIE/ANIMALE");
         title.setFont(UIManager.getFont("BigLabel.font"));
         title.setForeground(new Color(255, 215, 0));
         title.setBackground(new Color(18, 30, 49));
         title.setOpaque(true);
-        this.add(title, gbc);
+        panel.add(title, gbc);
 
         gbc.gridwidth = 1;
         gbc.anchor = GridBagConstraints.LINE_END;
 
-        addRow("Codice Fiscale: ", codicefiscaleField, ++row, gbc);
-        addRow("Nome: ", nomeField, ++row, gbc);
-        addRow("Cognome: ", cognomeField, ++row, gbc);
-        addRow("Età: ", etaField, ++row, gbc);
-        addRow("Indirizzo: ", indirizzoField, ++row, gbc);
-        addRow("Telefono: ", telefonoField, ++row, gbc);
-        addRow("Email: ", emailField, ++row, gbc);
-        addRow("Mansione: ", mansioneField, ++row, gbc);
-        addRow("Descrizione Mansione: ", descrizioneMansioneField, ++row, gbc);
-        addRow("Lavoro in zona: ", lavoroField, ++row, gbc);
+        addRow("Nome scientifico: ", nome_scientifico, ++row, gbc, panel);
+        addRow("Nome Esemplare: ", nomeEsemplare, ++row, gbc, panel);
+        addRow("Eta: ", eta, ++row, gbc, panel);
+        addRow("Altezza: ", altezza, ++row, gbc, panel);
+        addRow("Peso: ", peso, ++row, gbc, panel);
+        addRow("Malato: ", malato, ++row, gbc, panel);
+        addRow("Alimento: ", alimento, ++row, gbc, panel);
+        addRow("Numero Pasti: ", numero_pasti, ++row, gbc, panel);
 
         gbc.gridx = 0;
         gbc.gridy = ++row;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        this.add(sendButton, gbc);
+        panel.add(sendButton, gbc);
 
         gbc.gridy = ++row;
         final JButton backButton = new JButton("INDIETRO");
         backButton.setFont(UIManager.getFont("Button.font"));
         backButton.setAlignmentX(CENTER_ALIGNMENT);
         backButton.addActionListener(e -> mainView.showPanel(Pannelli.USER));
-        this.add(backButton, gbc);
+        panel.add(backButton, gbc);
     }
 
-    private void addRow(final String labelText, final JTextField field, final int row, final GridBagConstraints gbc) {
+    private void addRow(final String labelText, final JComponent jComponent, final int row, final GridBagConstraints gbc, final JPanel panel) {
         gbc.gridx = 0;
         gbc.gridy = row;
         gbc.anchor = GridBagConstraints.LINE_END;
-        this.add(createLabel(labelText), gbc);
+        panel.add(createLabel(labelText), gbc);
 
         gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.LINE_START;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        this.add(field, gbc);
+        panel.add(jComponent, gbc);
     }
 
     private JButton createSendButton() {
@@ -150,42 +149,42 @@ public class RegDipendentePanel extends JPanel {
         button.setBorderPainted(false);
         button.setFocusPainted(false);
 
-        button.addMouseListener(
-                new MouseAdapter() {
-                    @Override
-                    public void mouseEntered(final MouseEvent evt) {
-                        button.setBackground(button.getBackground().brighter());
-                    }
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(final MouseEvent evt) {
+                button.setBackground(button.getBackground().brighter());
+            }
 
-                    @Override
-                    public void mouseExited(final MouseEvent evt) {
-                        button.setBackground(UIManager.getColor("Button.background"));
-                    }
-                });
+            @Override
+            public void mouseExited(final MouseEvent evt) {
+                button.setBackground(UIManager.getColor("Button.background"));
+            }
+        });
 
         button.addActionListener(act -> {
-            this.regController.setData(this.textfields);
-            if (!this.regController.check()) {
-                this.showErrorMessage(this.regController.getErrorMessage());
+            regController.setData(textfields, this.malato.isSelected());
+            if (!regController.startChecks()) {
+                showErrorMessage(regController.getErrorMessage());
             } else {
                 final var title = "Conferma registrazione";
-                final var message = "I dati sono stati inseriti correttamente";
+                final var message = "I dati sono stati inseriti correttamente\n" +
+                        "Premere OK per ultimare l'inserimento oppure CANCEL per annullare";
                 final var executeBtn = new JButton("OK");
-                final Dialog dialog = new Dialog(title, message, false);
+                final Dialog dialog = new Dialog(title, message, true);
                 dialog.setLocationRelativeTo(this);
                 executeBtn.addActionListener(e -> {
                     dialog.dispose();
-                    this.regController.executeInsertQuery();
-                    final var entries = this.textfields.entrySet();
-                    for (final var entry : entries) {
-                        entry.getValue().setText("");
+                    boolean fatto = regController.executeInsertQuery();
+                    if (!fatto) {
+                        showErrorMessage("L'inserimento non è riuscito");
                     }
-
+                    textfields.values().forEach(field -> field.setText(""));
                 });
                 dialog.addButton(executeBtn);
                 dialog.setVisible(true);
             }
         });
+
         return button;
     }
 
@@ -243,4 +242,3 @@ public class RegDipendentePanel extends JPanel {
         }
     }
 }
-

@@ -12,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import parcofaunistico.controller.ReadingController;
-import parcofaunistico.data.Pannelli;
 import parcofaunistico.model.WritingModel;
 
 public class DipendentiPanel extends JPanel {
@@ -93,6 +92,12 @@ public class DipendentiPanel extends JPanel {
             btnGiornataLavorativa.setEnabled(false);
         }
 
+        final var btnAddAnimale = new JButton("Aggiungi Specie/Esemplare");
+        btnAddAnimale.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_SPECIE_ESEMPLARE));
+
+        final var btnModificaAnimale = new JButton("Modifica Esemplare");
+        btnModificaAnimale.addActionListener(e -> mainView.showPanel(Pannelli.MODIFICA_ESEMPLARE));
+
         add(btnAree);
         add(Box.createVerticalStrut(8));
         add(btnZoneAmministrative);
@@ -114,6 +119,10 @@ public class DipendentiPanel extends JPanel {
         add(btnNuovoOrdine);
         add(Box.createVerticalStrut(8));
         add(btnGiornataLavorativa);
+        add(Box.createVerticalStrut(8));
+        add(btnAddAnimale);
+        add(Box.createVerticalStrut(8));
+        add(btnModificaAnimale);
     }
 
     private static void centerButton(final JButton b) {

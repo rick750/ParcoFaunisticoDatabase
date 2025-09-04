@@ -17,7 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import parcofaunistico.controller.LoginController;
-import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.User;
 import parcofaunistico.model.ReadingModel;
 

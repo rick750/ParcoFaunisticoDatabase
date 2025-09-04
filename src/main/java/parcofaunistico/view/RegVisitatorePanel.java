@@ -23,7 +23,6 @@ import java.awt.GridBagConstraints;
 import java.awt.Insets;
 
 import parcofaunistico.controller.RegistrazioneVisitatoreController;
-import parcofaunistico.data.Pannelli;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
@@ -159,19 +158,27 @@ public class RegVisitatorePanel extends JPanel {
                 this.showErrorMessage(this.regController.getErrorMessage());
             } else {
                 final var title = "Conferma registrazione";
-                final var message = "I dati sono stati inseriti correttamente";
-                this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(),
-                        Integer.parseInt(this.etaField.getText()), 1, "nessuno");
-                final var executeBtn = new JButton("OK");
-                final Dialog dialog = new Dialog(title, message, false);
-                dialog.setLocationRelativeTo(this);
-                executeBtn.addActionListener(e -> {
-                    dialog.dispose();
-                    this.mainView.showPanel(Pannelli.ACQUISTO_BIGLIETTO_VISITATORE);
+                if(this.regController.checkExistance()) {
+                    final var message = "Il codice fiscale inserito è già registrato";
+                    final Dialog dialog = new Dialog(title, message, true);
+                    dialog.setLocationRelativeTo(this);
+                    dialog.setVisible(true);
+                } else {
+                    
+                    final var message = "I dati sono stati inseriti correttamente";
+                    this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(),
+                            Integer.parseInt(this.etaField.getText()), 1, "nessuno");
+                    final var executeBtn = new JButton("OK");
+                    final Dialog dialog = new Dialog(title, message, false);
+                    dialog.setLocationRelativeTo(this);
+                    executeBtn.addActionListener(e -> {
+                        dialog.dispose();
+                        this.mainView.showPanel(Pannelli.ACQUISTO_BIGLIETTO_VISITATORE);
 
-                });
-                dialog.addButton(executeBtn);
-                dialog.setVisible(true);
+                    });
+                    dialog.addButton(executeBtn);
+                    dialog.setVisible(true);
+                }
             }
         });
         return button;
@@ -232,6 +239,8 @@ public class RegVisitatorePanel extends JPanel {
     }
 
     public void executeInsertVisitatore() {
-        this.regController.executeInsertQuery();
+        if (! this.regController.checkExistance()) {
+            this.regController.executeInsertQuery();
+        } 
     }
 }

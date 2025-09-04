@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import parcofaunistico.controller.ReadingController;
-import parcofaunistico.data.Pannelli;
 import parcofaunistico.model.WritingModel;
 
 public class ManagerPanel extends JPanel {

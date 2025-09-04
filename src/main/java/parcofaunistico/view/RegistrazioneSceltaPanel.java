@@ -11,8 +11,6 @@ import java.awt.Font;
 import javax.swing.BorderFactory;
 import javax.swing.UIManager;
 
-import parcofaunistico.data.Pannelli;
-
 public class RegistrazioneSceltaPanel extends JPanel{
     private final JButton visitatoreBtn = new JButton("Visitatore");
     private final JButton gruppoBtn = new JButton("Gruppo");
