@@ -1,11 +1,11 @@
 plugins {
-    id 'java'
-    id 'application'
-    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    java
+    application
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
-group = 'it.parcofaunistico'
-version = '1.0.0'
+group = "it.parcofaunistico"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -23,31 +23,31 @@ application {
 
 dependencies {
     implementation("com.mysql:mysql-connector-j:8.3.0")
+    // aggiungi altre dipendenze qui
 }
 
-jar {
+tasks.jar {
     manifest {
         attributes(
-            'Implementation-Title': project.name,
-            'Implementation-Version': project.version,
-            'Main-Class': application.mainClass.get()
+            "Implementation-Title" to project.name,
+            "Implementation-Version" to project.version,
+            "Main-Class" to application.mainClass.get()
         )
     }
 }
 
-shadowJar {
+tasks.named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
     archiveBaseName.set(project.name)
-    archiveClassifier.set('') 
+    archiveClassifier.set("")           // rimuove il classifier
     archiveVersion.set(project.version.toString())
     manifest {
-        attributes 'Main-Class': application.mainClass.get()
+        attributes("Main-Class" to application.mainClass.get())
     }
-    mergeServiceFiles() 
+    mergeServiceFiles() // utile per service providers
 }
 
-// Optional: alias task per chiarezza
-tasks.register('fatJar') {
-    dependsOn tasks.named('shadowJar')
-    group = 'build'
-    description = 'Genera un JAR eseguibile contenente tutte le dipendenze (uber-jar).'
+tasks.register("fatJar") {
+    dependsOn(tasks.named("shadowJar"))
+    group = "build"
+    description = "Genera un JAR eseguibile contenente tutte le dipendenze (uber-jar)."
 }
