@@ -131,6 +131,12 @@ public class ManagerPanel extends JPanel {
         btnDipendente.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_DIPENDENTE));
         centerButton(btnDipendente);
         contentPanel.add(btnDipendente);
+        contentPanel.add(Box.createVerticalStrut(8));
+
+        final var btnInserimentoArea = new JButton("Aggiungi nuova area");
+        btnInserimentoArea.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_AREA));
+        centerButton(btnInserimentoArea);
+        contentPanel.add(btnInserimentoArea);
 
         // ScrollPane che contiene il pannello dei pulsanti
         JScrollPane scrollPane = new JScrollPane(contentPanel);

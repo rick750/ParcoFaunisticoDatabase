@@ -14,6 +14,7 @@ import parcofaunistico.data.Esemplare;
 import parcofaunistico.data.GiornataLavorativa;
 import parcofaunistico.data.Habitat;
 import parcofaunistico.data.IncassoBiglietto;
+import parcofaunistico.data.Manutenzione;
 import parcofaunistico.data.Ordine;
 import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.RendimentoGiornaliero;
@@ -96,6 +97,11 @@ public final class ReadingModelImpl implements ReadingModel {
     @Override
     public List<Area> loadAree() {
         return Area.DAO.list(this.connection);
+    }
+
+    @Override
+    public List<Manutenzione> loadManutenzioni() {
+        return Manutenzione.DAO.list(connection);
     }
 
     @Override

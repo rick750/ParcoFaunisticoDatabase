@@ -34,7 +34,6 @@ public class LoginController {
                 default:
                     break;
             }
-            System.out.println("\nTrovato = "+trovato);
         } catch (final Exception e) {
             e.printStackTrace();
         }

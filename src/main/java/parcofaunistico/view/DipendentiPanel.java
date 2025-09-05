@@ -103,6 +103,10 @@ public class DipendentiPanel extends JPanel implements UserPanel {
             btnGiornataLavorativa.setEnabled(false);
         }
 
+        final var btnManutenzione = new JButton("Aggiungi/Aggiorna Manutenzione");
+        centerButton(btnManutenzione);
+        btnManutenzione.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_MANUTENZIONE));
+
         final var btnAddAnimale = new JButton("Aggiungi Specie/Esemplare");
         centerButton(btnAddAnimale);
         btnAddAnimale.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_SPECIE_ESEMPLARE));
@@ -115,7 +119,7 @@ public class DipendentiPanel extends JPanel implements UserPanel {
         Component[] components = {
             btnAree, btnZoneAmministrative, btnZoneRicreative, btnHabitat, btnSpecie,
             btnEsemplari, btnOrdini, btnProdotti, btnGiornateLavorative, btnNuovoOrdine,
-            btnGiornataLavorativa, btnAddAnimale, btnModificaAnimale
+            btnGiornataLavorativa, btnManutenzione, btnAddAnimale, btnModificaAnimale
         };
 
         for (Component c : components) {

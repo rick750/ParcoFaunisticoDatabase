@@ -5,6 +5,8 @@ public enum Pannelli {
     ACCEDI_REGISTRATI("accReg"),
     LOGIN("login"),
     REGISTRAZIONE("reg"),
+    REGISTRAZIONE_AREA("regArea"),
+    REGISTRAZIONE_MANUTENZIONE("regManu"),
     REGISTRAZIONE_VISITATORE("regVis"),
     REGISTRAZIONE_GRUPPO("regGruppo"),
     REGISTRAZIONE_DIPENDENTE("regDip"),

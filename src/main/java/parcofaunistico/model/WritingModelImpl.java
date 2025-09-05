@@ -13,6 +13,8 @@ import parcofaunistico.data.Dipendente;
 import parcofaunistico.data.Esemplare;
 import parcofaunistico.data.GiornataLavorativa;
 import parcofaunistico.data.Gruppo;
+import parcofaunistico.data.Habitat;
+import parcofaunistico.data.Manutenzione;
 import parcofaunistico.data.Ordine;
 import parcofaunistico.data.PagamentoBiglietto;
 import parcofaunistico.data.Parametri;
@@ -21,6 +23,7 @@ import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Specie;
 import parcofaunistico.data.Visitatore;
+import parcofaunistico.data.ZonaAmministrativa;
 import parcofaunistico.data.ZonaRicreativa;
 
 public class WritingModelImpl implements WritingModel{
@@ -38,8 +41,22 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public boolean insertVisita(String codiceFiscale, String nomeArea) {
+    public boolean insertVisita(final String codiceFiscale, final String nomeArea) {
         return Visitatore.DAO.insertNewVisita(connection, codiceFiscale, nomeArea);
+    }
+
+    @Override
+    public boolean insertManutenzione(final Map<Parametri, String> textFields) {
+        return Manutenzione.DAO.insert(connection, textFields);
+    }
+
+    public boolean updateManutenzione(final Map<Parametri, String> textFields) {
+        return Manutenzione.DAO.update(connection, textFields);
+    }
+
+    @Override
+    public boolean checkManutenzione(final String nomeZona) {
+        return Manutenzione.DAO.check(connection, nomeZona);
     }
 
     @Override
@@ -171,7 +188,7 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public Map<Parametri, String> getSpecieFromEsemplare(String nomeEsemplare) {
+    public Map<Parametri, String> getSpecieFromEsemplare(final String nomeEsemplare) {
         return Specie.DAO.getFromEsemplare(connection, nomeEsemplare);
     }
 
@@ -215,7 +232,7 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
-    public boolean deleteSpecie(String nomeScientifico) {
+    public boolean deleteSpecie(final String nomeScientifico) {
         return Specie.DAO.delete(connection, nomeScientifico);
     }
 
@@ -227,5 +244,40 @@ public class WritingModelImpl implements WritingModel{
     @Override
     public boolean insertDieta(final Map<Parametri, String> fields) {
         return Dieta.DAO.insert(connection, fields);
+    }
+
+    @Override
+    public String getLastZonaAmministrativa() {
+        return ZonaAmministrativa.DAO.getLast(connection);
+    }
+
+    @Override
+    public boolean insertZonaAmministrativa(final String nome) {
+        return ZonaAmministrativa.DAO.insert(connection, nome);
+    }
+
+    @Override
+    public String getLastZonaRicreativa() {
+        return ZonaRicreativa.DAO.getLast(connection);
+    }
+
+    @Override
+    public boolean insertZonaRicreativa(final String nome) {
+        return ZonaRicreativa.DAO.insert(connection, nome);
+    }
+
+    @Override
+    public String getLastHabitat() {
+        return Habitat.DAO.getLast(connection);
+    }
+
+    @Override
+    public boolean insertHabitat(final String nome) {
+        return Habitat.DAO.insert(connection, nome);
+    }
+
+    @Override
+    public boolean insertArea(final String nome, final Parametri tipoZona, final Map<Parametri, String> fields) {
+        return Area.DAO.insert(connection, nome, tipoZona, fields);
     }
 }

@@ -53,6 +53,10 @@ public class VisitatorePanel extends JPanel implements UserPanel{
         btnVisite.addActionListener(e -> readingController.userRequestedVisiteEffettuate(codiceFiscale));
         centerButton(btnVisite);
 
+        final var btnManutezioni = new JButton("Pagina zona in manutenzione");
+        btnManutezioni.addActionListener(e -> readingController.userRequestedManutenzioni());
+        centerButton(btnManutezioni);
+
          // Aggiunta del componente personalizzato
         final CampoConDescrizionePulsante componente = new CampoConDescrizionePulsante(
             "Inserire nuova area da visitare: ", "Aggiungi", this);
@@ -77,7 +81,10 @@ public class VisitatorePanel extends JPanel implements UserPanel{
         add(Box.createVerticalStrut(8));
         add(btnVisite);
         add(Box.createVerticalStrut(8));
+        add(btnManutezioni);
+        add(Box.createVerticalStrut(8));
         add(componente);
+        
     }
     private static void centerButton(final JButton b) {
         b.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -89,12 +96,15 @@ public class VisitatorePanel extends JPanel implements UserPanel{
     public void notifyUserPressButton(final String textInsert) {
         final var title = "Inserimento Visita";
         String message;
-        if (! this.writingModel.insertVisita(codiceFiscale, textInsert)) {
-            message = "L'area inserita è già stata visitata in data: " + String.valueOf(LocalDate.now());
+        if(!this.writingModel.checkArea(textInsert)) {
+            message = "L'area deve figurare tra quelle registrate";
         } else {
-            message = "Nuova visita inserita correttamente per la data: " + String.valueOf(LocalDate.now());
+            if (! this.writingModel.insertVisita(codiceFiscale, textInsert)) {
+                message = "L'area inserita è già stata visitata in data: " + String.valueOf(LocalDate.now()) + "\noppure l'area si trova attualmente in manutenzione";
+            } else {
+                message = "Nuova visita inserita correttamente per la data: " + String.valueOf(LocalDate.now());
+            }
         }
-        
         final var dialog = new Dialog(title, message, true);
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);

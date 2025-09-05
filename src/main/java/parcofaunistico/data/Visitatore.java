@@ -136,6 +136,28 @@ public class Visitatore {
             }
         }
 
+        private static boolean checkManutenzione(final Connection connection, final String nomeArea) {
+            try (
+                var preparedStatement = DAOUtils.prepare(connection, getManutenzionecheckQuery(nomeArea));
+                var resultSet = preparedStatement.executeQuery();
+            ) {
+                if (resultSet.next()) {
+                    final var oggi = Date.valueOf(LocalDate.now());
+                    final var data_inizio = resultSet.getDate("data_inizio");
+                    final Date data_fine = resultSet.getDate("data_fine"); 
+                    if ((oggi.after(data_inizio) || oggi.equals(data_inizio)) && oggi.before(data_fine) &&
+                            (data_inizio.before(data_fine) || data_inizio.equals(data_fine))) {
+                            return true;
+                    }
+                    return false;
+                } else {
+                    return false;
+                }            
+            } catch (final Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
         private static boolean checkExistance(final Connection connection, final String codiceFiscale) {
             try (
                 var preparedStatement = DAOUtils.prepare(connection, getPersonaCheckQuery(codiceFiscale));
@@ -213,8 +235,12 @@ public class Visitatore {
                 stmtVisita.setDate(3, Date.valueOf(LocalDate.now()));
                 int righeInserite;
                 if(! checkExistanceVisita(connection, codiceFiscale, nomeArea)) {
-                    righeInserite = stmtVisita.executeUpdate();
-                    System.out.println("Righe inserite in visita: " + righeInserite);
+                    if (! checkManutenzione(connection, nomeArea)) {
+                        righeInserite = stmtVisita.executeUpdate();
+                        System.out.println("Righe inserite in visita: " + righeInserite);
+                        return true;
+                    }
+                    return false;
                 } else {
                     return false;
                 }
@@ -222,8 +248,6 @@ public class Visitatore {
                 e.printStackTrace();
                 return false;
             }
-            
-            return true;
         }
 
         private static String getCheckQuery(String codiceFiscale) {
@@ -241,6 +265,13 @@ public class Visitatore {
                     WHERE codice_fiscale = """ + "\'" + codiceFiscale + "\'"
                     + " AND nome = " + "\'" + codiceFiscale + "\'"
                     + " AND data = " + "\'" + String.valueOf(LocalDate.now()) + "\'";
+        }
+
+        private static String getManutenzionecheckQuery(final String nomeArea) {
+            return """
+                    SELECT *
+                    FROM MANUTENZIONE
+                    WHERE nome = """ + "\'" + nomeArea + "\'";
         }
 
         private static String getAgeQuery(String codiceFiscale) {

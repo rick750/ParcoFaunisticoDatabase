@@ -26,6 +26,15 @@ public final class ReadingController {
         }
     }
 
+    public void userRequestedManutenzioni() {
+        try {
+            var manutenzioni = this.model.loadManutenzioni();
+            this.view.showVociPanel(manutenzioni, "Visitatori");
+        } catch (DAOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void userRequestedEsemplari() {
         try {
             var esemplari = this.model.loadEsemplari();

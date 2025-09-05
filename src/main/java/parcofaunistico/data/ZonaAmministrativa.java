@@ -1,6 +1,7 @@
 package parcofaunistico.data;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -43,6 +44,46 @@ public class ZonaAmministrativa {
                 throw new DAOException(e);
             }
             return zoneAmministrative;            
+        }
+
+        public static String getLast(final Connection connection) {
+            String nomeZona;
+            try (
+                    var preparedStatement = DAOUtils.prepare(connection, getLastQuery());
+                    var resultSet = preparedStatement.executeQuery();) {
+                    resultSet.next();
+                    nomeZona = resultSet.getString("nome");
+                
+            } catch (final SQLException e) {
+                throw new DAOException(e);
+            }
+            return nomeZona;
+        }
+
+        public static boolean insert(final Connection connection, final String nomeZona) {
+            final String query = """
+                    INSERT INTO ZONA_AMMINISTRATIVA(nome)
+                    VALUES (?)
+                    """;
+            
+            try (PreparedStatement stmtZona = connection.prepareStatement(query)) {
+                stmtZona.setString(1, nomeZona);
+                int righe = stmtZona.executeUpdate();
+                System.out.println("Ho inserito " + righe + "dentro zona amministrativa");
+            } catch (final Exception e) {
+                return false;
+            }
+            return true; 
+        }
+
+
+        private static String getLastQuery() {
+            return """
+                        SELECT *
+                        FROM ZONA_AMMINISTRATIVA
+                        ORDER BY nome DESC
+                        LIMIT 1;
+                    """;
         }
     }
 }

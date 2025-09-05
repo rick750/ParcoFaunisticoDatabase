@@ -34,6 +34,11 @@ public enum Queries {
                         FROM AREA
                         """),
 
+        SHOW_MANUTENZIONE("""
+                        SELECT * 
+                        FROM MANUTENZIONE
+                        """),
+
         CHECK_AREA("""
                         SELECT nome
                         FROM AREA

@@ -10,6 +10,12 @@ public interface WritingModel {
 
     boolean insertVisita(String codiceFiscale, String nomeArea);
 
+    boolean insertManutenzione(Map<Parametri, String> textFields);
+
+    boolean updateManutenzione(Map<Parametri, String> textFields);
+
+    boolean checkManutenzione(String nomeZona);
+
     Map<Parametri, String> getVisitatore(String codiceFiscale);
 
     Boolean checkVisitatore(String codiceFiscale);
@@ -73,4 +79,18 @@ public interface WritingModel {
     boolean insertEsemplare(Map<Parametri, String> fields);
 
     boolean insertDieta(Map<Parametri, String> fields);
+
+    String getLastZonaAmministrativa();
+
+    boolean insertZonaAmministrativa(String nome);
+
+    String getLastZonaRicreativa();
+
+    boolean insertZonaRicreativa(String nome);
+
+    String getLastHabitat();
+
+    boolean insertHabitat(String nome);
+
+    boolean insertArea(String nome, Parametri tipoZona, Map<Parametri, String> fields);
 }

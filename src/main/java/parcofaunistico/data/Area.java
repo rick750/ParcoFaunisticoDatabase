@@ -1,10 +1,12 @@
 package parcofaunistico.data;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Area {
     private final String nome;
@@ -92,6 +94,46 @@ public class Area {
                 }
             } catch (Exception e) {
                 throw new DAOException(e);
+            }
+        }
+
+        public static boolean insert(final Connection connection, final String nomeZona, final Parametri tipoZona, final Map<Parametri, String> fields) {
+            
+             final String insertQuery = """
+                        INSERT AREA(nome, orario_apertura, orario_chiusura, ZONA_AMMINISTRATIVA, ZONA_RICREATIVA, HABITAT)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                    """;
+            
+            try (PreparedStatement stmtZona = connection.prepareStatement(insertQuery)) {
+                stmtZona.setString(1, nomeZona);
+                stmtZona.setTime(2, Time.valueOf(fields.get(Parametri.ORARIO_INIZIO)));
+                stmtZona.setTime(3, Time.valueOf(fields.get(Parametri.ORARIO_FINE)));
+                switch(tipoZona) {
+                    case NOME_ZONA_AMMINISTRATIVA -> {
+                        stmtZona.setString(4, nomeZona);
+                        stmtZona.setString(5, null);
+                        stmtZona.setString(6, null);
+                    }
+                    case NOME_ZONA_RICREATIVA -> {
+                        stmtZona.setString(4, null);
+                        stmtZona.setString(5, nomeZona);
+                        stmtZona.setString(6, null);
+                    }
+                    case NOME_HABITAT -> {
+                        stmtZona.setString(4, null);
+                        stmtZona.setString(5, null);
+                        stmtZona.setString(6, nomeZona);
+                    }
+
+                    default -> {return false;}
+                }
+                
+                int righe = stmtZona.executeUpdate();
+                System.out.println("Ho inserito " + righe + "dentro area");
+                return true;
+            } catch (final Exception e) {
+                e.printStackTrace();
+                return false;
             }
         }
 

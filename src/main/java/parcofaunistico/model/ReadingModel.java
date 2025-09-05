@@ -12,6 +12,7 @@ import parcofaunistico.data.Esemplare;
 import parcofaunistico.data.GiornataLavorativa;
 import parcofaunistico.data.Habitat;
 import parcofaunistico.data.IncassoBiglietto;
+import parcofaunistico.data.Manutenzione;
 import parcofaunistico.data.Ordine;
 import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.RendimentoGiornaliero;
@@ -52,6 +53,8 @@ public interface ReadingModel {
     Boolean checkDipendente(String codiceFiscale);
 
     List<Area> loadAree();
+
+    List<Manutenzione> loadManutenzioni();
     
     List<ZonaAmministrativa> loadZoneAmministrative();
 

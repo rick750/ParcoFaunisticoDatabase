@@ -34,6 +34,8 @@ public final class MainView extends JFrame{
     private final JPanel emptyPanel;
     private final LoginPanel loginPanel;
     private final RegistrazioneSceltaPanel registrazionePanel;
+    private final RegAreaPanel regAreaPanel;
+    private final RegManutenzionePanel regManutenzionePanel;
     private final RegVisitatorePanel regVisitatorePanel;
     private final RegGruppoPanel regGruppoPanel;
     private final AcquistoBigliettoPanel acBigliettoVisitatorePanel;
@@ -51,6 +53,8 @@ public final class MainView extends JFrame{
         this.emptyPanel = new JPanel();
         this.loginPanel = new LoginPanel(this, mainController.getReadingModel());
         this.registrazionePanel = new RegistrazioneSceltaPanel(this);
+        this.regAreaPanel = new RegAreaPanel(this, writingModel);
+        this.regManutenzionePanel = new RegManutenzionePanel(this, writingModel);
         this.acBigliettoVisitatorePanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
         this.acBigliettoGruppoPanel = new AcquistoBigliettoPanel(this, mainController.getWritingModel());
         this.regVisitatorePanel = new RegVisitatorePanel(this, mainController.getWritingModel(), acBigliettoVisitatorePanel);
@@ -70,6 +74,8 @@ public final class MainView extends JFrame{
         this.cardPanel.add(emptyPanel, EMPTY);
         this.cardPanel.add(loginPanel, Pannelli.LOGIN.get());
         this.cardPanel.add(registrazionePanel, Pannelli.REGISTRAZIONE.get());
+        this.cardPanel.add(regAreaPanel, Pannelli.REGISTRAZIONE_AREA.get());
+        this.cardPanel.add(regManutenzionePanel, Pannelli.REGISTRAZIONE_MANUTENZIONE.get());
         this.cardPanel.add(acBigliettoGruppoPanel, Pannelli.ACQUISTO_BIGLIETTO_GRUPPO.get());
         this.cardPanel.add(acBigliettoVisitatorePanel, Pannelli.ACQUISTO_BIGLIETTO_VISITATORE.get());
         this.cardPanel.add(regVisitatorePanel, Pannelli.REGISTRAZIONE_VISITATORE.get());
