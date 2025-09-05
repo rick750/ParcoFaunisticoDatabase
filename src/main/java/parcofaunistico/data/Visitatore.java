@@ -1,8 +1,10 @@
 package parcofaunistico.data;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -119,6 +121,21 @@ public class Visitatore {
             }
         }
 
+        private static boolean checkExistanceVisita(final Connection connection, final String codiceFiscale, final String nomeArea) {
+            try (
+                var preparedStatement = DAOUtils.prepare(connection, getVisitaCheckQuery(codiceFiscale, nomeArea));
+                var resultSet = preparedStatement.executeQuery();
+            ) {
+                if (resultSet.next()) {
+                    return true;
+                } else {
+                    return false;
+                }            
+            } catch (final Exception e) {
+                throw new DAOException(e);
+            }
+        }
+
         private static boolean checkExistance(final Connection connection, final String codiceFiscale) {
             try (
                 var preparedStatement = DAOUtils.prepare(connection, getPersonaCheckQuery(codiceFiscale));
@@ -133,6 +150,7 @@ public class Visitatore {
                 throw new DAOException(e);
             }
         }
+
 
         public static boolean insert(Connection connection, Map<Parametri, String> textfields) {
             final String codiceFiscale = textfields.get(Parametri.CODICE_FISCALE);
@@ -183,12 +201,46 @@ public class Visitatore {
             return true;
         }
 
+        public static boolean insertNewVisita(final Connection connection, final String codiceFiscale, final String nomeArea) {
+            final String queryNewVisita = """
+                        INSERT INTO VISITA(codice_fiscale, nome, data)
+                        VALUES (?, ?, ?)
+                    """;
+            
+            try (PreparedStatement stmtVisita = connection.prepareStatement(queryNewVisita)) {
+                stmtVisita.setString(1, codiceFiscale);
+                stmtVisita.setString(2, nomeArea);
+                stmtVisita.setDate(3, Date.valueOf(LocalDate.now()));
+                int righeInserite;
+                if(! checkExistanceVisita(connection, codiceFiscale, nomeArea)) {
+                    righeInserite = stmtVisita.executeUpdate();
+                    System.out.println("Righe inserite in visita: " + righeInserite);
+                } else {
+                    return false;
+                }
+            } catch(Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            
+            return true;
+        }
+
         private static String getCheckQuery(String codiceFiscale) {
             return Queries.CHECK_VISITATORE.get() + "\'" + codiceFiscale + "\'";
         }
 
         private static String getPersonaCheckQuery(final String codiceFiscale) {
             return Queries.CHECK_PERSONA.get() + "\'"+codiceFiscale+ "\'";
+        }
+
+        private static String getVisitaCheckQuery(final String codiceFiscale, final String nomeArea) {
+            return """
+                    SELECT * 
+                    FROM VISITA
+                    WHERE codice_fiscale = """ + "\'" + codiceFiscale + "\'"
+                    + " AND nome = " + "\'" + codiceFiscale + "\'"
+                    + " AND data = " + "\'" + String.valueOf(LocalDate.now()) + "\'";
         }
 
         private static String getAgeQuery(String codiceFiscale) {

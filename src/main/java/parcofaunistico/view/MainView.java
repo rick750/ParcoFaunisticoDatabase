@@ -127,7 +127,7 @@ public final class MainView extends JFrame{
             }
 
             case VISITATORE -> {
-                final var panel = new VisitatorePanel(this.readingController.get(), codiceFiscale);
+                final var panel = new VisitatorePanel(this.readingController.get(), writingModel, codiceFiscale);
                 this.cardPanel.add(panel, CARD_USER);
                 this.layout.show(this.cardPanel, CARD_USER);
             }

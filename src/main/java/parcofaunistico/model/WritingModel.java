@@ -8,6 +8,8 @@ import parcofaunistico.data.Parametri;
 public interface WritingModel {
     boolean insertVisitatore(Map<Parametri, String> textfields);
 
+    boolean insertVisita(String codiceFiscale, String nomeArea);
+
     Map<Parametri, String> getVisitatore(String codiceFiscale);
 
     Boolean checkVisitatore(String codiceFiscale);

@@ -89,6 +89,15 @@ public final class ReadingController {
        }
     }
 
+    public void userRequestedVisiteEffettuate(final String codiceFiscale) {
+        try {
+         final var visite = this.model.loadVisiteEffettuate(codiceFiscale);
+         this.view.showVociPanel(visite, "Visite effettuate dal visitatore: " + codiceFiscale);
+       } catch (Exception e) {
+            e.printStackTrace();
+       }
+    }
+
     public void userRequestedZoneAmministrative() {
         try {
             final var zoneAmm = this.model.loadZoneAmministrative();

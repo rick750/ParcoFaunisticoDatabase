@@ -17,6 +17,7 @@ import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.RendimentoGiornaliero;
 import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Specie;
+import parcofaunistico.data.Visita;
 import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaAmministrativa;
 import parcofaunistico.data.ZonaRicreativa;
@@ -24,6 +25,8 @@ import parcofaunistico.data.ZonaRicreativa;
 public interface ReadingModel {
 
     List<Visitatore> loadVisitatori();
+
+    List<Visita> loadVisiteEffettuate(String codiceFiscale);
 
     List<Esemplare> loadEsemplari();
 

@@ -14,6 +14,12 @@ public enum Queries {
             WHERE p.codice_fiscale = v.codice_fiscale;
             """),
 
+    SHOW_VISITE("""
+            SELECT *
+            FROM VISITA
+            WHERE codice_fiscale = """
+    ),
+
     SHOW_VISITATORE_SINGOLO("""
             SELECT *
             FROM PERSONA p

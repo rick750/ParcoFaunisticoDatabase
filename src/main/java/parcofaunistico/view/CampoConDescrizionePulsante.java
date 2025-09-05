@@ -13,7 +13,7 @@ public class CampoConDescrizionePulsante extends JPanel{
     private final JTextField campoTesto;
     private final JButton pulsante;
 
-    public CampoConDescrizionePulsante(String testoDescrizione, String testoPulsante, final DipendentiPanel container) {
+    public CampoConDescrizionePulsante(String testoDescrizione, String testoPulsante, final UserPanel container) {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
@@ -30,7 +30,7 @@ public class CampoConDescrizionePulsante extends JPanel{
         // Esempio di azione sul pulsante
         pulsante.addActionListener(e -> {
             final String valore = campoTesto.getText();
-            container.notifyUserRequestDeleteEsemplare(valore);
+            container.notifyUserPressButton(valore);
         });
     }
 

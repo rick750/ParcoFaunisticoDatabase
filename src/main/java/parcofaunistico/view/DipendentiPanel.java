@@ -18,7 +18,7 @@ import parcofaunistico.controller.ReadingController;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.model.WritingModel;
 
-public class DipendentiPanel extends JPanel {
+public class DipendentiPanel extends JPanel implements UserPanel {
     private final Optional<ReadingController> readContr;
     private final WritingModel writingModel;
 
@@ -143,16 +143,16 @@ public class DipendentiPanel extends JPanel {
         b.setMaximumSize(new Dimension(Math.max(pref.width, 220), pref.height));
     }
 
-    public void notifyUserRequestDeleteEsemplare(final String nomeEsemplare) {
+    public void notifyUserPressButton(final String textInsert) {
         final var text = "Eliminazione esemplare: ";
-        String message = "Sei sicuro di volere eliminare l'esemplare: " + nomeEsemplare + " ?";
+        String message = "Sei sicuro di volere eliminare l'esemplare: " + textInsert + " ?";
         final var dialog = new Dialog(text, message, true);
         final JButton ok = new JButton("OK");
         ok.addActionListener(e -> {
             dialog.dispose();
-            if (this.writingModel.checkEsemplare(nomeEsemplare)) {
-                final var fields = this.writingModel.getSpecieFromEsemplare(nomeEsemplare);
-                final var done = this.writingModel.deleteEsemplare(nomeEsemplare);
+            if (this.writingModel.checkEsemplare(textInsert)) {
+                final var fields = this.writingModel.getSpecieFromEsemplare(textInsert);
+                final var done = this.writingModel.deleteEsemplare(textInsert);
                 if(Integer.parseInt(fields.get(Parametri.NUMERO_ESEMPLARI)) > 1) {
                     this.writingModel.updateSpecieCount(fields.get(Parametri.NOME_SCIENTIFICO), false);
                 } else {
@@ -160,9 +160,9 @@ public class DipendentiPanel extends JPanel {
                 }
                 String mes;
                 if (done) {
-                    mes = "Esemplare " + nomeEsemplare + " eliminato correttamente";
+                    mes = "Esemplare " + textInsert + " eliminato correttamente";
                 } else {
-                    mes = "Problemi durante eliminazione dell'esemplare " + nomeEsemplare;
+                    mes = "Problemi durante eliminazione dell'esemplare " + textInsert;
                 }
                 final var diag = new Dialog(text, mes, true);
                 diag.setLocationRelativeTo(this);

@@ -38,6 +38,11 @@ public class WritingModelImpl implements WritingModel{
     }
 
     @Override
+    public boolean insertVisita(String codiceFiscale, String nomeArea) {
+        return Visitatore.DAO.insertNewVisita(connection, codiceFiscale, nomeArea);
+    }
+
+    @Override
     public Map<Parametri, String> getVisitatore(final String codiceFiscale) {
         return Visitatore.DAO.getVisitatore(connection, codiceFiscale);
     }
