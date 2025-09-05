@@ -17,6 +17,7 @@ import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.RendimentoGiornaliero;
 import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Specie;
+import parcofaunistico.data.StatisticheVisiteArea;
 import parcofaunistico.data.Visita;
 import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaAmministrativa;
@@ -67,4 +68,6 @@ public interface ReadingModel {
     List<GiornataLavorativa> loadGiornateLavorative(String codiceFiscale);
 
     List<Ordine> loadOrdiniVisitatore(String codiceFiscale);
+
+    List<StatisticheVisiteArea> loadMedieGiornaliere();
 }

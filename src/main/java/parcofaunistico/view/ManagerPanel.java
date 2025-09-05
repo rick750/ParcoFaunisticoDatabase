@@ -121,6 +121,12 @@ public class ManagerPanel extends JPanel {
         contentPanel.add(btnRendimentiGiornalieri);
         contentPanel.add(Box.createVerticalStrut(8));
 
+        final var btnMedieVisite = new JButton("Pagina Medie Visite Giornaliere");
+        btnMedieVisite.addActionListener(e -> readingController.userRequestedMedieGiornaliere());
+        centerButton(btnMedieVisite);
+        contentPanel.add(btnMedieVisite);
+        contentPanel.add(Box.createVerticalStrut(8));
+
         final var btnDipendente = new JButton("Aggiungi nuovo dipendente");
         btnDipendente.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_DIPENDENTE));
         centerButton(btnDipendente);

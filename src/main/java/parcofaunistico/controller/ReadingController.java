@@ -165,5 +165,10 @@ public final class ReadingController {
         final var ordiniVisitatore = this.model.loadOrdiniVisitatore(codiceFiscale);
         this.view.showVociPanel(ordiniVisitatore, "Ordini richiesti dal visitatore: " + codiceFiscale);
     }
+
+    public void userRequestedMedieGiornaliere() {
+        final var medieGiornaliere = this.model.loadMedieGiornaliere();
+        this.view.showVociPanel(medieGiornaliere, "Visite medie giornaliere per area: ");
+    }
     
 }

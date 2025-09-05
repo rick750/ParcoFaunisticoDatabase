@@ -19,6 +19,7 @@ import parcofaunistico.data.Prodotto;
 import parcofaunistico.data.RendimentoGiornaliero;
 import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Specie;
+import parcofaunistico.data.StatisticheVisiteArea;
 import parcofaunistico.data.Visita;
 import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaAmministrativa;
@@ -150,5 +151,10 @@ public final class ReadingModelImpl implements ReadingModel {
     @Override
     public List<Ordine> loadOrdiniVisitatore(final String codiceFiscale) {
         return Ordine.DAO.getVisitatoreOrdini(connection, codiceFiscale);
+    }
+
+    @Override
+    public List<StatisticheVisiteArea> loadMedieGiornaliere() {
+        return StatisticheVisiteArea.DAO.list(connection);
     }
 }
