@@ -16,8 +16,8 @@ public class IncassoBiglietto {
 
     @Override
     public String toString() {
-        return "data effettuazione: " + this.data + ",      "
-              + "incasso giornaliero: " + this.incasso_giornaliero;
+        return "Data: " + this.data + ",      "
+              + "Incasso totale: " + this.incasso_giornaliero;
     }
 
     public static final class DAO {

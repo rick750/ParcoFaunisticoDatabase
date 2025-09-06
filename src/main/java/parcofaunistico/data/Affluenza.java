@@ -16,8 +16,8 @@ public class Affluenza {
 
     @Override
     public String toString() {
-        return this.nome + ", "
-              + this.affluenza;
+        return this.nome + ": "
+              + this.affluenza +" visitatori";
     }
 
     
