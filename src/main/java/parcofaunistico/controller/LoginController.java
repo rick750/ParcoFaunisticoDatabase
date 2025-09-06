@@ -9,7 +9,7 @@ public class LoginController {
     private static final String NOME_MANAGER = "Manager";
     private static final String NOME_DIPENDENTE = "Dipendente";
     private static final String NOME_VISITATORE = "Visitatore";
-    private String codiceManager = "RVIBNC00S51G273Y";
+    private String codiceManager = "ABCDEF12G34H567I";
 
     private final ReadingModel model;
 

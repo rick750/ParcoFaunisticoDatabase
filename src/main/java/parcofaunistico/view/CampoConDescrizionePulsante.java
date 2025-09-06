@@ -1,5 +1,7 @@
 package parcofaunistico.view;
 
+import java.awt.Dimension;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -19,12 +21,13 @@ public class CampoConDescrizionePulsante extends JPanel{
 
         descrizione = new JLabel(testoDescrizione);
         campoTesto = new JTextField(20);
+        campoTesto.setMaximumSize(new Dimension(200, 30));
         pulsante = new JButton(testoPulsante);
 
         this.add(descrizione);
-        this.add(Box.createHorizontalStrut(10)); // Spazio tra label e campo
+        this.add(Box.createHorizontalStrut(10));
         this.add(campoTesto);
-        this.add(Box.createHorizontalStrut(10)); // Spazio tra campo e pulsante
+        this.add(Box.createHorizontalStrut(10));
         this.add(pulsante);
 
         // Esempio di azione sul pulsante

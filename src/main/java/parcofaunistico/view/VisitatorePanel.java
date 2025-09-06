@@ -7,12 +7,14 @@ import java.time.LocalDate;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import parcofaunistico.controller.ReadingController;
 import parcofaunistico.model.WritingModel;
 
-public class VisitatorePanel extends JPanel implements UserPanel{
+public class VisitatorePanel extends JPanel implements UserPanel {
     private final WritingModel writingModel;
     private final String codiceFiscale;
     public VisitatorePanel(final ReadingController readingController, final WritingModel writingModel,
@@ -57,13 +59,20 @@ public class VisitatorePanel extends JPanel implements UserPanel{
         btnManutezioni.addActionListener(e -> readingController.userRequestedManutenzioni());
         centerButton(btnManutezioni);
 
-         // Aggiunta del componente personalizzato
         final CampoConDescrizionePulsante componente = new CampoConDescrizionePulsante(
             "Inserire nuova area da visitare: ", "Aggiungi", this);
         this.add(Box.createVerticalStrut(10));
         this.add(componente);
 
-
+        final String[] nomeCognome = readingController.getNomeCognomeFromVisitatore(codiceFiscale);
+        final String nome = nomeCognome[0];
+        final String cognome = nomeCognome[1];
+        final JLabel lblBenvenuto = new JLabel("Benvenuto/a " + nome +" "+ cognome);
+        lblBenvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblBenvenuto.setFont(UIManager.getFont("BigLabel.font"));
+        add(Box.createVerticalStrut(10));
+        add(lblBenvenuto);
+        add(Box.createVerticalStrut(10));
 
         add(btnZonaRicreativa);
         add(Box.createVerticalStrut(8));

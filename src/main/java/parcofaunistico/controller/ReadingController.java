@@ -10,7 +10,7 @@ public final class ReadingController {
     private final ReadingModel model;
     private final MainView view;
 
-    public ReadingController(ReadingModel model, MainView view) {
+    public ReadingController(final ReadingModel model, final MainView view) {
         Objects.requireNonNull(model, "Controller created with null model");
         Objects.requireNonNull(view, "Controller created with null view");
         this.view = view;
@@ -19,27 +19,27 @@ public final class ReadingController {
 
     public void userRequestedPersone() {
         try {
-            var persone = this.model.loadVisitatori();
+            final var persone = this.model.loadVisitatori();
             this.view.showVociPanel(persone, "Visitatori");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
 
     public void userRequestedManutenzioni() {
         try {
-            var manutenzioni = this.model.loadManutenzioni();
+            final var manutenzioni = this.model.loadManutenzioni();
             this.view.showVociPanel(manutenzioni, "Visitatori");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
 
     public void userRequestedEsemplari() {
         try {
-            var esemplari = this.model.loadEsemplari();
+            final var esemplari = this.model.loadEsemplari();
             this.view.showVociPanel(esemplari, "Esemplari");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
@@ -48,7 +48,7 @@ public final class ReadingController {
         try {
             final var affluenze = this.model.loadAffluenze();
             this.view.showVociPanel(affluenze, "Affluenze");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
@@ -57,7 +57,7 @@ public final class ReadingController {
         try {
             final var applicazioni = this.model.loadApplicazioniSconto();
             this.view.showVociPanel(applicazioni, "Applicazioni Sconto");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
@@ -66,7 +66,7 @@ public final class ReadingController {
           try {
             final var incassi = this.model.loadIncassiBiglietti();
             this.view.showVociPanel(incassi, "Incassi Biglietti");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
@@ -75,7 +75,7 @@ public final class ReadingController {
         try {
             final var incassi = this.model.loadClassificaProdotti();
             this.view.showVociPanel(incassi, "Classifica Prodotti più venduti");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
@@ -84,7 +84,7 @@ public final class ReadingController {
         try {
             final var acquisti = this.model.loadAcquistiProdotti();
             this.view.showVociPanel(acquisti, "Numero di vendite dei prodotti");
-        } catch (DAOException e) {
+        } catch (final DAOException e) {
             e.printStackTrace();
         }
     }
@@ -93,7 +93,7 @@ public final class ReadingController {
        try {
          final var aree = this.model.loadAree();
          this.view.showVociPanel(aree, "Aree del parco");
-       } catch (Exception e) {
+       } catch (final Exception e) {
             e.printStackTrace();
        }
     }
@@ -102,7 +102,7 @@ public final class ReadingController {
         try {
          final var visite = this.model.loadVisiteEffettuate(codiceFiscale);
          this.view.showVociPanel(visite, "Visite effettuate dal visitatore: " + codiceFiscale);
-       } catch (Exception e) {
+       } catch (final Exception e) {
             e.printStackTrace();
        }
     }
@@ -111,7 +111,7 @@ public final class ReadingController {
         try {
             final var zoneAmm = this.model.loadZoneAmministrative();
             this.view.showVociPanel(zoneAmm, "Zone Amministrative del parco");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -120,7 +120,7 @@ public final class ReadingController {
         try {
             final var zoneRic = this.model.loadZoneRicreative();
             this.view.showVociPanel(zoneRic, "Zone Ricreative del parco");
-        } catch (Exception e) {
+        } catch (final Exception e) {
            e.printStackTrace();
         }
     }
@@ -178,6 +178,14 @@ public final class ReadingController {
     public void userRequestedMedieGiornaliere() {
         final var medieGiornaliere = this.model.loadMedieGiornaliere();
         this.view.showVociPanel(medieGiornaliere, "Visite medie giornaliere per area: ");
+    }
+
+    public String[] getNomeCognomeFromVisitatore(final String codiceFiscale) {
+        return this.model.getNomeCognomeFromVisitatore(codiceFiscale);
+    }
+
+    public String[] getNomeCognomeFromDipendente(final String codiceFiscale) {
+        return this.model.getNomeCognomeFromDipendente(codiceFiscale);
     }
     
 }

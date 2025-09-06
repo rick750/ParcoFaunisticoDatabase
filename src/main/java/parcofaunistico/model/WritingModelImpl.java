@@ -1,6 +1,7 @@
 package parcofaunistico.model;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +21,15 @@ import parcofaunistico.data.PagamentoBiglietto;
 import parcofaunistico.data.Parametri;
 import parcofaunistico.data.Percorso;
 import parcofaunistico.data.Prodotto;
+import parcofaunistico.data.RendimentoGiornaliero;
 import parcofaunistico.data.Sconto;
 import parcofaunistico.data.Specie;
 import parcofaunistico.data.Visitatore;
 import parcofaunistico.data.ZonaAmministrativa;
 import parcofaunistico.data.ZonaRicreativa;
 
-public class WritingModelImpl implements WritingModel{
-    
+public class WritingModelImpl implements WritingModel {
+
     private final Connection connection;
 
     public WritingModelImpl(final Connection connection) {
@@ -64,7 +66,7 @@ public class WritingModelImpl implements WritingModel{
         return Visitatore.DAO.getVisitatore(connection, codiceFiscale);
     }
 
-     @Override
+    @Override
     public Boolean checkVisitatore(final String codiceFiscale) {
         final var trovato = Visitatore.DAO.check(connection, codiceFiscale);
         return trovato;
@@ -74,13 +76,13 @@ public class WritingModelImpl implements WritingModel{
     public boolean insertGruppo(final String codiceGruppo, final int numPartecipanti,
             final List<Map<Parametri, String>> partecipanti) {
         boolean fatto = false;
-    
+
         final List<String> codiciFiscali = new ArrayList<>();
         for (final var partecipante : partecipanti) {
-            System.out.println("codice fiscale: "  + partecipante.get(Parametri.CODICE_FISCALE) +
-             " nome: " + partecipante.get(Parametri.NOME) +
-             " cognome: " + partecipante.get(Parametri.COGNOME) +
-             " età: " + partecipante.get(Parametri.ETA));
+            System.out.println("codice fiscale: " + partecipante.get(Parametri.CODICE_FISCALE) +
+                    " nome: " + partecipante.get(Parametri.NOME) +
+                    " cognome: " + partecipante.get(Parametri.COGNOME) +
+                    " età: " + partecipante.get(Parametri.ETA));
             if (!this.checkVisitatore(partecipante.get(Parametri.CODICE_FISCALE))) {
                 fatto = this.insertVisitatore(partecipante);
             }
@@ -91,7 +93,7 @@ public class WritingModelImpl implements WritingModel{
             fatto = Gruppo.DAO.insert(connection, codiceGruppo, numPartecipanti, codiciFiscali);
             System.out.println("finiti gli inserimenti");
         }
-        
+
         return fatto;
     }
 
@@ -224,8 +226,8 @@ public class WritingModelImpl implements WritingModel{
 
     @Override
     public boolean updateSpecieCount(final String nomeScientifico, final Boolean adding) {
-        if(adding) {
-             return Specie.DAO.addEsemplare(connection, nomeScientifico);
+        if (adding) {
+            return Specie.DAO.addEsemplare(connection, nomeScientifico);
         } else {
             return Specie.DAO.removeEsemplare(connection, nomeScientifico);
         }
@@ -279,5 +281,20 @@ public class WritingModelImpl implements WritingModel{
     @Override
     public boolean insertArea(final String nome, final Parametri tipoZona, final Map<Parametri, String> fields) {
         return Area.DAO.insert(connection, nome, tipoZona, fields);
+    }
+
+    @Override
+    public boolean insertProdotto(final Map<Parametri, String> fields) {
+        return Prodotto.DAO.insert(connection, fields);
+    }
+
+    @Override
+    public String getActualProductCode() {
+        return Prodotto.DAO.getLast(connection);
+    }
+
+    @Override
+    public boolean insertRendimento(String nomeArea, Date data) {
+        return RendimentoGiornaliero.DAO.insert(connection, nomeArea, data);
     }
 }

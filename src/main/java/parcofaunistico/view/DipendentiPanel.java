@@ -11,8 +11,10 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 
 import parcofaunistico.controller.ReadingController;
 import parcofaunistico.data.Parametri;
@@ -34,6 +36,16 @@ public class DipendentiPanel extends JPanel implements UserPanel {
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
         contentPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        String[] nomeCognome = readContr.get().getNomeCognomeFromDipendente(codiceFiscale);
+        String nome = nomeCognome[0];
+        String cognome = nomeCognome[1];
+        JLabel lblBenvenuto = new JLabel("Benvenuto/a " + nome +" "+ cognome);
+        lblBenvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblBenvenuto.setFont(UIManager.getFont("BigLabel.font"));
+        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(lblBenvenuto);
+        contentPanel.add(Box.createVerticalStrut(10));
 
         // Pulsanti
         final var btnAree = new JButton("Pagina aree");
@@ -115,11 +127,17 @@ public class DipendentiPanel extends JPanel implements UserPanel {
         centerButton(btnModificaAnimale);
         btnModificaAnimale.addActionListener(e -> mainView.showPanel(Pannelli.MODIFICA_ESEMPLARE));
 
+        final var btnInserimentoProdotto = new JButton("Aggiungi nuovo prodotto");
+        btnInserimentoProdotto.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_PRODOTTO));
+        centerButton(btnInserimentoProdotto);
+        contentPanel.add(btnInserimentoProdotto);
+
         // Aggiunta dei componenti al pannello interno
         Component[] components = {
             btnAree, btnZoneAmministrative, btnZoneRicreative, btnHabitat, btnSpecie,
             btnEsemplari, btnOrdini, btnProdotti, btnGiornateLavorative, btnNuovoOrdine,
-            btnGiornataLavorativa, btnManutenzione, btnAddAnimale, btnModificaAnimale
+            btnGiornataLavorativa, btnManutenzione, btnAddAnimale, btnModificaAnimale,
+            btnInserimentoProdotto
         };
 
         for (Component c : components) {

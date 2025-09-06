@@ -135,6 +135,7 @@ public enum Queries {
         SHOW_RENDIMENTO_GIORNALIERO("""
                         SELECT *
                         FROM RENDIMENTO_GIORNALIERO
+                        ORDER BY data DESC, nome ASC;
                         """),
 
         SHOW_SCONTO("""
@@ -295,7 +296,13 @@ public enum Queries {
                         WHERE a.nome NOT IN (SELECT nome FROM ZONA_AMMINISTRATIVA)
                         GROUP BY a.nome;
 
-                                                """);
+                                                """), 
+        SHOW_ULTIMO_PRODOTTO("""
+                        SELECT *
+                        FROM PRODOTTO
+                        ORDER BY codice_prodotto DESC
+                        LIMIT 1;
+                        """);
 
         private final String query;
 

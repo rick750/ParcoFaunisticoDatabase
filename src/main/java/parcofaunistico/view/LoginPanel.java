@@ -166,7 +166,7 @@ public class LoginPanel extends JPanel {
     private JPanel createInputPanel() {
         final JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         panel.setBackground(UIManager.getColor("Panel.backgrund"));
-        panel.add(createLabel("Codice Fiscale:"));
+        panel.add(createLabel("Codice:"));
         panel.add(usernameField);
         return panel;
     }
@@ -222,7 +222,7 @@ public class LoginPanel extends JPanel {
         return e -> {
             final String codiceFiscale = usernameField.getText().trim();
             if (!loginContr.checkValidity(codiceFiscale)) {
-                this.showErrorDialog("Il codice fiscale deve essere lungo 16 caratteri!");
+                this.showErrorDialog("Il codice deve essere lungo 16 caratteri!");
             } else if (confirmUser(codiceFiscale)) {
                 switch(this.selected) {
                     case "Manager" -> this.mainView.setUserPanel(User.MANAGER, codiceFiscale);
@@ -238,7 +238,7 @@ public class LoginPanel extends JPanel {
         final boolean isNew = !loginContr.checkExistance(codiceFiscale, this.selected);
 
         final String message = String.format(
-            "Il codice fiscale%sè presente nel database.",
+            "Il codice %sè corretto.",
             isNew ? " non " : " "
         );
 

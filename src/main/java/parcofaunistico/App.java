@@ -38,14 +38,14 @@ public final class App {
 
         }
         UIManager.put("Panel.background", new Color(18, 30, 49));
-        UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 30));
+        UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 20));
         UIManager.put("Button.background", new Color(255, 185, 0));
         UIManager.put("Button.foreground", new Color(18, 30, 49));
-        UIManager.put("BigLabel.font", new Font("Segoe UI", Font.PLAIN, 40));
-        UIManager.put("Field.font", new Font("Segoe UI", Font.PLAIN, 24));
-        UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 30));
+        UIManager.put("BigLabel.font", new Font("Segoe UI", Font.PLAIN, 36));
+        UIManager.put("Field.font", new Font("Segoe UI", Font.PLAIN, 20));
+        UIManager.put("Label.font", new Font("Segoe UI", Font.PLAIN, 20));
         UIManager.put("Label.background", new Color(173, 216, 230));
         UIManager.put("Label.foreground", new Color(144, 238, 144));
-        UIManager.put("TextField.font", new Font("Segoe UI", Font.PLAIN, 30));
+        UIManager.put("TextField.font", new Font("Segoe UI", Font.PLAIN, 20));
     }    
 }

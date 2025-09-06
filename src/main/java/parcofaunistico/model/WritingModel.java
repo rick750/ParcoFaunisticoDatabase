@@ -1,5 +1,6 @@
 package parcofaunistico.model;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public interface WritingModel {
     Boolean checkPathName(String percorso);
 
     String getLastGroupCode();
-    
+
     boolean checkProdotto(String text);
 
     boolean checkZonaRicreativa(String text);
@@ -93,4 +94,10 @@ public interface WritingModel {
     boolean insertHabitat(String nome);
 
     boolean insertArea(String nome, Parametri tipoZona, Map<Parametri, String> fields);
+
+    boolean insertProdotto(Map<Parametri, String> fields);
+
+    String getActualProductCode();
+
+    boolean insertRendimento(String nomeArea, Date data);
 }

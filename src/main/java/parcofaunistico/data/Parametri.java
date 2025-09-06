@@ -11,6 +11,8 @@ public enum Parametri {
     CODICE_PERCORSO,
     NOME,
     NOME_PRODOTTO,
+    DESCRIZIONE_PRODOTTO,
+    PREZZO_PRODOTTO,
     COGNOME,
     ETA,
     INDIRIZZO,
@@ -42,5 +44,6 @@ public enum Parametri {
     PESO,
     MALATO,
     ALIMENTO,
-    NUMERO_PASTI;
+    NUMERO_PASTI,
+    DATA_RENDIMENTO;
 }

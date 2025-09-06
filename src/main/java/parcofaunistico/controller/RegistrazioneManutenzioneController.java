@@ -61,7 +61,7 @@ public class RegistrazioneManutenzioneController {
             inizio = Date.valueOf(this.textFields.get(Parametri.DATA_INIZIO));
             fine = Date.valueOf(this.textFields.get(Parametri.DATA_FINE));
         } catch (IllegalArgumentException e) {
-            this.errorMessage = "Le date devono essere scritte nel formato: YY-MM-DD";
+            this.errorMessage = "Le date devono essere scritte nel formato: YYYY-MM-DD";
             return false;
         }
         
@@ -69,7 +69,7 @@ public class RegistrazioneManutenzioneController {
          (inizio.before(fine) || inizio.equals(fine))) {
             return true;
         } else {
-            this.errorMessage = "IL nome della zona deve figurare tra quelli già registrati e la data di inizio e di fine devono essere compatibili con la data odierna";
+            this.errorMessage = "Il nome della zona deve figurare tra quelli già registrati e la data di inizio e di fine devono essere compatibili con la data odierna";
             return false;
         }
     }

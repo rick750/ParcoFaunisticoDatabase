@@ -7,8 +7,10 @@ import java.awt.Dimension;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.UIManager;
 
 import parcofaunistico.controller.ReadingController;
 import parcofaunistico.model.WritingModel;
@@ -16,15 +18,20 @@ import parcofaunistico.model.WritingModel;
 public class ManagerPanel extends JPanel {
 
     public ManagerPanel(final ReadingController readingController,
-                        final WritingModel writingModel,
-                        final MainView mainView,
-                        final String codiceFiscale) {
+            final WritingModel writingModel,
+            final MainView mainView,
+            final String codiceFiscale) {
 
-        // Pannello interno che conterrà tutti i pulsanti
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
 
-        // Creazione pulsanti come prima
+        JLabel lblBenvenuto = new JLabel("Benvenuto nel pannello di controllo del manager");
+        lblBenvenuto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblBenvenuto.setFont(UIManager.getFont("BigLabel.font"));
+        contentPanel.add(Box.createVerticalStrut(10));
+        contentPanel.add(lblBenvenuto);
+        contentPanel.add(Box.createVerticalStrut(10));
+
         final var btnAree = new JButton("Pagina aree");
         btnAree.addActionListener(e -> readingController.userRequestedAree());
         centerButton(btnAree);
@@ -137,12 +144,16 @@ public class ManagerPanel extends JPanel {
         btnInserimentoArea.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_AREA));
         centerButton(btnInserimentoArea);
         contentPanel.add(btnInserimentoArea);
+        contentPanel.add(Box.createVerticalStrut(8));
 
-        // ScrollPane che contiene il pannello dei pulsanti
+        final var btnRendimentoGiornaliero = new JButton("Aggiungi nuovo rendimento");
+        btnRendimentoGiornaliero.addActionListener(e -> mainView.showPanel(Pannelli.REGISTRAZIONE_RENDIMENTO));
+        centerButton(btnRendimentoGiornaliero);
+        contentPanel.add(btnRendimentoGiornaliero);
+
         JScrollPane scrollPane = new JScrollPane(contentPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
-        // Layout principale: BorderLayout per riempire tutto
         setLayout(new BorderLayout());
         add(scrollPane, BorderLayout.CENTER);
     }

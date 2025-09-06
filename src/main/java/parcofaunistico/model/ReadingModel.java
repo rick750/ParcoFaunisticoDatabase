@@ -73,4 +73,8 @@ public interface ReadingModel {
     List<Ordine> loadOrdiniVisitatore(String codiceFiscale);
 
     List<StatisticheVisiteArea> loadMedieGiornaliere();
+
+    String[] getNomeCognomeFromVisitatore(String codiceFiscale);
+
+    String[] getNomeCognomeFromDipendente(String codiceFiscale);
 }

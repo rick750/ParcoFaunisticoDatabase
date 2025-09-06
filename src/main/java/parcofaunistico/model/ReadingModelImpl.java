@@ -42,7 +42,7 @@ public final class ReadingModelImpl implements ReadingModel {
     }
 
     @Override
-    public List<Visita> loadVisiteEffettuate(String codiceFiscale) {
+    public List<Visita> loadVisiteEffettuate(final String codiceFiscale) {
         return Visita.DAO.list(connection, codiceFiscale);
     }
 
@@ -162,5 +162,15 @@ public final class ReadingModelImpl implements ReadingModel {
     @Override
     public List<StatisticheVisiteArea> loadMedieGiornaliere() {
         return StatisticheVisiteArea.DAO.list(connection);
+    }
+
+    @Override
+    public String[] getNomeCognomeFromVisitatore(final String codiceFiscale) {
+        return Visitatore.DAO.getNomeCognome(connection, codiceFiscale);
+    }
+
+    @Override
+    public String[] getNomeCognomeFromDipendente(final String codiceFiscale) {
+        return Dipendente.DAO.getNomeCognome(connection, codiceFiscale);
     }
 }

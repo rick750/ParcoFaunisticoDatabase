@@ -14,7 +14,9 @@ public enum Pannelli {
     MODIFICA_ESEMPLARE("modEsemplare"),
     ACQUISTO_BIGLIETTO_VISITATORE("AcqBiglVis"),
     ACQUISTO_BIGLIETTO_GRUPPO("AcqBiglGrup"),
-    ORDINE("ordine");
+    ORDINE("ordine"),
+    REGISTRAZIONE_PRODOTTO("regProdotto"),
+    REGISTRAZIONE_RENDIMENTO("rendimento");
 
     private String name;
 
