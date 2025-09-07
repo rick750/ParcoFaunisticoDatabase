@@ -4,6 +4,7 @@ Le credenziali usate per lo sviluppo locale del database sono:
 - Database: parco_faunistico
 - Username: root
 - Password: (vuota)
+L'applicazione può essere eseguita tramite il file 'ApplicazioneParcoFaunistico-1.0.0.jar'.
 Nell'applicazione ci si può registrare come visitatore o gruppo oppure accedere come visitatore/dipendente/manager.
 Ciascun profilo di accesso permette di eseguire operazioni differenti; per accedere come visitatore o dipendente basta inserire 
 quando richiesto il proprio codice fiscale (registrato nel database). Per il manager invece è necessario un codice apposito.
