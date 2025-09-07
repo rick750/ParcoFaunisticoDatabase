@@ -79,19 +79,13 @@ public class WritingModelImpl implements WritingModel {
 
         final List<String> codiciFiscali = new ArrayList<>();
         for (final var partecipante : partecipanti) {
-            System.out.println("codice fiscale: " + partecipante.get(Parametri.CODICE_FISCALE) +
-                    " nome: " + partecipante.get(Parametri.NOME) +
-                    " cognome: " + partecipante.get(Parametri.COGNOME) +
-                    " età: " + partecipante.get(Parametri.ETA));
             if (!this.checkVisitatore(partecipante.get(Parametri.CODICE_FISCALE))) {
                 fatto = this.insertVisitatore(partecipante);
             }
             codiciFiscali.addLast(partecipante.get(Parametri.CODICE_FISCALE));
-            System.out.println("Inserito visitatore: " + codiciFiscali.getLast());
         }
         if (fatto) {
             fatto = Gruppo.DAO.insert(connection, codiceGruppo, numPartecipanti, codiciFiscali);
-            System.out.println("finiti gli inserimenti");
         }
 
         return fatto;

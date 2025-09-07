@@ -61,11 +61,9 @@ public class PagamentoBiglietto {
                 stmtPagamento.setDate(4, dataEffettuazione);
                 stmtPagamento.setString(5, codSconto);
                 stmtPagamento.setString(6, nomeZona);
-                int righeInserite = stmtPagamento.executeUpdate();
-                System.out.println("Righe inserite: " + righeInserite);
+                stmtPagamento.executeUpdate();
     
             } catch (final Exception e) {
-                System.out.println("Problemi nell'inserimento di PAGAMENTO_VISITA");
                 e.printStackTrace();
                 return false;
             }

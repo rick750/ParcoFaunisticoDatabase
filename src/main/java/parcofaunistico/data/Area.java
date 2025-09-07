@@ -128,8 +128,7 @@ public class Area {
                     default -> {return false;}
                 }
                 
-                int righe = stmtZona.executeUpdate();
-                System.out.println("Ho inserito " + righe + "dentro area");
+                stmtZona.executeUpdate();
                 return true;
             } catch (final Exception e) {
                 e.printStackTrace();

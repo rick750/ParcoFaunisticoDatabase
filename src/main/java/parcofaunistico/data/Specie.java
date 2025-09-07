@@ -110,8 +110,7 @@ public class Specie {
                 stmtSpecie.setString(3, abitudini);
                 stmtSpecie.setInt(4, numEsemplari);
                 stmtSpecie.setString(5, nomeHabitat);
-                int righeInserite = stmtSpecie.executeUpdate();
-                System.out.println("Righe inserite dentro Specie: " + righeInserite);
+                stmtSpecie.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -127,8 +126,7 @@ public class Specie {
                 WHERE nome_scientifico = ?""";
                 try ( PreparedStatement stmt = connection.prepareStatement(queryUpdate)) {
                         stmt.setString(1, nomeScientifico);
-                        int righeAggiornate = stmt.executeUpdate();
-                        System.out.println("Specie aggiornata. Righe modificate: " + righeAggiornate);
+                        stmt.executeUpdate();
 
                 } catch (SQLException e) {
                     e.printStackTrace();
@@ -144,9 +142,7 @@ public class Specie {
                 WHERE nome_scientifico = ?""";
                 try ( PreparedStatement stmt = connection.prepareStatement(queryUpdate)) {
                         stmt.setString(1, nomeScientifico);
-                        int righeAggiornate = stmt.executeUpdate();
-                        System.out.println("Specie aggiornata. Righe modificate: " + righeAggiornate);
-
+                        stmt.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
                     return false;
@@ -159,8 +155,7 @@ public class Specie {
 
             try (PreparedStatement stmt = connection.prepareStatement(deleteQuery)) {
                 stmt.setString(1, nomeScientifico);
-                int righeEliminate = stmt.executeUpdate();
-                System.out.println("Righe eliminate da SPECIE: " + righeEliminate);
+                stmt.executeUpdate();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();

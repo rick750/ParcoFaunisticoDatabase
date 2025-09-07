@@ -84,8 +84,7 @@ public class ZonaRicreativa {
             
             try (PreparedStatement stmtZona = connection.prepareStatement(query)) {
                 stmtZona.setString(1, nomeZona);
-                int righe = stmtZona.executeUpdate();
-                System.out.println("Ho inserito " + righe + "dentro zona ricreativa");
+                stmtZona.executeUpdate();
             } catch (final Exception e) {
                 return false;
             }

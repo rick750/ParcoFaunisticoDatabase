@@ -69,12 +69,9 @@ public class Biglietto {
                 stmtBiglietto.setDouble(6, prezzoBase);
                 stmtBiglietto.setDouble(7, prezzoEffettivo);
                 stmtBiglietto.setString(8, codicePercorso);
-                int righeInserite = stmtBiglietto.executeUpdate();
-                System.out.println("Righe inserite: " + righeInserite);
-
+                stmtBiglietto.executeUpdate();
                 
             } catch (Exception e) {
-                System.out.println("Problemi nell'inserimento di BIGLIETTO");
                 e.printStackTrace();
                 return false;
             }

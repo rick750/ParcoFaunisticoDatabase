@@ -236,7 +236,6 @@ public class AcquistoBigliettoPanel extends JPanel {
             if (visitatore) {
                 mainView.notifyVisitatoreInsert();
             } else {
-                System.out.println("notifico che bisogna inserire il gruppo");
                 mainView.notifyGruppoInsert();
             }
             this.regController.executeInsertQuery();

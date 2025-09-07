@@ -71,7 +71,6 @@ public class RegistrazioneGruppoController {
     public void clearPartecipanti() {
         this.partecipanti.clear();
         this.numPartecipanti = 0;
-        System.out.println("cancello i dati sui partecipanti");
     }
 
     public String getErrorMessage() {
@@ -88,9 +87,7 @@ public class RegistrazioneGruppoController {
 
     public boolean executeInsertQuery() {
         final var done = this.writingModel.insertGruppo(getActualGroupCode(), numPartecipanti, partecipanti);
-        System.out.println("provo a inserire un gruppo con dati: " + getActualGroupCode() + " " + numPartecipanti);
         if (!done) {
-            System.out.println("ho avuto problemi a creare il gruppo");
             return false;
         }
         this.clearPartecipanti();

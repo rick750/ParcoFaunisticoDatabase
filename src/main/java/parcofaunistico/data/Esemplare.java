@@ -112,8 +112,7 @@ public class Esemplare {
                 stmtEsemplare.setBoolean(6, malato);
                 stmtEsemplare.setString(7, alimento);
                 stmtEsemplare.setString(8, nome_scientifico);
-                int righeInserite = stmtEsemplare.executeUpdate();
-                System.out.println("Righe inserite dentro Esemplare: " + righeInserite);
+                stmtEsemplare.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -189,14 +188,9 @@ public class Esemplare {
                     stmt.setObject(i + 1, valori.get(i));
                 }
 
-                int righeModificate = stmt.executeUpdate();
-                System.out.println("Ho modificato " + righeModificate + " dentro Esemplare");
-                System.out.println("Query: " + query);
-                System.out.println("Valori: " + valori);
+                stmt.executeUpdate();
             } catch(Exception e) {
                 e.printStackTrace();
-                System.out.println("Query: " + query);
-                System.out.println("Valori: " + valori);
                 return false;
             }
 
@@ -208,8 +202,7 @@ public class Esemplare {
 
             try (PreparedStatement stmt = connection.prepareStatement(deleteQuery)) {
                 stmt.setString(1, nomeEsemplare);
-                int righeEliminate = stmt.executeUpdate();
-                System.out.println("Righe eliminate da esemplare: " + righeEliminate);
+                stmt.executeUpdate();
                 return true;
             } catch (SQLException e) {
                 e.printStackTrace();

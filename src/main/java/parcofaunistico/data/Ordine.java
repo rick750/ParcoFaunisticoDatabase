@@ -92,14 +92,12 @@ public class Ordine {
                 stmtOrdine.setInt(3, quantita);
                 stmtOrdine.setDate(4, data);
                 stmtOrdine.setString(5, nomeZona);
-                int righeInserite = stmtOrdine.executeUpdate();
-                System.out.println("Righe inserite in ordini: " + righeInserite);
+                stmtOrdine.executeUpdate();
                 try (PreparedStatement stmtRichiesta = connection.prepareStatement(queryRichiesta)){
                     stmtRichiesta.setString(1, codiceFiscale);
                     stmtRichiesta.setString(2, codiceProdotto);
                     stmtRichiesta.setString(3, codiceOrdine);
-                    righeInserite = stmtRichiesta.executeUpdate();
-                    System.out.println("Righe inserite in richieste: " + righeInserite); 
+                    stmtRichiesta.executeUpdate();
                 } catch (Exception e) {
                     return false;
                 }

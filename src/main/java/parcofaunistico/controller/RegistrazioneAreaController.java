@@ -87,7 +87,6 @@ public class RegistrazioneAreaController {
                 return false;
             }
         }
-        System.out.println("nome trovato: " + nome);
         fatto = this.writingModel.insertArea(nome, zonaSpecifica, fields);
         if(fatto) {
                 switch(zonaSpecifica) {

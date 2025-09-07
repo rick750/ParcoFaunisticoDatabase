@@ -182,7 +182,6 @@ public class RegGruppoPanel extends JPanel {
                 dialog.setLocationRelativeTo(this);
                 executeBtn.addActionListener(e -> {
                     dialog.dispose();
-                    System.out.println("mostro il pannello di pagamento visita gruppo");
                     this.acquistoBigliettoPanel.setData(false, "nessuno",
                             0, regController.getNumPartecipanti(),
                             this.codicegruppoLabel.getText());

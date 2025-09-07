@@ -109,7 +109,6 @@ public class Prodotto {
                 stmt.setString(3, descrizione);
                 stmt.setDouble(4, prezzo);
                 int righeInserite = stmt.executeUpdate();
-                System.out.println("Righe inserite in prodotto: " + righeInserite);
                 return righeInserite > 0;
             } catch (SQLException e) {
                 throw new DAOException(e);

@@ -75,8 +75,7 @@ public class Manutenzione {
                 stmTManutenzione.setString(1, nomeZona);
                 stmTManutenzione.setDate(2, dataInizio);
                 stmTManutenzione.setDate(3, dataFine);
-                int righeInserite = stmTManutenzione.executeUpdate();
-                System.out.println("Righe inserite in manutenzione: " + righeInserite);
+                stmTManutenzione.executeUpdate();
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,15 +96,10 @@ public class Manutenzione {
                 for (int i = 0; i < valori.size(); i++) {
                     stmt.setObject(i + 1, valori.get(i));
                 }
-                int righeModificate = stmt.executeUpdate();
-                System.out.println("Ho modificato " + righeModificate + " dentro Manutenzione");
-                System.out.println("Query: " + query);
-                System.out.println("Valori: " + valori);
+                stmt.executeUpdate();
                 return true;
             } catch(Exception e) {
                 e.printStackTrace();
-                System.out.println("Query: " + query);
-                System.out.println("Valori: " + valori);
                 return false;
             }
         }

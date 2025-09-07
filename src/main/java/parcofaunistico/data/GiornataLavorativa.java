@@ -79,8 +79,7 @@ public class GiornataLavorativa {
                 stmtGiornataLavorativa.setString(3, nomeGiorno);
                 stmtGiornataLavorativa.setTime(4, orario_inizio);
                 stmtGiornataLavorativa.setTime(5, orario_fine);
-                int righeInserite = stmtGiornataLavorativa.executeUpdate();
-                System.out.println("Righe inserite in giornate lavorative: " + righeInserite);
+                stmtGiornataLavorativa.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;

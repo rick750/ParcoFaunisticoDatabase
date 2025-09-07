@@ -39,7 +39,6 @@ public class RegistrazionePagamentoController {
         this.codiceTransazione = prefisso + String.format("%03d", numero);
 
         if(persona) {
-            System.out.println("Ho trovato come età: " + eta);
             if (eta <= 6) {
                 this.codiceSconto = "S03";
             } else if( eta > 6 && eta <= 15) {
@@ -48,7 +47,6 @@ public class RegistrazionePagamentoController {
                 this.codiceSconto = "nessuno";
             }
         } else {
-            System.out.println("Ho trovato come numero partecipanti: " + numPartecipanti);
             if (numPartecipanti >= 6 && numPartecipanti <= 15) {
                 this.codiceSconto = "S01";
             } else if (numPartecipanti > 15) {
@@ -60,7 +58,6 @@ public class RegistrazionePagamentoController {
 
         
         ultimo = writingModel.getLastTicket();
-        System.out.println("ultimo biglietto trovato: " + ultimo);
         prefisso = ultimo.substring(0, 1);
         numero = Integer.parseInt(ultimo.substring(1));
         numero++;
@@ -132,8 +129,7 @@ public class RegistrazionePagamentoController {
     }
 
     public void executeInsertQuery() {
-          if (!this.model.insertPagamentoBiglietto(datiPagamento)) {
-            System.out.println("Ho completato l'inserimento del pagamento visita");  
+          if (!this.model.insertPagamentoBiglietto(datiPagamento)) {  
                 final String errorMessage = "Errore nell'inserimento del nuovo pagamento visita";
                 panel.showErrorMessage(errorMessage);
         }

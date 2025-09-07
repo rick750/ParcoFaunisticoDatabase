@@ -132,8 +132,7 @@ public class Dipendente {
                 stmtPersone.setString(7, email);
                 int righeInserite;
                 if (!checkExistance(connection, codiceFiscale)) {
-                    righeInserite = stmtPersone.executeUpdate();
-                    System.out.println("Righe inserite in persona: " + righeInserite);
+                    stmtPersone.executeUpdate();
                 }
                 final String queryDipendente = """
                             INSERT INTO DIPENDENTE(codice_fiscale, mansione, descrizione_mansione)
@@ -144,8 +143,7 @@ public class Dipendente {
                     stmtDipendente.setString(1, codiceFiscale);
                     stmtDipendente.setString(2, mansione);
                     stmtDipendente.setString(3, descrizioneMans);
-                    righeInserite = stmtDipendente.executeUpdate();
-                    System.out.println("Righe inserite in dipendente: " + righeInserite);
+                    stmtDipendente.executeUpdate();
                 } catch (final Exception e) {
                     e.printStackTrace();
                     return false;
@@ -159,8 +157,7 @@ public class Dipendente {
                 try (PreparedStatement stmtLavoro = connection.prepareStatement(queryLavoro)) {
                     stmtLavoro.setString(1, nomeArea);
                     stmtLavoro.setString(2, codiceFiscale);
-                    righeInserite = stmtLavoro.executeUpdate();
-                    System.out.println("Righe inserite in lavora: " + righeInserite);
+                    stmtLavoro.executeUpdate();
                 } catch (final Exception e) {
                     e.printStackTrace();
                     return false;

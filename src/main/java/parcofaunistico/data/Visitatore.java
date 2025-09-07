@@ -194,10 +194,8 @@ public class Visitatore {
                 stmtPersone.setString(5, indirizzo);
                 stmtPersone.setString(6, telefono);
                 stmtPersone.setString(7, email);
-                int righeInserite;
                 if (!checkExistance(connection, codiceFiscale)) {
-                    righeInserite = stmtPersone.executeUpdate();
-                    System.out.println("Righe inserite in persona: " + righeInserite);
+                    stmtPersone.executeUpdate();
                 }
                 // Secondo inserimento nella tabella visitatori
                 final String queryVisitatori = """
@@ -207,8 +205,7 @@ public class Visitatore {
 
                 try (PreparedStatement stmtVisitatori = connection.prepareStatement(queryVisitatori)) {
                     stmtVisitatori.setString(1, codiceFiscale);
-                    righeInserite = stmtVisitatori.executeUpdate();
-                    System.out.println("Righe inserite in visitatore: " + righeInserite);
+                    stmtVisitatori.executeUpdate();
                 } catch (final Exception e) {
                     e.printStackTrace();
                     return false;
@@ -231,11 +228,9 @@ public class Visitatore {
                 stmtVisita.setString(1, codiceFiscale);
                 stmtVisita.setString(2, nomeArea);
                 stmtVisita.setDate(3, Date.valueOf(LocalDate.now()));
-                int righeInserite;
                 if (!checkExistanceVisita(connection, codiceFiscale, nomeArea)) {
                     if (!checkManutenzione(connection, nomeArea)) {
-                        righeInserite = stmtVisita.executeUpdate();
-                        System.out.println("Righe inserite in visita: " + righeInserite);
+                        stmtVisita.executeUpdate();
                         return true;
                     }
                     return false;

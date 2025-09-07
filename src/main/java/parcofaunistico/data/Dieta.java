@@ -69,8 +69,7 @@ public class Dieta {
             try (PreparedStatement stmtDieta = connection.prepareStatement(queryDieta)) {
                 stmtDieta.setString(1, alimento);
                 stmtDieta.setInt(2, numPasti);
-                int righeInserite = stmtDieta.executeUpdate();
-                System.out.println("Righe inserite dentro Dieta: " + righeInserite);
+                stmtDieta.executeUpdate();
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
