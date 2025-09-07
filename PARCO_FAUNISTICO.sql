@@ -10,6 +10,9 @@
 -- ________________ 
 DROP DATABASE IF EXISTS parco_faunistico;
 CREATE DATABASE IF NOT EXISTS parco_faunistico;
+CREATE USER IF NOT EXISTS 'appuser'@'localhost' IDENTIFIED BY 'StrongP@ssw0rd';
+GRANT ALL PRIVILEGES ON parco_faunistico.* TO 'appuser'@'localhost';
+FLUSH PRIVILEGES;
 USE parco_faunistico;
 
 -- Tabelle
