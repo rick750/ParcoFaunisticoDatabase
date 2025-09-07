@@ -18,7 +18,7 @@ public final class DAOUtils {
         }
     }*/
 
-    public static Connection localMySQLConnection(String dbName, String user, String pass) throws SQLException {
+    public static Connection localMySQLConnection(String dbName) throws SQLException {
     try (Connection rootConn = DriverManager.getConnection(
             "jdbc:mysql://localhost:3306/?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true",
             "root", "")) {

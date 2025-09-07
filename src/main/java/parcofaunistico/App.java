@@ -17,7 +17,7 @@ public final class App {
     
     public static void main(String[] args) throws SQLException {
         setUpUI();
-        final var connection = DAOUtils.localMySQLConnection("parco_faunistico", "root", "");
+        final var connection = DAOUtils.localMySQLConnection("parco_faunistico");
         final var readingModel = new ReadingModelImpl(connection);
         final var writingModel = new WritingModelImpl(connection);
         final var mainController = new MainController(readingModel, writingModel);
