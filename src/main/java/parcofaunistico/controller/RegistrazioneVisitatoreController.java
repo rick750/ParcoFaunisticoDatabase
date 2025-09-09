@@ -19,16 +19,24 @@ public class RegistrazioneVisitatoreController {
     }
 
     public boolean check() {
-        boolean check = this.checkVoids();
-        if (check) {
-            return false;
-        }
-
+        boolean check;
         check = this.textfields.get(Parametri.CODICE_FISCALE).getText().length() == 16;
         if(!check) {
             this.errorMessage = "Il codicefiscale deve essere lungo esattamente 16 cifre";
             return false;
         }
+
+        check = this.checkExistance();
+        if(check) {
+            return true;
+        }
+
+        check = this.checkVoids();
+        if (check) {
+            return false;
+        }
+
+        
 
         /*check = this.checkExistance();
         if(!check) {
@@ -90,12 +98,19 @@ public class RegistrazioneVisitatoreController {
         return this.errorMessage;
     }
 
+    public int getVisitatoreAge() {
+        return this.writingModel.getVisitatoreAge(this.textfields.get(Parametri.CODICE_FISCALE).getText());
+    }
+
 
     public boolean executeInsertQuery() {
-        final var visitatore = new EnumMap<Parametri, String>(Parametri.class);
-        for (final var entry : this.textfields.entrySet()) {
+        if (! this.checkExistance()) {
+            final var visitatore = new EnumMap<Parametri, String>(Parametri.class);
+            for (final var entry : this.textfields.entrySet()) {
                 visitatore.put(entry.getKey(), entry.getValue().getText());
             }
-        return this.writingModel.insertVisitatore(visitatore);
+            return this.writingModel.insertVisitatore(visitatore);
+        }
+        return true;
     }
 }

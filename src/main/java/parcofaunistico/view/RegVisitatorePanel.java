@@ -154,22 +154,27 @@ public class RegVisitatorePanel extends JPanel {
                 });
 
         button.addActionListener(act -> {
+            int eta;
+            String message;
+            Dialog dialog;
             if (!this.regController.check()) {
                 this.showErrorMessage(this.regController.getErrorMessage());
             } else {
                 final var title = "Conferma registrazione";
                 if(this.regController.checkExistance()) {
-                    final var message = "Il codice fiscale inserito è già registrato";
-                    final Dialog dialog = new Dialog(title, message, true);
-                    dialog.setLocationRelativeTo(this);
-                    dialog.setVisible(true);
+                    eta = this.regController.getVisitatoreAge();
+                    message = "Il codice fiscale inserito è già registrato";
+                    dialog = new Dialog(title, message, true);
                 } else {
                     
-                    final var message = "I dati sono stati inseriti correttamente";
+                    message = "I dati sono stati inseriti correttamente";
+                    eta = Integer.parseInt(this.textfields.get(Parametri.ETA).getText());
+                    dialog = new Dialog(title, message, false);
+                }
                     this.acquistoBigliettoPanel.setData(true, this.codicefiscaleField.getText(),
-                            Integer.parseInt(this.etaField.getText()), 1, "nessuno");
+                            eta, 1, "nessuno");
                     final var executeBtn = new JButton("OK");
-                    final Dialog dialog = new Dialog(title, message, false);
+                    
                     dialog.setLocationRelativeTo(this);
                     executeBtn.addActionListener(e -> {
                         dialog.dispose();
@@ -179,7 +184,6 @@ public class RegVisitatorePanel extends JPanel {
                     dialog.addButton(executeBtn);
                     dialog.setVisible(true);
                 }
-            }
         });
         return button;
     }

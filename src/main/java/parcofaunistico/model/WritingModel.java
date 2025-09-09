@@ -100,4 +100,6 @@ public interface WritingModel {
     String getActualProductCode();
 
     boolean insertRendimento(String nomeArea, Date data);
+
+    int getVisitatoreAge(String codiceFiscale);
 }

@@ -168,7 +168,8 @@ public enum Queries {
                                             FROM BIGLIETTO b, PAGAMENTO_VISITA pv
                                             WHERE (b.codice_transazione = pv.codice_transazione AND b.codice_fiscale = pv.codice_fiscale)
                                         OR (b.codice_transazione = pv.codice_transazione AND b.codice_gruppo = pv.codice_gruppo)
-                                            GROUP BY pv.data_effettuazione;
+                                            GROUP BY pv.data_effettuazione
+                                            ORDER BY pv.data_effettuazione DESC;
                                             """),
 
         SHOW_CLASSIFICA_PRODOTTI("""

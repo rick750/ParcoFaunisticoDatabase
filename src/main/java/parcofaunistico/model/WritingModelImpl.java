@@ -291,4 +291,9 @@ public class WritingModelImpl implements WritingModel {
     public boolean insertRendimento(String nomeArea, Date data) {
         return RendimentoGiornaliero.DAO.insert(connection, nomeArea, data);
     }
+
+    @Override
+    public int getVisitatoreAge(String codiceFiscale) {
+        return Visitatore.DAO.getAge(connection, codiceFiscale);
+    }
 }

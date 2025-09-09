@@ -11,7 +11,7 @@
 DROP DATABASE IF EXISTS parco_faunistico;
 CREATE DATABASE IF NOT EXISTS parco_faunistico;
 CREATE USER IF NOT EXISTS 'appuser'@'localhost'
-  IDENTIFIED WITH mysql_native_password BY 'StrongP@ssw0rd';
+IDENTIFIED BY 'StrongP@ssw0rd';
 
 GRANT ALL PRIVILEGES ON parco_faunistico.* TO 'appuser'@'localhost';
 FLUSH PRIVILEGES;
